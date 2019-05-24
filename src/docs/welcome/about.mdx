@@ -1,0 +1,77 @@
+---
+name: About kaoscript
+menu: Welcome
+route: /
+---
+
+About kaoscript
+===============
+
+What's kaoscript?
+-----------------
+
+kaoscript is programming language combining features from ES7, CoffeeScript, TypeScript, Rust, Swift, C# and more.
+
+Currently, kaoscript is transpiled to JavaScript.
+
+Why?
+----
+
+This project came to life due to an issue of JavaScript:
+
+- It's **not recommended to extends natives classes** to avoid any conflict with a JavaScript engine or a dependency.
+
+But, because of that issue, your code consistency is broken!
+
+For example, to call the array's functions `map` and `clone`, it is written differently:
+- `array.map(...)`
+- `_.clone(array)`
+
+So how kaoscript fixes that issue?
+
+kaoscript compiles `array.clone()` to `_.clone(array)` so you can keep your code consistency.
+
+But, now, it became much more than that :wink:
+
+Features
+--------
+
+> :construction: This project is still in an **experimental state** due to **major missing features** like trait, mixin and operator overloading.
+
+- **easy syntax**: close to ES6 and Swift
+- **fully OOP**: extendable native classes but fully compatible with the node.js
+- **partial/impl paradigm**
+- **async/await**: don't need ES7
+- **check variables existences**
+- **automatically declare variable**: `i = 0` => `let i = 0`
+- **array range**
+- **for/to, for/til, for/in, for/of, for/range, until**: no more `for(;;)`
+- **comprehensions**
+- **typed or not** `let i = 0` or `let i: Number = 0`
+- **automatic typing**: on assignement with operator `:=`
+- **type alias**: `type float = Number`
+- **generics**
+- **chained operations**: `1 < x < 10`
+- **enum**
+- **namespace**
+- **import/export**: `import` is the equivalent of node.js `require`
+- **require**: declare requirements (only for a module)
+- **extern/declare**: explicit global scope
+- **typed import**: import non-kaoscript objects and indicate their types
+- **function overloading**
+- **advanced parameters**
+- **error handling**: by default, it's à la Java but it's configurable
+- **attributes**
+- **conditional compilation**
+- **macro**
+
+Roadmap
+------
+
+### v1
+
+- Implements all [*accepted* features](https://github.com/orgs/kaoscript/projects/1)
+
+### v2
+
+- Transpile to another language (Go, Python or Haxe)

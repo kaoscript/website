@@ -1,0 +1,65 @@
+code[class*="language-"] {
+	display: block;
+    padding: 1em;
+	background: none;
+	font-family: Monaco, monospace;
+	font-size: 0.85em;
+	border-radius: 5px;
+	text-align: left;
+	white-space: pre;
+	word-spacing: normal;
+	word-break: normal;
+	word-wrap: normal;
+	line-height: 1.5;
+	-moz-tab-size: 4;
+	-o-tab-size: 4;
+	tab-size: 4;
+	-webkit-hyphens: none;
+	-moz-hyphens: none;
+	-ms-hyphens: none;
+	hyphens: none;
+}
+
+@media print {
+	code[class*="language-"] {
+		text-shadow: none;
+	}
+}
+
+code[class*="language-"].line-numbers {
+	position: relative;
+	counter-reset: linenumber;
+	padding-left: 0;
+}
+
+code[class*="language-"] .line {
+	margin-left: 3.8em;
+}
+
+.line-numbers .line-numbers-rows {
+	position: absolute;
+	pointer-events: none;
+	top: 1em;
+	font-size: 100%;
+	width: 3em; /* works for line-numbers below 1000 lines */
+	letter-spacing: -1px;
+
+	-webkit-user-select: none;
+	-moz-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+
+}
+
+.line-numbers-rows > span {
+	pointer-events: none;
+	display: block;
+	counter-increment: linenumber;
+}
+
+.line-numbers-rows > span:before {
+	content: counter(linenumber);
+	display: block;
+	padding-right: 0.8em;
+	text-align: right;
+}

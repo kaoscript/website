@@ -1,0 +1,42 @@
+---
+name: Comments
+menu: Guide
+route: /guide/comments
+---
+
+# Comments
+
+Comments in kaoscript are very similar to comments in C.
+
+## Single-line comments
+
+A single-line comment begins with `//`. Everything between `//` and the end of line is ignored.
+
+```kaoscript
+// a single line comment
+```
+
+## Multiline comments
+
+A multiline comment begins with `/*` and ends with `*/`.
+
+```kaoscript
+/*
+	a multiline comment
+
+	TODO: test
+*/
+```
+
+Multiline comments in kaoscript can be nested inside other multiline comments.
+It enable you to comment out large blocks of code, even if it contains multiline comments.
+
+```kaoscript
+/*
+	a multiline comment
+
+	/* can be nested */
+
+	a multiline comment
+*/
+```

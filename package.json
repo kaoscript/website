@@ -1,0 +1,61 @@
+{
+	"name": "website",
+	"description": "Website and documentation for kaoscript",
+	"version": "0.0.0",
+	"author": {
+		"name": "Baptiste Augrain",
+		"email": "daiyam@zokugun.org"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/kaoscript/website"
+	},
+	"bugs": {
+		"url": "https://github.com/kaoscript/website/issues"
+	},
+	"license": "MIT",
+	"licenses": [
+		{
+			"type": "MIT",
+			"url": "http://www.opensource.org/licenses/mit-license.php"
+		}
+	],
+	"private": true,
+	"devDependencies": {
+		"@loadable/component": "^5.7.0",
+		"@reach/router": "^1.2.1",
+		"@tippy.js/react": "^2.1.2",
+		"@types/lodash": "^4.14.123",
+		"@types/styled-components": "^4.1.14",
+		"babel-plugin-module-resolver": "^3.2.0",
+		"babel-plugin-styled-components": "^1.10.0",
+		"classnames": "^2.2.6",
+		"copy-text-to-clipboard": "^2.1.0",
+		"css-loader": "^2.1.1",
+		"docz": "^1.0.4",
+		"facepaint": "^1.2.1",
+		"hotkeys-js": "^3.6.2",
+		"jsonc-parser": "^2.1.0",
+		"lodash": "^4.17.11",
+		"polished": "^3.2.0",
+		"prop-types": "15.7.2",
+		"re-resizable": "^4.11.0",
+		"react": "^16.8.6",
+		"react-dom": "^16.8.6",
+		"react-feather": "^1.1.6",
+		"react-live": "^2.1.2",
+		"react-perfect-scrollbar": "^1.5.0",
+		"remark-breaks": "^1.0.2",
+		"remark-emoji": "^2.0.2",
+		"remark-external-links": "^4.0.0",
+		"remark-task-list": "^0.0.3",
+		"style-loader": "^0.23.1",
+		"styled-components": "^4.2.0",
+		"unist-util-visit": "^1.4.1",
+		"vscode-textmate": "^3.3.1"
+	},
+	"scripts": {
+		"build": "docz build",
+		"start": "docz dev"
+	}
+}

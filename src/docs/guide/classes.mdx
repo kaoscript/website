@@ -1,0 +1,121 @@
+---
+name: Classes
+menu: Guide
+route: /guide/classes
+---
+
+# Classes
+
+```kaoscript
+extern console: {
+	log(...args)
+}
+
+class Shape {
+	private {
+		_color: String
+	}
+
+    constructor(@color)
+	// automatically set the instance variable '_color' as the parameter 'color'
+
+	destructor() {
+		@color = null
+	}
+
+	color() => @color
+	color(@color) => this
+
+    draw(): String {
+        return `I'm drawing with a \(@color) pen.`
+    }
+}
+
+class Rectangle extends Shape {
+    draw() {
+        return `\(super()) I'm drawing a \(@color) rectangle.`
+    }
+}
+
+let r = new Rectangle('black')
+
+console.log(r.draw())
+// I'm drawing with a black pen. I'm drawing a black rectangle.
+
+
+impl Shape {
+	draw(shape): String {
+		return `I'm drawing a \(@color) \(shape).`
+	}
+}
+// adds dynamically the method 'draw(shape)' to the class 'Shape'
+
+let s = new Shape('red')
+
+console.log(s.draw())
+// I'm drawing with a red pen
+
+console.log(s.draw('circle'))
+// I'm drawing a red circle.
+```
+
+## abstract
+
+```kaoscript
+abstract class AbstractGreetings {
+	private {
+		_message: String: ''
+	}
+
+	constructor() {
+		this('Hello!')
+	}
+
+	constructor(@message)
+
+	abstract greet(name): String
+}
+
+class Greetings extends AbstractGreetings {
+	greet(name) => `\(@message)\nIt's nice to meet you, \(name).`
+}
+```
+
+## override native class
+
+```kaoscript
+extern console
+
+extern sealed class Number
+// 'sealed' avoid to directly extends the class Number
+
+impl Number {
+	mod(max): Number {
+		if this == NaN {
+			return 0
+		}
+		else {
+			let n = this % max
+			if n < 0 {
+				return n + max
+			}
+			else {
+				return n
+			}
+		}
+	}
+}
+// adds dynamically the method 'mod' to the class 'Number'
+
+let i = 42
+
+console.log(i.mod(2))
+// throw an error that 'mod' is not defined
+
+let j: Number = 42
+// typed as a Number
+
+console.log(j.mod(2))
+// <- 0
+// javascript code: console.log(__ks_Number._im_mod(j, 2))
+```

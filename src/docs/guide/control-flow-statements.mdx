@@ -1,0 +1,85 @@
+---
+name: Control Flow Statements
+menu: Guide
+route: /guide/control-flow-statements
+---
+
+# Control Flow
+
+## if and else
+
+## unless
+
+## for-from
+
+```kaoscript
+for x from 0 to 10 {
+	console.log(x)
+}
+// 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+
+for x from 0 til 10 {
+	console.log(x)
+}
+// 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+```
+
+## for-in
+
+```kaoscript
+heroes = ['leto', 'duncan', 'goku']
+
+for hero, index in heroes when index % 2 == 0
+{
+	console.log(hero)
+}
+// leto, goku
+```
+
+```ks
+heroes = ['leto', 'duncan', 'goku']
+
+for hero in heroes until hero == 'duncan'
+{
+	console.log(hero)
+}
+// leto
+```
+
+## for-of
+
+```kaoscript
+likes = {
+	leto: 'spice'
+	paul: 'chani'
+	duncan: 'murbella'
+}
+
+for key, value of likes {
+	console.log(`\(key) likes \(value)`)
+}
+// leto likes spice
+// paul likes chani
+// duncan likes murbella
+```
+
+## for-range
+
+## while and do-while
+
+## until and do-until
+
+## switch
+
+```kaoscript
+extern console
+
+let number = 13
+
+switch number {
+	1               => console.log("One!")
+	2, 3, 5, 7, 11  => console.log("This is a prime")
+	13..19          => console.log("A teen")
+	                => console.log("Ain't special")
+}
+```

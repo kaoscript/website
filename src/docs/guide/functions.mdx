@@ -1,0 +1,93 @@
+---
+name: Functions
+menu: Guide
+route: /guide/functions
+---
+
+Functions
+=========
+
+Declaration
+-----------
+
+```kaoscript
+import '@zokugun/lang'
+
+extern console, parseFoat
+
+func alpha(n: Number, percentage = false): Number {
+	let i: Number = parseFoat(n)
+
+	return 1 if i is NaN else (percentage ? i / 100 : i).limit(0, 1).round(3)
+}
+```
+
+Asynchronous
+------------
+
+```kaoscript
+import '@zokugun/lang'
+import 'child_process' for exec
+
+const df_regex = /([\/[a-z0-9\-\_\s]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+%)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+%)\s+(\/.*)/i
+
+async func disks() {
+	let stdout: string, stderr = await exec('df -k')
+
+	let disks = []
+	let matches: Array<String?>
+	for line in stdout.lines() {
+		matches = df_regex.exec(line)
+
+		if matches {
+			disks.push({
+				device: matches[1].trim(),
+				mount: matches[9],
+				total: matches[2].toInt() * 1024,
+				used: matches[3].toInt() * 1024,
+				available: matches[4].toInt() * 1024
+			})
+		}
+	}
+
+	return disks
+}
+
+let d = await disks()
+```
+
+Parameters
+----------
+
+```kaoscript
+require expect: func
+
+func foo(u = null, v, x, y = null, z = null) {
+	return [u, v, x, y, z]
+}
+
+expect(() => foo()).to.throw()
+
+expect(() => foo(1)).to.throw()
+
+expect(foo(1, 2)).to.eql([null, 1, 2, null, null])
+
+expect(foo(1, 2, 3)).to.eql([1, 2, 3, null, null])
+
+expect(foo(1, 2, 3, 4)).to.eql([1, 2, 3, 4, null])
+
+expect(foo(1, 2, 3, 4, 5)).to.eql([1, 2, 3, 4, 5])
+```
+
+|                              | Required | Nullable | Typed | Default Value |
+| ---------------------------- | -------- | -------- | ----- | ------------- |
+| `foo(x)`                     | YES      |          |       |               |
+| `foo(x?)`                    | YES      | YES      |       |               |
+| `foo(x = null)`              |          | YES      |       | YES           |
+| `foo(x = 'foobar')`          |          |          |       | YES           |
+| `foo(x: String)`             | YES      |          | YES   |               |
+| `foo(x: String?)`            | YES      | YES      | YES   |               |
+| `foo(x: String = null)`      |          | YES      | YES   | YES           |
+| `foo(x: String = 'foobar')`  |          |          | YES   | YES           |
+| `foo(x: String? = null)`     |          | YES      | YES   | YES           |
+| `foo(x: String? = 'foobar')` |          | YES      | YES   | YES           |

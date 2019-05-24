@@ -1,0 +1,53 @@
+---
+name: Error Handling
+menu: Guide
+route: /guide/error-handling
+---
+
+# Error Handling
+
+```kaoscript
+try {
+	console.log('foobar')
+}
+on RangeError catch error {
+	console.log('RangeError', error)
+}
+catch error {
+	console.log('Error', error)
+}
+finally {
+	console.log('finally')
+}
+```
+
+```kaoscript
+try {
+	console.log('foobar')
+}
+on RangeError {
+	console.log('RangeError')
+}
+catch {
+	console.log('Error')
+}
+```
+
+```kaoscript
+try {
+	foo()
+}
+
+func foo(name): String ~ Error {
+	if name == 'foobar' {
+		throw new Error(`Invalid name '\(name)'`)
+	}
+
+	return name
+}
+
+#[error(off)]
+func bar() {
+	validate('toto')
+}
+```

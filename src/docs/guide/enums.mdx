@@ -1,0 +1,36 @@
+---
+name: Enums
+menu: Guide
+route: /guide/enums
+---
+
+# Enums
+
+```kaoscript
+extern console
+
+enum Color {
+	Red
+	Green
+	Blue
+}
+
+let color = Color::Red
+
+console.log(color)
+// 0
+```
+
+```kaoscript
+enum CardSuit<String> {
+	Clubs
+	Diamonds
+	Hearts
+	Spades
+}
+
+let card = CardSuit::Clubs
+
+console.log(card)
+// clubs
+```
