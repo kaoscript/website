@@ -1,0 +1,42 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="391.58333333333337" height="134.734375" style="overflow:hidden;position:relative" version="1.1">
+    <defs style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <rect width="391.58333333333337" height="134.734375" x="0" y="0" r="0" fill="#ffffff" stroke="#ffffff" rx="0" ry="0" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <circle cx="20" cy="93.1875" r="10" fill="#000000" stroke="none" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <rect width="31.26388888888889" height="31.09375" x="46" y="77.640625" r="0" fill="#87ceeb" stroke="none" rx="0" ry="0" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <text x="61.63194444444444" y="93.1875" fill="#000000" stroke="none" font="10px &quot;Arial&quot;" font-family="Source Sans Pro" font-size="16px" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);text-anchor:middle;font:16px &quot;Source Sans Pro&quot;" text-anchor="middle">
+        <tspan dy="5.5" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)">0b</tspan>
+    </text>
+    <path fill="none" stroke="#800000" stroke-width="2" d="M103.26388888888889,93.1875Q93.26388888888889,93.1875,93.26388888888889,103.1875V114.734375Q93.26388888888889,124.734375,103.26388888888889,124.734375H181.79166666666666Q191.79166666666666,124.734375,191.79166666666666,114.734375V103.1875Q191.79166666666666,93.1875,181.79166666666666,93.1875" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <rect width="78.52777777777777" height="43.09375" x="103.26388888888889" y="71.640625" r="0" fill="#f0e68c" stroke="none" rx="4" ry="4" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <rect width="40.895833333333336" height="31.09375" x="109.26388888888889" y="77.640625" r="0" fill="#008080" stroke="none" rx="5" ry="5" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <text x="129.71180555555554" y="93.1875" fill="#ffffff" stroke="none" font="10px &quot;Arial&quot;" font-family="Source Sans Pro" font-size="16px" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);text-anchor:middle;font:16px &quot;Source Sans Pro&quot;" text-anchor="middle">
+        <tspan dy="5.5" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)">0-1</tspan>
+    </text>
+    <rect width="21.631944444444443" height="31.09375" x="154.15972222222223" y="77.640625" r="0" fill="#87cefa" stroke="none" rx="5" ry="5" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <text x="164.97569444444446" y="93.1875" fill="#000000" stroke="none" font="10px &quot;Arial&quot;" font-family="Source Sans Pro" font-size="16px" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);text-anchor:middle;font:16px &quot;Source Sans Pro&quot;" text-anchor="middle">
+        <tspan dy="5.5" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)">_</tspan>
+    </text>
+    <text x="142.52777777777777" y="59.3671875" fill="#444444" stroke="none" font="10px &quot;Arial&quot;" font-family="Source Sans Pro" font-size="14px" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);text-anchor:middle;font:14px &quot;Source Sans Pro&quot;" text-anchor="middle">
+        <tspan dy="5.0078125" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)">One of:</tspan>
+    </text>
+    <path fill="none" stroke="#800000" stroke-width="2" d="M227.79166666666666,93.1875Q217.79166666666666,93.1875,217.79166666666666,103.1875V114.734375Q217.79166666666666,124.734375,227.79166666666666,124.734375H325.5833333333333Q335.5833333333333,124.734375,335.5833333333333,114.734375V103.1875Q335.5833333333333,93.1875,325.5833333333333,93.1875" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <path fill="none" stroke="#333333" stroke-width="2" d="M207.79166666666666,93.1875Q217.79166666666666,93.1875,217.79166666666666,83.1875V51.09375Q217.79166666666666,41.09375,227.79166666666666,41.09375H325.58333333333337Q335.58333333333337,41.09375,335.58333333333337,51.09375V83.1875Q335.58333333333337,93.1875,345.58333333333337,93.1875" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <rect width="97.79166666666667" height="43.09375" x="227.79166666666666" y="71.640625" r="0" fill="#f0e68c" stroke="none" rx="4" ry="4" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <rect width="40.895833333333336" height="31.09375" x="233.79166666666666" y="77.640625" r="0" fill="#008080" stroke="none" rx="5" ry="5" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <text x="254.23958333333331" y="93.1875" fill="#ffffff" stroke="none" font="10px &quot;Arial&quot;" font-family="Source Sans Pro" font-size="16px" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);text-anchor:middle;font:16px &quot;Source Sans Pro&quot;" text-anchor="middle">
+        <tspan dy="5.5" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)">A-Z</tspan>
+    </text>
+    <rect width="40.895833333333336" height="31.09375" x="278.6875" y="77.640625" r="0" fill="#008080" stroke="none" rx="5" ry="5" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <text x="299.13541666666663" y="93.1875" fill="#ffffff" stroke="none" font="10px &quot;Arial&quot;" font-family="Source Sans Pro" font-size="16px" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);text-anchor:middle;font:16px &quot;Source Sans Pro&quot;" text-anchor="middle">
+        <tspan dy="5.5" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)">a-z</tspan>
+    </text>
+    <text x="276.6875" y="59.3671875" fill="#444444" stroke="none" font="10px &quot;Arial&quot;" font-family="Source Sans Pro" font-size="14px" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);text-anchor:middle;font:14px &quot;Source Sans Pro&quot;" text-anchor="middle">
+        <tspan dy="5.0078125" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)">One of:</tspan>
+    </text>
+    <circle cx="371.58333333333337" cy="93.1875" r="7" fill="#000000" stroke="none" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <circle cx="371.58333333333337" cy="93.1875" r="10" fill="none" stroke="#000" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <path x="20" y="0" fill="none" stroke="#333333" stroke-linecap="butt" stroke-linejoin="round" stroke-width="2" d="M30,93.1875H46" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);stroke-linecap:butt;stroke-linejoin:round"/>
+    <path x="67.26388888888889" y="0" fill="none" stroke="#333333" stroke-linecap="butt" stroke-linejoin="round" stroke-width="2" d="M77.26388888888889,93.1875H103.26388888888889" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);stroke-linecap:butt;stroke-linejoin:round"/>
+    <path x="171.79166666666666" y="0" fill="none" stroke="#333333" stroke-linecap="butt" stroke-linejoin="round" stroke-width="2" d="M181.79166666666666,93.1875H227.79166666666666" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);stroke-linecap:butt;stroke-linejoin:round"/>
+    <path x="315.5833333333333" y="0" fill="none" stroke="#333333" stroke-linecap="butt" stroke-linejoin="round" stroke-width="2" d="M325.5833333333333,93.1875H361.58333333333337" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);stroke-linecap:butt;stroke-linejoin:round"/>
+</svg>

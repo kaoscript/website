@@ -27,6 +27,14 @@ const BaseStyle = createGlobalStyle`
 		height: 100%;
 		min-height: 100%;
 	}
+
+	.language-name {
+		font-family: Ubuntu;
+		color: #342780;
+		text-transform: lowercase;
+    	padding: 0 0.2em;
+		font-size: 0.95em;
+	}
 `
 
 export const Global = () => (

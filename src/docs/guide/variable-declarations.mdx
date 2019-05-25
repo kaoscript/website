@@ -5,3 +5,85 @@ route: /guide/variable-declarations
 ---
 
 # Variable Declarations
+
+## const
+
+```kaoscript
+const name = 'John'
+```
+
+`const` declares the variable `name` as **immutable reference**. But the referenced value can be modified.
+
+```kaoscript
+const names = ['John']
+
+names.push('Jane')
+// names: ['John', 'Jane']
+
+// but
+names = ['John']
+// will through an error
+```
+
+If not type is provided, `const` will deduce the variable's type based on its value.
+
+```kaoscript
+const name = 'John'
+// type: String
+
+const names: Array = []
+// type: Array
+```
+
+The type of a variable declared with `const` can't be changed.
+
+## let
+
+```kaoscript
+let name = 'John'
+```
+
+`let` declares the variable `name` and it's rebindable.
+
+```kaoscript
+let name = 'John'
+
+name = 42
+// no error
+```
+
+If a type is provided at the declaration of a variable, its type can't be changed.
+
+```kaoscript
+let name: String = 'John'
+
+name = 42
+// throws an error
+```
+
+But if no type is provided, it will automatically deduce its type based on the current value.
+
+```kaoscript
+let name = 'John'
+// type: String
+
+name = 42
+// type: Number
+
+func foobar() {
+	return 'hello'
+}
+
+name = foobar()
+// no type
+```
+
+`let` can also make the deduced type immutable.
+
+```kaoscript
+let name := 'John'
+// type: String
+
+name = 42
+// throws an error
+```

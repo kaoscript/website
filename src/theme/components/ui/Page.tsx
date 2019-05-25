@@ -1,7 +1,6 @@
 import * as React from 'react'
 import { SFC, Fragment } from 'react'
 import { PageProps, useConfig } from 'docz'
-import Edit from 'react-feather/dist/icons/edit-2'
 import styled from 'styled-components'
 
 import { ButtonLink } from './Button'
@@ -57,22 +56,13 @@ const EditPage = styled(ButtonLink.withComponent('a'))`
   })};
 `
 
-const EditIcon = styled(Edit)<{ width: number }>`
-  margin-right: 5px;
-`
-
 export const Page: SFC<PageProps> = ({
   children,
-  doc: { link, fullpage, edit = true },
+  doc: { fullpage },
 }) => {
   const { repository } = useConfig()
   const content = (
     <Fragment>
-      {link && edit && (
-        <EditPage href={link} target="_blank">
-          <EditIcon width={14} /> Edit page
-        </EditPage>
-      )}
       {children}
     </Fragment>
   )

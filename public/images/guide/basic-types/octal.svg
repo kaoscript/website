@@ -1,0 +1,95 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="888.25" height="146.734375" style="overflow:hidden;position:relative" version="1.1">
+    <defs style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <rect width="888.25" height="146.734375" x="0" y="0" r="0" fill="#ffffff" stroke="#ffffff" rx="0" ry="0" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <circle cx="20" cy="105.1875" r="10" fill="#000000" stroke="none" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <rect width="31.26388888888889" height="31.09375" x="46" y="89.640625" r="0" fill="#87ceeb" stroke="none" rx="0" ry="0" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <text x="61.63194444444444" y="105.1875" fill="#000000" stroke="none" font="10px &quot;Arial&quot;" font-family="Source Sans Pro" font-size="16px" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);text-anchor:middle;font:16px &quot;Source Sans Pro&quot;" text-anchor="middle">
+        <tspan dy="5.5" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)">0o</tspan>
+    </text>
+    <path fill="none" stroke="#800000" stroke-width="2" d="M103.26388888888889,105.1875Q93.26388888888889,105.1875,93.26388888888889,115.1875V126.734375Q93.26388888888889,136.734375,103.26388888888889,136.734375H181.79166666666666Q191.79166666666666,136.734375,191.79166666666666,126.734375V115.1875Q191.79166666666666,105.1875,181.79166666666666,105.1875" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <rect width="78.52777777777777" height="43.09375" x="103.26388888888889" y="83.640625" r="0" fill="#f0e68c" stroke="none" rx="4" ry="4" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <rect width="40.895833333333336" height="31.09375" x="109.26388888888889" y="89.640625" r="0" fill="#008080" stroke="none" rx="5" ry="5" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <text x="129.71180555555554" y="105.1875" fill="#ffffff" stroke="none" font="10px &quot;Arial&quot;" font-family="Source Sans Pro" font-size="16px" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);text-anchor:middle;font:16px &quot;Source Sans Pro&quot;" text-anchor="middle">
+        <tspan dy="5.5" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)">0-7</tspan>
+    </text>
+    <rect width="21.631944444444443" height="31.09375" x="154.15972222222223" y="89.640625" r="0" fill="#87cefa" stroke="none" rx="5" ry="5" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <text x="164.97569444444446" y="105.1875" fill="#000000" stroke="none" font="10px &quot;Arial&quot;" font-family="Source Sans Pro" font-size="16px" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);text-anchor:middle;font:16px &quot;Source Sans Pro&quot;" text-anchor="middle">
+        <tspan dy="5.5" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)">_</tspan>
+    </text>
+    <text x="142.52777777777777" y="71.3671875" fill="#444444" stroke="none" font="10px &quot;Arial&quot;" font-family="Source Sans Pro" font-size="14px" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);text-anchor:middle;font:14px &quot;Source Sans Pro&quot;" text-anchor="middle">
+        <tspan dy="5.0078125" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)">One of:</tspan>
+    </text>
+    <path fill="none" stroke="#333333" stroke-width="2" d="M207.79166666666666,105.1875Q217.79166666666666,105.1875,217.79166666666666,95.1875V51.09375Q217.79166666666666,41.09375,227.79166666666666,41.09375H668.4583333333334Q678.4583333333334,41.09375,678.4583333333334,51.09375V95.1875Q678.4583333333334,105.1875,688.4583333333334,105.1875" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <rect width="21.631944444444443" height="31.09375" x="227.79166666666666" y="89.640625" r="0" fill="#87ceeb" stroke="none" rx="0" ry="0" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <text x="238.60763888888889" y="105.1875" fill="#000000" stroke="none" font="10px &quot;Arial&quot;" font-family="Source Sans Pro" font-size="16px" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);text-anchor:middle;font:16px &quot;Source Sans Pro&quot;" text-anchor="middle">
+        <tspan dy="5.5" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)">.</tspan>
+    </text>
+    <path fill="none" stroke="#800000" stroke-width="2" d="M275.4236111111111,105.1875Q265.4236111111111,105.1875,265.4236111111111,115.1875V126.734375Q265.4236111111111,136.734375,275.4236111111111,136.734375H353.95138888888886Q363.95138888888886,136.734375,363.95138888888886,126.734375V115.1875Q363.95138888888886,105.1875,353.95138888888886,105.1875" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <rect width="78.52777777777777" height="43.09375" x="275.4236111111111" y="83.640625" r="0" fill="#f0e68c" stroke="none" rx="4" ry="4" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <rect width="40.895833333333336" height="31.09375" x="281.4236111111111" y="89.640625" r="0" fill="#008080" stroke="none" rx="5" ry="5" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <text x="301.8715277777777" y="105.1875" fill="#ffffff" stroke="none" font="10px &quot;Arial&quot;" font-family="Source Sans Pro" font-size="16px" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);text-anchor:middle;font:16px &quot;Source Sans Pro&quot;" text-anchor="middle">
+        <tspan dy="5.5" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)">0-7</tspan>
+    </text>
+    <rect width="21.631944444444443" height="31.09375" x="326.3194444444444" y="89.640625" r="0" fill="#87cefa" stroke="none" rx="5" ry="5" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <text x="337.13541666666663" y="105.1875" fill="#000000" stroke="none" font="10px &quot;Arial&quot;" font-family="Source Sans Pro" font-size="16px" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);text-anchor:middle;font:16px &quot;Source Sans Pro&quot;" text-anchor="middle">
+        <tspan dy="5.5" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)">_</tspan>
+    </text>
+    <text x="314.6875" y="71.3671875" fill="#444444" stroke="none" font="10px &quot;Arial&quot;" font-family="Source Sans Pro" font-size="14px" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);text-anchor:middle;font:14px &quot;Source Sans Pro&quot;" text-anchor="middle">
+        <tspan dy="5.0078125" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)">One of:</tspan>
+    </text>
+    <rect width="43.263888888888886" height="43.09375" x="387.8142361111111" y="83.640625" r="0" fill="#f0e68c" stroke="none" rx="4" ry="4" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <rect width="31.26388888888889" height="31.09375" x="393.8142361111111" y="89.640625" r="0" fill="#87cefa" stroke="none" rx="5" ry="5" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <text x="409.44618055555554" y="105.1875" fill="#000000" stroke="none" font="10px &quot;Arial&quot;" font-family="Source Sans Pro" font-size="16px" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);text-anchor:middle;font:16px &quot;Source Sans Pro&quot;" text-anchor="middle">
+        <tspan dy="5.5" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)">pP</tspan>
+    </text>
+    <text x="409.44618055555554" y="71.3671875" fill="#444444" stroke="none" font="10px &quot;Arial&quot;" font-family="Source Sans Pro" font-size="14px" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);text-anchor:middle;font:14px &quot;Source Sans Pro&quot;" text-anchor="middle">
+        <tspan dy="5.0078125" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)">One of:</tspan>
+    </text>
+    <path fill="none" stroke="#333333" stroke-width="2" d="M454.9409722222222,105.1875Q464.9409722222222,105.1875,464.9409722222222,95.1875V63.09375Q464.9409722222222,53.09375,474.9409722222222,53.09375H533.9305555555555Q543.9305555555555,53.09375,543.9305555555555,63.09375V95.1875Q543.9305555555555,105.1875,553.9305555555555,105.1875" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <rect width="43.263888888888886" height="43.09375" x="482.8038194444444" y="83.640625" r="0" fill="#f0e68c" stroke="none" rx="4" ry="4" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <rect width="31.26388888888889" height="31.09375" x="488.8038194444444" y="89.640625" r="0" fill="#87cefa" stroke="none" rx="5" ry="5" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <text x="504.43576388888886" y="105.1875" fill="#000000" stroke="none" font="10px &quot;Arial&quot;" font-family="Source Sans Pro" font-size="16px" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);text-anchor:middle;font:16px &quot;Source Sans Pro&quot;" text-anchor="middle">
+        <tspan dy="5.5" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)">-+</tspan>
+    </text>
+    <text x="504.43576388888886" y="71.3671875" fill="#444444" stroke="none" font="10px &quot;Arial&quot;" font-family="Source Sans Pro" font-size="14px" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);text-anchor:middle;font:14px &quot;Source Sans Pro&quot;" text-anchor="middle">
+        <tspan dy="5.0078125" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)">One of:</tspan>
+    </text>
+    <path fill="none" stroke="#800000" stroke-width="2" d="M579.9305555555555,105.1875Q569.9305555555555,105.1875,569.9305555555555,115.1875V126.734375Q569.9305555555555,136.734375,579.9305555555555,136.734375H658.4583333333333Q668.4583333333333,136.734375,668.4583333333333,126.734375V115.1875Q668.4583333333333,105.1875,658.4583333333333,105.1875" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <rect width="78.52777777777777" height="43.09375" x="579.9305555555555" y="83.640625" r="0" fill="#f0e68c" stroke="none" rx="4" ry="4" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <rect width="40.895833333333336" height="31.09375" x="585.9305555555555" y="89.640625" r="0" fill="#008080" stroke="none" rx="5" ry="5" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <text x="606.3784722222222" y="105.1875" fill="#ffffff" stroke="none" font="10px &quot;Arial&quot;" font-family="Source Sans Pro" font-size="16px" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);text-anchor:middle;font:16px &quot;Source Sans Pro&quot;" text-anchor="middle">
+        <tspan dy="5.5" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)">0-9</tspan>
+    </text>
+    <rect width="21.631944444444443" height="31.09375" x="630.8263888888889" y="89.640625" r="0" fill="#87cefa" stroke="none" rx="5" ry="5" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <text x="641.6423611111111" y="105.1875" fill="#000000" stroke="none" font="10px &quot;Arial&quot;" font-family="Source Sans Pro" font-size="16px" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);text-anchor:middle;font:16px &quot;Source Sans Pro&quot;" text-anchor="middle">
+        <tspan dy="5.5" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)">_</tspan>
+    </text>
+    <text x="619.1944444444445" y="71.3671875" fill="#444444" stroke="none" font="10px &quot;Arial&quot;" font-family="Source Sans Pro" font-size="14px" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);text-anchor:middle;font:14px &quot;Source Sans Pro&quot;" text-anchor="middle">
+        <tspan dy="5.0078125" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)">One of:</tspan>
+    </text>
+    <path x="219.4236111111111" y="0" fill="none" stroke="#333333" stroke-linecap="butt" stroke-linejoin="round" stroke-width="2" d="M249.4236111111111,105.1875H275.4236111111111" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);stroke-linecap:butt;stroke-linejoin:round"/>
+    <path x="323.95138888888886" y="0" fill="none" stroke="#333333" stroke-linecap="butt" stroke-linejoin="round" stroke-width="2" d="M353.95138888888886,105.1875H387.8142361111111" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);stroke-linecap:butt;stroke-linejoin:round"/>
+    <path x="401.078125" y="0" fill="none" stroke="#333333" stroke-linecap="butt" stroke-linejoin="round" stroke-width="2" d="M431.078125,105.1875H482.8038194444444" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);stroke-linecap:butt;stroke-linejoin:round"/>
+    <path x="496.06770833333326" y="0" fill="none" stroke="#333333" stroke-linecap="butt" stroke-linejoin="round" stroke-width="2" d="M526.0677083333333,105.1875H579.9305555555555" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);stroke-linecap:butt;stroke-linejoin:round"/>
+    <path fill="none" stroke="#800000" stroke-width="2" d="M724.4583333333334,105.1875Q714.4583333333334,105.1875,714.4583333333334,115.1875V126.734375Q714.4583333333334,136.734375,724.4583333333334,136.734375H822.25Q832.25,136.734375,832.25,126.734375V115.1875Q832.25,105.1875,822.25,105.1875" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <path fill="none" stroke="#333333" stroke-width="2" d="M704.4583333333334,105.1875Q714.4583333333334,105.1875,714.4583333333334,95.1875V63.09375Q714.4583333333334,53.09375,724.4583333333334,53.09375H822.25Q832.25,53.09375,832.25,63.09375V95.1875Q832.25,105.1875,842.25,105.1875" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <rect width="97.79166666666667" height="43.09375" x="724.4583333333334" y="83.640625" r="0" fill="#f0e68c" stroke="none" rx="4" ry="4" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <rect width="40.895833333333336" height="31.09375" x="730.4583333333334" y="89.640625" r="0" fill="#008080" stroke="none" rx="5" ry="5" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <text x="750.90625" y="105.1875" fill="#ffffff" stroke="none" font="10px &quot;Arial&quot;" font-family="Source Sans Pro" font-size="16px" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);text-anchor:middle;font:16px &quot;Source Sans Pro&quot;" text-anchor="middle">
+        <tspan dy="5.5" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)">A-Z</tspan>
+    </text>
+    <rect width="40.895833333333336" height="31.09375" x="775.3541666666667" y="89.640625" r="0" fill="#008080" stroke="none" rx="5" ry="5" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <text x="795.8020833333334" y="105.1875" fill="#ffffff" stroke="none" font="10px &quot;Arial&quot;" font-family="Source Sans Pro" font-size="16px" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);text-anchor:middle;font:16px &quot;Source Sans Pro&quot;" text-anchor="middle">
+        <tspan dy="5.5" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)">a-z</tspan>
+    </text>
+    <text x="773.3541666666667" y="71.3671875" fill="#444444" stroke="none" font="10px &quot;Arial&quot;" font-family="Source Sans Pro" font-size="14px" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);text-anchor:middle;font:14px &quot;Source Sans Pro&quot;" text-anchor="middle">
+        <tspan dy="5.0078125" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)">One of:</tspan>
+    </text>
+    <circle cx="868.25" cy="105.1875" r="7" fill="#000000" stroke="none" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <circle cx="868.25" cy="105.1875" r="10" fill="none" stroke="#000" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0)"/>
+    <path x="20" y="0" fill="none" stroke="#333333" stroke-linecap="butt" stroke-linejoin="round" stroke-width="2" d="M30,105.1875H46" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);stroke-linecap:butt;stroke-linejoin:round"/>
+    <path x="67.26388888888889" y="0" fill="none" stroke="#333333" stroke-linecap="butt" stroke-linejoin="round" stroke-width="2" d="M77.26388888888889,105.1875H103.26388888888889" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);stroke-linecap:butt;stroke-linejoin:round"/>
+    <path x="171.79166666666666" y="0" fill="none" stroke="#333333" stroke-linecap="butt" stroke-linejoin="round" stroke-width="2" d="M181.79166666666666,105.1875H227.79166666666666" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);stroke-linecap:butt;stroke-linejoin:round"/>
+    <path x="648.4583333333333" y="0" fill="none" stroke="#333333" stroke-linecap="butt" stroke-linejoin="round" stroke-width="2" d="M658.4583333333333,105.1875H724.4583333333334" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);stroke-linecap:butt;stroke-linejoin:round"/>
+    <path x="812.25" y="0" fill="none" stroke="#333333" stroke-linecap="butt" stroke-linejoin="round" stroke-width="2" d="M822.25,105.1875H858.25" style="-webkit-tap-highlight-color:rgba(0, 0, 0, 0);stroke-linecap:butt;stroke-linejoin:round"/>
+</svg>

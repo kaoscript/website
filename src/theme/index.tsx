@@ -16,9 +16,9 @@ const map = {
   h5: components.H5,
   h6: components.H6,
   hr: components.Hr,
-//   pre: components.Pre,
   inlineCode: components.InlineCode,
   blockquote: components.Blockquote,
+  table: components.Table
 }
 
 import { SFC } from 'react'

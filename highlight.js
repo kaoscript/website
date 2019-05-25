@@ -20,11 +20,11 @@ code[class*="language-"] {
 	background-color: ${theme.colors['editor.background']};
 }
 
-.line-numbers .line-numbers-rows {
-	border-right: 1px solid ${theme.colors['editorRuler.foreground']};
+.code-lines {
+	border-left: 1px solid ${theme.colors['editorRuler.foreground']};
 }
 
-.line-numbers-rows > span:before {
+.code-lines .line:before {
 	color: ${theme.colors['editorRuler.foreground']};
 }
 `]
@@ -32,7 +32,7 @@ code[class*="language-"] {
 const colors = registry.getColorMap()
 for(let i = 2; i < colors.length; i++) {
 	css.push(`
-code[class*="language-"] .fg${i} {
+.code-lines .fg${i} {
 	color: ${colors[i]};
 }
 `)
@@ -89,7 +89,6 @@ export default function({include, exclude} = {}) {
 			data.hProperties = {}
 		}
 
-		data.hChildren = []
 		data.hProperties.className = [
 			...(data.hProperties.className || []),
 			`language-${lang}`,
@@ -98,6 +97,8 @@ export default function({include, exclude} = {}) {
 
 		const grammar = registry.grammarForScopeName(scope)
 		const lines = node.value.split(/\n/g)
+
+		const hLines = []
 
 		let ruleStack = null
 
@@ -150,22 +151,16 @@ export default function({include, exclude} = {}) {
 				}],
 			})
 
-			data.hChildren.push(hLine)
+			hLines.push(hLine)
 		}
 
-		data.hChildren.push({
+		data.hChildren = [{
 			type: 'element',
-			tagName: 'span',
+			tagName: 'div',
 			properties: {
-				ariaHidden: true,
-				className: ['line-numbers-rows']
+				className: ['code-lines']
 			},
-			children: lines.map(line => ({
-				type: 'element',
-				tagName: 'span',
-				properties: {},
-				children: [],
-			})),
-		})
+			children: hLines
+		}]
 	} // }}}
 }

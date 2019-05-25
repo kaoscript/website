@@ -24,8 +24,6 @@ const TableStyled = styled.table`
   border-collapse: collapse;
   border-style: hidden;
   border-radius: ${get('radii')};
-  font-size: 14px;
-  color: ${get('colors.tableColor')};
 
   ${mq({
     overflowX: ['initial', 'initial', 'initial', 'hidden'],
@@ -39,7 +37,8 @@ const TableStyled = styled.table`
 
   & thead th {
     font-weight: 400;
-    padding: 20px 20px;
+    padding: 6px 13px;
+	border: 1px solid #dfe2e5;
 
     &:nth-of-type(1) {
       ${mq({
@@ -73,14 +72,18 @@ const TableStyled = styled.table`
   }
 
   & tbody td {
-    padding: 12px 20px;
-    line-height: 2;
+    padding: 6px 13px;
     font-weight: 200;
+	    border: 1px solid #dfe2e5;
   }
 
   & tbody > tr {
     display: table-row;
     border-top: 1px solid ${get('colors.border')};
+
+	:nth-child(2n) {
+		background-color: ${get('colors.theadBg')};
+	}
   }
 
   ${get('styles.table')};

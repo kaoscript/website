@@ -4,6 +4,7 @@ import externalLinks from 'remark-external-links'
 import taskList from 'remark-task-list'
 
 import highlight from './highlight.js'
+import languageName from './languageName.js'
 
 import * as path from 'path'
 const PUBLIC = path.resolve(__dirname, 'public')
@@ -38,10 +39,10 @@ export default {
 				'Variable Declarations',
 				'Basic Types',
 				'Basic Operators',
-				'Typing',
 				'Control Flow Statements',
 				'Control Flow Expressions',
 				'Functions',
+				'Typing',
 				'Classes',
 				'Enums',
 				'Namespaces',
@@ -77,6 +78,7 @@ export default {
 		externalLinks,
 		taskList,
 		highlight,
+		languageName,
 	],
 	onCreateWebpackChain: config => {
 		config.resolve.alias

@@ -34,12 +34,15 @@ export const styles = {
     font-size: 2rem;
     letter-spacing: -0.02em;
 	margin: 40px 0px 30px;
-	border-bottom: 1px dashed rgb(206, 212, 222);
+	border-bottom: 1px dashed #ced4de;
   `,
   h3: css`
-    margin: 25px 0 10px;
-    font-size: 20px;
+    margin: 30px 0 10px;
+	font-family: Poppins, serif;
+    font-size: 1.3em;
     font-weight: 400;
+	position: relative;
+	display: table;
   `,
   h4: css`
     margin: 25px 0 10px;
@@ -65,9 +68,6 @@ export const styles = {
     padding: 0;
     margin: 10px 0 10px;
   `,
-  playground: css`
-    padding: 40px;
-  `,
   code: css`
     margin: 0 3px;
     border-radius: 3px;
@@ -87,8 +87,6 @@ export const styles = {
   table: css`
     overflow-y: hidden;
     width: 100%;
-    font-family: ${get('fonts.mono')};
-    font-size: 16px;
     overflow-x: initial;
     display: block;
   `,

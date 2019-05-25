@@ -18,6 +18,7 @@ code[class*="language-"] {
 	-moz-hyphens: none;
 	-ms-hyphens: none;
 	hyphens: none;
+	counter-reset: div;
 }
 
 @media print {
@@ -26,40 +27,24 @@ code[class*="language-"] {
 	}
 }
 
-code[class*="language-"].line-numbers {
-	position: relative;
-	counter-reset: linenumber;
-	padding-left: 0;
+.code-lines {
+	padding-left: 2em;
+	margin-left: 2em;
 }
 
-code[class*="language-"] .line {
-	margin-left: 3.8em;
+.code-lines .line {
+    white-space: pre-wrap;
+    text-indent: -1em;
 }
 
-.line-numbers .line-numbers-rows {
-	position: absolute;
-	pointer-events: none;
-	top: 1em;
-	font-size: 100%;
-	width: 3em; /* works for line-numbers below 1000 lines */
-	letter-spacing: -1px;
-
-	-webkit-user-select: none;
-	-moz-user-select: none;
-	-ms-user-select: none;
-	user-select: none;
-
+.code-lines .line:before {
+    content: counter(div);
+    counter-increment: div;
+    -webkit-user-select: none;
+	margin-left: -2.5em;
+    margin-right: 2em;
 }
 
-.line-numbers-rows > span {
-	pointer-events: none;
-	display: block;
-	counter-increment: linenumber;
-}
-
-.line-numbers-rows > span:before {
-	content: counter(linenumber);
-	display: block;
-	padding-right: 0.8em;
-	text-align: right;
+.code-lines .line:nth-child(n+10):before {
+	margin-left: -3.1em;
 }
