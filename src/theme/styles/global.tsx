@@ -4,8 +4,7 @@ import { createGlobalStyle } from 'styled-components'
 import { get } from '@utils/theme'
 
 const BaseStyle = createGlobalStyle`
-	@import url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600');
-	@import url('https://fonts.googleapis.com/css?family=Inconsolata');
+	@import url('https://fonts.googleapis.com/css?family=Lato:400,700|Playfair+Display:700|Poppins:400|Source+Sans+Pro');
 
 	.icon-link {
 		display: none;
@@ -34,6 +33,10 @@ const BaseStyle = createGlobalStyle`
 		text-transform: lowercase;
     	padding: 0 0.2em;
 		font-size: 0.95em;
+	}
+
+	p {
+		overflow: scroll;
 	}
 `
 

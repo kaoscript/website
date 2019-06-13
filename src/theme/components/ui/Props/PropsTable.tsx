@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useMemo } from 'react'
-import { PropsComponentProps, useComponents } from 'docz'
+import { PropsComponentProps, useComponents } from '@daiyam/docz'
 import styled from 'styled-components'
 
 import { get } from '@utils/theme'

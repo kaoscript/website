@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { SFC, Fragment } from 'react'
-import { PageProps, useConfig } from 'docz'
+import { PageProps, useConfig } from '@daiyam/docz'
 import styled from 'styled-components'
 
 import { ButtonLink } from './Button'

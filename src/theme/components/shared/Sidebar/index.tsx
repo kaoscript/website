@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { Fragment, SFC, useState, useEffect } from 'react'
-import { useMenus, useWindowSize, usePrevious } from 'docz'
+import { useMenus, useWindowSize, usePrevious } from '@daiyam/docz'
 import styled from 'styled-components'
 
 import { Logo } from '../Logo'

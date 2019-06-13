@@ -1,0 +1,355 @@
+---
+name: Control Flows
+menu: Guide
+route: /guide/control-flows
+---
+
+# Control Flow
+
+## if...else
+
+### Syntax
+
+```syntax
+if
+	*expression:Boolean*
+	| (const | let) (*varname*[: *type*] | *destructuring*) = *expression*
+{
+	*...statements*
+}
+[else if
+	*expression:Boolean*
+	| (const | let) (*varname*[: *type*] | *destructuring*) = *expression*
+{
+	*...statements*
+}]
+[else {
+	*...statements*
+}]
+```
+
+### Examples
+
+```kaoscript
+if x == 5 {
+}
+else if x == 6 {
+}
+else {
+}
+```
+
+## unless
+
+`unless x` is equivalent to `if !x`.
+
+### Syntax
+
+```syntax
+unless *expression:Boolean* {
+	*...statements*
+}
+```
+
+### Examples
+
+```kaoscript
+unless x == 0 {
+}
+```
+
+## for...from
+
+### Syntax
+
+```syntax
+for
+	[const | let] *varname*
+	from *expression:Number*
+	(til | to) *expression:Number*
+	[by *expression:Number*]
+	[(while | until) *expression:Boolean*]
+	[when *expression:Boolean*]
+{
+	*...statements*
+}
+```
+
+### Examples
+
+```kaoscript
+for x from 0 to 10 {
+	console.log(x)
+}
+// 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
+
+for const x from 0 til 10 {
+	console.log(x)
+}
+// 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+```
+
+## for...in
+
+Unlike JavaScript, in kaoscript, `for...in` loops an array.
+
+### Syntax
+
+```syntax
+for
+	[const | let] ((*varname*[: *type*] | *destructuring*)[, *index*] | :*index*)
+	in *expression:Array*
+	[desc]
+	[from *expression:Number*]
+	[by *expression:Number*]
+	[(til | to) *expression:Number*]
+	[(while | until) *expression:Boolean*]
+	[when *expression:Boolean*]
+{
+	*...statements*
+}
+```
+
+### Examples
+
+```kaoscript
+heroes = ['leto', 'duncan', 'goku']
+
+for const hero, index in heroes when index % 2 == 0
+{
+	console.log(hero)
+}
+// leto, goku
+```
+
+```kaoscript
+heroes = ['leto', 'duncan', 'goku']
+
+for hero in heroes until hero == 'duncan'
+{
+	console.log(hero)
+}
+// leto
+```
+
+## for...of
+
+Unlike JavaScript, in kaoscript, `for...in` loops an object.
+
+### Syntax
+
+```syntax
+for
+	[const | let] ((*varname*[: *type*] | *destructuring*)[, *key*] | :*key*)
+	of *expression:Object*
+	[(while | until) *expression:Boolean*]
+	[when *expression:Boolean*]
+{
+	*...statements*
+}
+```
+
+### Examples
+
+```kaoscript
+likes = {
+	leto: 'spice'
+	paul: 'chani'
+	duncan: 'murbella'
+}
+
+for value, key of likes {
+	console.log(`\(key) likes \(value)`)
+}
+// leto likes spice
+// paul likes chani
+// duncan likes murbella
+```
+
+## for...range
+
+### Syntax
+
+```syntax
+for
+	[const | let] *varname*[, *index*] | :*index*
+	in *operand:Number*[<]..[<]*operand:Number*[..*operand:Number*]
+	[(while | until) *expression:Boolean*]
+	[when *expression:Boolean*]
+{
+	*...statements*
+}
+```
+
+### Examples
+
+```kaoscript
+for x in 0..10..2 while test(x) {
+}
+```
+
+## while and do...while
+
+`while` executes the loop while the condition is `true`.
+
+### Syntax
+
+```syntax
+while *expression:Boolean* {
+
+}
+```
+
+```syntax
+do  {
+
+}
+while *expression:Boolean*
+```
+
+### Examples
+
+```kaoscript
+while supply > demand {
+	buy()
+}
+```
+
+```kaoscript
+do {
+	buy()
+}
+while supply > demand
+```
+
+## until and do...until
+
+`until` executes the loop and stops it when the condition becomes `true`.
+
+### Syntax
+
+```syntax
+until *expression:Boolean* {
+
+}
+```
+
+```syntax
+do  {
+
+}
+until *expression:Boolean*
+```
+
+### Examples
+
+```kaoscript
+until supply > demand {
+	sell()
+}
+```
+
+```kaoscript
+do {
+	sell()
+}
+until supply > demand
+```
+
+## break and continue
+
+
+
+## switch
+
+Unlike JavaScript, in kaoscript, `switch` doesn't support cascading.
+It executes only and only one branch. (No `break` needed)
+
+### Syntax
+
+```syntax
+switch *expression* {
+	[*expression1*[, *expression2* ... [*expressionN*]] | is *class*]
+	[with (*varname* [as *type*] | *destructuring*) ]
+	[where *expression:Boolean*]
+	=> (
+		*statement*
+		| {
+			*...statements*
+		}
+	)
+}
+```
+
+### Examples
+
+```kaoscript
+switch number {
+	1               => console.log("One!")
+	2, 3, 5, 7, 11  => console.log("This is a prime")
+	13..19          => console.log("A teen")
+	                => console.log("Ain't special")
+}
+```
+
+```kaoscript
+switch age() {
+	0					=> console.log(`I'm not born yet I guess`)
+	1  .. 12 	with n	=> console.log(`I'm a child of age \(n)`)
+	13 .. 19 	with n	=> console.log(`I'm a teen of age \(n)`)
+				with n	=> console.log(`I'm an old person of age \(n)`)
+}
+```
+
+```kaoscript
+let somePoint = [1, 1]
+
+switch somePoint {
+	[0, 0]			=> console.log(`(0, 0) is at the origin`)
+	[, 0]			=> console.log(`(\(somePoint[0]), 0) is on the x-axis`)
+	[0,]			=> console.log(`(0, \(somePoint[1])) is on the y-axis`)
+	[-2..2, -2..2]	=> console.log(`(\(somePoint[0]), \(somePoint[1])) is inside the box`)
+					=> console.log(`(\(somePoint[0]), \(somePoint[1])) is outside of the box`)
+}
+```
+
+```kaoscript
+let somePoint = [1, 1]
+
+switch somePoint {
+	with [x, y] where x == 0 && y == 0				=> console.log(`(0, 0) is at the origin`)
+	with [x, y] where y == 0						=> console.log(`(\(x), 0) is on the x-axis`)
+	with [x, y] where x == 0						=> console.log(`(0, \(y)) is on the y-axis`)
+	with [x, y] where -2 <= x <= 2 && -2 <= y <= 2	=> console.log(`(\(x), \(y)) is inside the box`)
+	with [x, y]										=> console.log(`(\(x), \(y)) is outside of the box`)
+													=> console.log(`Not a point`)
+}
+```
+
+```kaoscript
+let value = {
+	foo: 1,
+	bar() => 2
+}
+
+switch value {
+	{foo: 1}	with {qux: n} 			=> console.log(`qux: \(n)`)
+	{foo: 1} 							=> console.log('foo: 1')
+	{foo}								=> console.log('has foo')
+	{qux}								=> console.log('has qux')
+				where value.bar() == 0	=> console.log('bar() == 0')
+										=> console.log('oops!')
+}
+```
+
+```kaoscript
+switch view {
+	is UIImageView								=> console.log("It's an image view")
+	is UILabel		with label as UILabel		=> console.log("It's a label")
+	is UITableView	with tblv as UITableView	=> {
+						let sectionCount = tblv.numberOfSections()
+						console.log(`It's a table view with \(sectionCount) sections`)
+					}
+												=> console.log("It's some other UIView or subclass")
+}
+```

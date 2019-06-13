@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useMemo, useEffect, useRef, useState } from 'react'
-import { MenuItem, useConfig, usePrevious } from 'docz'
+import { MenuItem, useConfig, usePrevious } from '@daiyam/docz'
 import styled, { css } from 'styled-components'
 
 import { MenuHeadings } from './MenuHeadings'

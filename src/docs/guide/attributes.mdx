@@ -6,11 +6,86 @@ route: /guide/attributes
 
 # Attributes
 
-## Conditional Compilation
+An attribute is metadata applied to the file or to a statement. Attributes are modeled on attributes in Rust
+
+Inner attributes, written with a bang (`!`) after the hash (`#`), apply to the item that the attribute is declared within. Outer attributes, written without the bang after the hash, apply to the statement that follows the attribute.
+
+## syntax
+
+```syntax
+inner = "#![" *attributes* "]"
+
+outer = "#[" *attributes* "]"
+
+attributes = (
+	*varname* [= *value*]
+	|
+	*varname* "(" *attribute1*, *attribute2*, ..., *attributeN* ")"
+)
+
+value = ( *number* | " *string* ")
+```
+
+## binary
+
+Unlike JavaScript, by default, a kaoscript file is a module.
+A module can not be executed by the command line `kaoscript`, it will need to be imported from another file.
+
+For a kaoscript file to be executed as binary, it would need the attribute `#![bin]`.
 
 ```kaoscript
-#[if(any(trident, safari-v8))]
+#![bin]
+
+extern console
+
+console.log('Hello World!')
+```
+
+## conditional compilation
+
+Condition compilation allows to transpile the code depending of the targeted engine.
+
+```kaoscript
+// if the engine is IE (*trident*) or Safari 8 or under (*lte(jsc-v8)*)
+#[if(any(trident, lte(jsc-v8)))]
 impl String {
-	startsWith(value: String): Boolean => this.length >= value.length && this.slice(0, value.length) == value
+	endsWith(value: String): Boolean => this.length >= value.length && this.slice(this.length - value.length) == value
 }
+
+#[else]
+disclose String {
+	endsWith(search: String): Boolean
+}
+```
+
+By default, the only available targets are *ecma-v5* and *ecma-v6*.
+[@kaoscript/target-commons](@kaoscript/target-commons) provides those additional targets.
+
+### operators
+
+|         operator          |              description               |
+|:-------------------------:|:--------------------------------------:|
+| `any`(item1, ..., itemN)  |   true if at least one item is true    |
+| `all`(item1, ..., itemN)  |     true if all the items are true     |
+| `none`(item1, ..., itemN) |   true if none of the item are true    |
+| `one`(item1, ..., itemN)  | true if only and only one item is true |
+|        `lt`(item)         |               less than                |
+|        `lte`(item)        |          less than or equals           |
+|        `gt`(item)         |              greater than              |
+|        `gte`(item)        |         greater than or equals         |
+
+## runtime
+
+kaoscript needs a runtime to add dynamics functions on classes (`Helper`) and to do type checking (`Type`).
+
+The runtime is imported only when it's needed.
+
+The default runtime is [@kaoscript/runtime]() and provides only the bare minimum.
+
+But you can provide your own runtime with the following attributes
+
+```kaoscript
+#![runtime(package="@kaoscript/runtime")]
+#![runtime(type(alias="Type", member="Type"))]
+#![runtime(helper(alias="Helper", member="Helper"))]
 ```

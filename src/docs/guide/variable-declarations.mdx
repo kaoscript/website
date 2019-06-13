@@ -8,6 +8,14 @@ route: /guide/variable-declarations
 
 ## const
 
+### Syntax
+
+```syntax
+const (*varname*[: *type*] | *destructuring*) = *expression*
+```
+
+### Description
+
 ```kaoscript
 const name = 'John'
 ```
@@ -25,6 +33,8 @@ names = ['John']
 // will through an error
 ```
 
+### Typing
+
 If not type is provided, `const` will deduce the variable's type based on its value.
 
 ```kaoscript
@@ -39,6 +49,16 @@ The type of a variable declared with `const` can't be changed.
 
 ## let
 
+### Syntax
+
+```syntax
+let (*varname*[: *type*] | *destructuring*) = *expression*
+let (*varname* | *destructuring*) := *expression*
+let *varname1*[, *varname2* ... [, *varnamN*]]
+```
+
+### Description
+
 ```kaoscript
 let name = 'John'
 ```
@@ -52,6 +72,8 @@ name = 42
 // no error
 ```
 
+### Typing
+
 If a type is provided at the declaration of a variable, its type can't be changed.
 
 ```kaoscript
@@ -61,24 +83,9 @@ name = 42
 // throws an error
 ```
 
-But if no type is provided, it will automatically deduce its type based on the current value.
+### Auto-Typing
 
-```kaoscript
-let name = 'John'
-// type: String
-
-name = 42
-// type: Number
-
-func foobar() {
-	return 'hello'
-}
-
-name = foobar()
-// no type
-```
-
-`let` can also make the deduced type immutable.
+`:=` make the variable's type to be immutable. The type will be deduced from the initial value.
 
 ```kaoscript
 let name := 'John'
@@ -87,3 +94,31 @@ let name := 'John'
 name = 42
 // throws an error
 ```
+
+## assignement
+
+Like JavaScript, kaosscript can create variables with assignements:
+
+```kaoscript
+name = 'John'
+```
+
+But unlike JavaScript, in kaoscript, those variables are created only inside the current block.
+
+```kaoscript
+func foobar() {
+	x = 42
+
+	console.log(x)
+}
+
+foobar()
+// 42
+
+console.log(x)
+// throw the error 'Undefined'
+```
+
+> :exclamation: You will able to disable the creation of variables via assignments, with an attribute
+
+> :question: By default, should this behaviour be allowed?

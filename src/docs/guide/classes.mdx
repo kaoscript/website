@@ -6,10 +6,98 @@ route: /guide/classes
 
 # Classes
 
-```kaoscript
-extern console: {
-	log(...args)
+## syntax
+
+```syntax
+[abstract] class *varname*["<" *type* ">"] [extends *varname*] {
+	(
+		[private | protected | public] (*field* | *method*)
+		|
+		(private | protected | public) {
+			(*field* | *method*)+
+		}
+	)*
 }
+
+field = *varname*[: *type*] [= *value*]
+
+method = [abstract] [async] *varname*([[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]])[: *type*] [~ *class1* [, *class2* ... [, *classN*]]] [ => *expression* | {
+	*...statements*
+}]
+```
+
+## example
+
+```kaoscript
+class Shape {
+	private {
+		_color: String
+	}
+
+	draw(): String {
+        return `I'm drawing with a \(this._color) pen.`
+    }
+}
+```
+
+## this aliasing
+
+`@x` is an alias for `this.x`, `this._x` or even `this.x()`.
+
+```kaoscript
+class Shape {
+	private {
+		_color: String
+	}
+
+	draw(): String {
+        return `I'm drawing with a \(@color) pen.`
+    }
+}
+```
+
+## constructor
+
+The constructor is called when creating a new object like `new Shape()`
+
+```kaoscript
+class Shape {
+	private _color: String
+
+    constructor(@color)
+	// automatically set the instance variable '_color' as the parameter 'color'
+}
+```
+
+## destructor
+
+The destructor is called by the statement `delete`.
+
+```kaoscript
+extern console
+
+class Shape {
+	private {
+		_color: String
+	}
+
+    constructor(@color)
+
+	destructor() {
+		@color = null
+	}
+}
+
+let s = new Shape('red')
+
+delete s
+// the destructor is called and the variable `s` is unreferenced
+```
+
+## superclass & subclass
+
+```kaoscript
+extern console
 
 class Shape {
 	private {
@@ -41,22 +129,6 @@ let r = new Rectangle('black')
 
 console.log(r.draw())
 // I'm drawing with a black pen. I'm drawing a black rectangle.
-
-
-impl Shape {
-	draw(shape): String {
-		return `I'm drawing a \(@color) \(shape).`
-	}
-}
-// adds dynamically the method 'draw(shape)' to the class 'Shape'
-
-let s = new Shape('red')
-
-console.log(s.draw())
-// I'm drawing with a red pen
-
-console.log(s.draw('circle'))
-// I'm drawing a red circle.
 ```
 
 ## abstract
@@ -81,21 +153,43 @@ class Greetings extends AbstractGreetings {
 }
 ```
 
-## override native class
+## implements
+
+`impl` statement allows the developer to augment the given class.
 
 ```kaoscript
-extern console
+impl Shape {
+	draw(shape): String {
+		return `I'm drawing a \(@color) \(shape).`
+	}
+}
+// adds the method 'draw(shape)' to the class 'Shape'
 
+let s = new Shape('red')
+
+console.log(s.draw())
+// I'm drawing with a red pen
+
+console.log(s.draw('circle'))
+// I'm drawing a red circle.
+```
+
+## implements & native class
+
+`impl` doesn't modify classes that have been flagged as `sealed`.
+
+```kaoscript
 extern sealed class Number
-// 'sealed' avoid to directly extends the class Number
+// import the external class 'Number' and flag it as `sealed` to avoid to directly modify it
 
 impl Number {
-	mod(max): Number {
+	mod(max: Number): Number {
 		if this == NaN {
 			return 0
 		}
 		else {
-			let n = this % max
+			const n = this % max
+
 			if n < 0 {
 				return n + max
 			}
@@ -105,17 +199,27 @@ impl Number {
 		}
 	}
 }
-// adds dynamically the method 'mod' to the class 'Number'
+// adds the method 'mod' to the class 'Number'
+// under the hood, the object `__ks_Number` is created to avoid to modify the object 'Number'
 
 let i = 42
+// inferred type: Number
 
 console.log(i.mod(2))
-// throw an error that 'mod' is not defined
+// 0
+// javascript code: console.log(__ks_Number._im_mod(i, 2))
+```
 
-let j: Number = 42
-// typed as a Number
+## disclose
 
-console.log(j.mod(2))
-// <- 0
-// javascript code: console.log(__ks_Number._im_mod(j, 2))
+`disclose` is
+
+```kaoscript
+disclose String {
+	length: Number
+	substring(indexStart: Number, indexEnd: Number = -1): String
+	toLowerCase(): String
+	toUpperCase(): String
+	trim(): String
+}
 ```

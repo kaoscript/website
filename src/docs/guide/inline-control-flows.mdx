@@ -1,0 +1,185 @@
+---
+name: Inline Control Flows
+menu: Guide
+route: /guide/inline-control-flows
+---
+
+# Inline Control Flows
+
+## array comprehensions
+
+### Syntax
+
+```syntax
+"["
+	*expression*
+	for
+	(
+		[const | let] *varname*
+			from *expression:Number*
+			(til | to) *expression:Number*
+			[by *expression:Number*]
+			[(while | until) *expression:Boolean*]
+			[when *expression:Boolean*]
+		| [const | let] ((*varname*[: *type*] | *destructuring*)[, *index*] | :*index*)
+			in *expression:Array*
+			[desc]
+			[from *expression:Number*]
+			[(til | to) *expression:Number*]
+			[by *expression:Number*]
+			[(while | until) *expression:Boolean*]
+			[when *expression:Boolean*]
+		| [const | let] ((*varname*[: *type*] | *destructuring*)[, *key*] | :*key*)
+			of *expression:Object*
+			[(while | until) *expression:Boolean*]
+			[when *expression:Boolean*]
+		| [const | let] *varname*[, *index*] | :*index*
+			in *operand:Number*[<]..[<]*operand:Number*[..*operand:Number*]
+			[(while | until) *expression:Boolean*]
+			[when *expression:Boolean*]
+	)
+"]"
+```
+
+### Examples
+
+```kaoscript
+likes = {
+	leto: 'spice'
+	paul: 'chani'
+	duncan: 'murbella'
+}
+
+spicyHeroes = [hero for like, hero of likes when like == 'spice']
+// spicyHeroes = ['leto']
+```
+
+```kaoscript
+a = [i for const i from 0 to 10 by 2 until foo(i)]
+```
+
+## assignement statement
+
+### Syntax
+
+```syntax
+... = *expression* [
+	if *expression:Boolean* [else *expression*]
+	| unless *expression:Boolean*
+]
+```
+
+### Examples
+
+```kaoscript
+y = 10 if x == 5 else 15
+```
+
+## expression statement
+
+### Syntax
+
+```syntax
+*expression*
+[
+	for
+		(
+			[const | let] *varname*
+				from *expression:Number*
+				(til | to) *expression:Number*
+				[by *expression:Number*]
+				[(while | until) *expression:Boolean*]
+				[when *expression:Boolean*]
+			| [const | let] ((*varname*[: *type*] | *destructuring*)[, *index*] | :*index*)
+				in *expression:Array*
+				[desc]
+				[from *expression:Number*]
+				[(til | to) *expression:Number*]
+				[by *expression:Number*]
+				[(while | until) *expression:Boolean*]
+				[when *expression:Boolean*]
+			| [const | let] ((*varname*[: *type*] | *destructuring*)[, *key*] | :*key*)
+				of *expression:Object*
+				[(while | until) *expression:Boolean*]
+				[when *expression:Boolean*]
+			| [const | let] *varname*[, *index*] | :*index*
+				in *operand:Number*[<]..[<]*operand:Number*[..*operand:Number*]
+				[(while | until) *expression:Boolean*]
+				[when *expression:Boolean*]
+		)
+	| if *expression:Boolean*
+	| unless *expression:Boolean*
+
+]
+```
+
+### Examples
+
+```kaoscript
+foobar() if x == 5
+```
+
+```kaoscript
+heroes = ['leto', 'duncan', 'goku']
+
+console.log(hero) for hero in heroes
+```
+
+## let statement
+
+### Syntax
+
+```syntax
+let ... = *expression* [
+	if *expression:Boolean* [else *expression*]
+	| unless *expression:Boolean*
+]
+```
+
+### Examples
+
+```kaoscript
+let y = 10 if x == 5 else 15
+```
+
+## return statement
+
+### Syntax
+
+```syntax
+return [
+	if *expression:Boolean*
+	| unless *expression:Boolean*
+	| *expression* [
+		if *expression:Boolean* [else *expression*]
+		| unless *expression:Boolean*
+	]
+]
+```
+
+### Examples
+
+```kaoscript
+return if lang == 'en'
+```
+
+```kaoscript
+return 'hello' if lang == 'en' else 'bonjour'
+```
+
+## throw statement
+
+### Syntax
+
+```syntax
+throw *expression* [
+	if *expression:Boolean* [else *expression*]
+	| unless *expression:Boolean*
+]
+```
+
+### Examples
+
+```kaoscript
+throw new Error('Not Defined') if !?x
+```

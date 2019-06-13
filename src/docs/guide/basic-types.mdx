@@ -6,7 +6,7 @@ route: /guide/basic-types
 
 # Basic Types
 
-## Booleans
+## boolean
 
 The boolean literals are `true` and `false`.
 
@@ -15,26 +15,15 @@ The boolean literals are `true` and `false`.
 let isDone = true
 ```
 
-## Strings
+## string
 
 ```kaoscript
 let singleQuote = 'John'
 let doubleQuote = "Jane"
 ```
-
-You can also use template strings.
-
-```kaoscript
-let message = 'Hello!'
-let name = 'John'
-
-let template = `\(message)\nIt's nice to meet you, \(name).`
-// Hello! \nIt's nice to meet you, John.
-```
-
 > :construction: kaoscript will support multilines strings.
 
-## Numbers
+## number
 
 Numbers are floating point values like in JavaScript but with more possible literals.
 
@@ -102,7 +91,19 @@ let radix7 = 7r66.6
 
 ![radix-regex](@images/guide/basic-types/radix.svg)
 
-## Arrays
+### NaN & Infinity
+
+```kaoscript
+if x == NaN {
+
+}
+
+if y == Infinity {
+
+}
+```
+
+## array
 
 ```kaoscript
 let array = [1, 2, 3]
@@ -150,7 +151,7 @@ let a = [min..max]
 // 1, 2, 3, 4, 5
 ```
 
-## Objects
+## object
 
 ```kaoscript
 let foo = {}
@@ -204,9 +205,9 @@ let foo2 = {
 // {"x": 42}
 ```
 
-> :construction: Object in kaoscript might evolve into true `Dictionary`. With no default methods added to them.
+> :construction: `Object` in kaoscript might evolve into true `Dictionary`. With no default methods added to them.
 
-## RegExps
+## regex
 
 kaoscript uses the RegExp class from JavaScript.
 
@@ -214,13 +215,24 @@ kaoscript uses the RegExp class from JavaScript.
 let r = /foobar/gim
 ```
 
-## Nulls
+## null
 
 ```kaoscript
 let n = null
 ```
 
-## Tagged Templates
+
+## template string
+
+```kaoscript
+let message = 'Hello!'
+let name = 'John'
+
+let template = `\(message)\nIt's nice to meet you, \(name).`
+// Hello! \nIt's nice to meet you, John.
+```
+
+## tagged template
 
 ```kaoscript
 let person = 'Mike'

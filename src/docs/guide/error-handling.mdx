@@ -6,6 +6,36 @@ route: /guide/error-handling
 
 # Error Handling
 
+In kaoscript, the error handling is very Java-like with some go-iness.
+
+## try..catch
+
+### syntax
+
+```syntax
+try {
+	*...statements*
+}
+[on *classname1* [catch *varname*]] {
+	*...statements*
+}]
+[on *classname2* [catch *varname*]] {
+	*...statements*
+}]
+...
+[on *classnameN* [catch *varname*]] {
+	*...statements*
+}]
+[catch [*varname*] {
+	*...statements*
+}]
+[finally {
+	*...statements*
+}]
+```
+
+### examples
+
 ```kaoscript
 try {
 	console.log('foobar')
@@ -33,21 +63,45 @@ catch {
 }
 ```
 
+## disabling
+
+koascript allows to disable the disable the default error handling.
+
+### global
+
 ```kaoscript
-try {
-	foo()
+#![error(off)]
+
+func foobar() ~ Error {
+	throw new Error(`Not Implemented`)
 }
 
-func foo(name): String ~ Error {
-	if name == 'foobar' {
-		throw new Error(`Invalid name '\(name)'`)
-	}
+func disabled() {
+	foobar()
+}
+```
 
-	return name
+### local
+
+```kaoscript
+func foobar() ~ Error {
+	throw new Error(`Not Implemented`)
 }
 
 #[error(off)]
-func bar() {
-	validate('toto')
+func qux() {
+	foobar()
 }
+```
+
+The error handling is only disabled for the function `qux`.
+
+## filtering
+
+You can also exclude error type that need to be handled.
+
+```kaoscript
+#[error(ignore(SyntaxError))]
+
+#[error(ignore(SyntaxError, UnexpectedError))]
 ```

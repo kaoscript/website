@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { SFC } from 'react'
-import { useConfig } from 'docz'
+import { useConfig } from '@daiyam/docz'
 import styled from 'styled-components'
 
 import { breakpoints } from '@styles/responsive'

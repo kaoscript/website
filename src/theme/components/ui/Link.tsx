@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useMemo, SFC } from 'react'
-import { useConfig, useDocs } from 'docz'
+import { useConfig, useDocs } from '@daiyam/docz'
 import styled from 'styled-components'
 
 import { get } from '@utils/theme'

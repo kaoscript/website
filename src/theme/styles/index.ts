@@ -99,4 +99,7 @@ export const styles = {
 	color: ${get('colors.grayDark')};
     font-size: 1.125rem;
   `,
+  sidebar: css`
+	font-family: "Helvetica Neue", Helvetica, Geneva, sans-serif;
+  `
 }

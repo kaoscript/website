@@ -6,54 +6,39 @@ route: /guide/functions
 
 # Functions
 
-## Declaration
+## statement
+
+### Syntax
+
+```syntax
+[async] func *varname*([[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]])[: *type*] [~ *class1* [, *class2* ... [, *classN*]]] [ => *expression* | {
+	*...statements*
+}]
+```
+
+### Examples
 
 ```kaoscript
 import '@zokugun/lang'
-
-extern console, parseFoat
 
 func alpha(n: Number, percentage = false): Number {
-	let i: Number = parseFoat(n)
+	const i = n.toInt()
 
-	return 1 if i is NaN else (percentage ? i / 100 : i).limit(0, 1).round(3)
-}
-```
-
-## Asynchronous
-
-```kaoscript
-import '@zokugun/lang'
-import 'child_process' for exec
-
-const df_regex = /([\/[a-z0-9\-\_\s]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+%)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+%)\s+(\/.*)/i
-
-async func disks() {
-	let stdout: string, stderr = await exec('df -k')
-
-	let disks = []
-	let matches: Array<String?>
-	for line in stdout.lines() {
-		matches = df_regex.exec(line)
-
-		if matches {
-			disks.push({
-				device: matches[1].trim(),
-				mount: matches[9],
-				total: matches[2].toInt() * 1024,
-				used: matches[3].toInt() * 1024,
-				available: matches[4].toInt() * 1024
-			})
-		}
-	}
-
-	return disks
+	return 1 if i == NaN else (percentage ? i / 100 : i).limit(0, 1).round(3)
 }
 
-let d = await disks()
+func red() => '#FF0000'
 ```
 
-## Parameters
+## parameters
+
+### Syntax
+
+```syntax
+[*varname* | *destructuring* | ...[*varname*]] [: *type*] [?] [= *expression*]
+```
+
+### Examples
 
 ```kaoscript
 require expect: func
@@ -75,15 +60,219 @@ expect(foo(1, 2, 3, 4)).to.eql([1, 2, 3, 4, null])
 expect(foo(1, 2, 3, 4, 5)).to.eql([1, 2, 3, 4, 5])
 ```
 
+### Distribution
+
 |                              | Required | Nullable | Typed | Default Value |
-| ---------------------------- | -------- | -------- | ----- | ------------- |
-| `foo(x)`                     | YES      |          |       |               |
-| `foo(x?)`                    | YES      | YES      |       |               |
-| `foo(x = null)`              |          | YES      |       | YES           |
-| `foo(x = 'foobar')`          |          |          |       | YES           |
-| `foo(x: String)`             | YES      |          | YES   |               |
-| `foo(x: String?)`            | YES      | YES      | YES   |               |
-| `foo(x: String = null)`      |          | YES      | YES   | YES           |
-| `foo(x: String = 'foobar')`  |          |          | YES   | YES           |
-| `foo(x: String? = null)`     |          | YES      | YES   | YES           |
-| `foo(x: String? = 'foobar')` |          | YES      | YES   | YES           |
+| ---------------------------- |:--------:|:--------:|:-----:|:-------------:|
+| `foo(x)`                     |   YES    |          |       |               |
+| `foo(x?)`                    |   YES    |   YES    |       |               |
+| `foo(x = null)`              |          |   YES    |       |      YES      |
+| `foo(x = 'foobar')`          |          |          |       |      YES      |
+| `foo(x: String)`             |   YES    |          |  YES  |               |
+| `foo(x: String?)`            |   YES    |   YES    |  YES  |               |
+| `foo(x: String = null)`      |          |   YES    |  YES  |      YES      |
+| `foo(x: String = 'foobar')`  |          |          |  YES  |      YES      |
+| `foo(x: String? = null)`     |          |   YES    |  YES  |      YES      |
+| `foo(x: String? = 'foobar')` |          |   YES    |  YES  |      YES      |
+
+## rest parameter
+
+Unlike JavaScript, in kaoscript, the `rest` parameter is allowed in any position.
+
+### Examples
+
+```kaoscript
+func foo(...items) {
+	console.log(items)
+}
+
+func quux(x = 1, ...items, z = 1) {
+	console.log(x, items, z)
+}
+
+func corge(...items = [1..5]) {
+	console.log(items)
+}
+```
+
+## anonymous parameter
+
+In kaoscript, a parameter can be ignored.
+
+### Examples
+
+```kaoscript
+func foo(...) {
+}
+
+func bar(, x, y) {
+	console.log(x, y)
+}
+```
+
+## asynchronous
+
+`async/await` use the traditional `callback(error, ...values)` where the `error` can be catched with `try/catch`.
+
+### Examples
+
+```kaoscript
+import '@zokugun/lang'
+import 'child_process' for exec
+
+const df_regex = /([\/[a-z0-9\-\_\s]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+%)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+%)\s+(\/.*)/i
+
+async func disks() {
+	const stdout: string, stderr = await exec('df -k')
+
+	const disks = []
+
+	for const line in stdout.lines() {
+		if const matches = df_regex.exec(line) {
+			disks.push({
+				device: matches[1].trim(),
+				mount: matches[9],
+				total: matches[2].toInt() * 1024,
+				used: matches[3].toInt() * 1024,
+				available: matches[4].toInt() * 1024
+			})
+		}
+	}
+
+	return disks
+}
+
+let d = await disks()
+```
+
+## error handling
+
+Like Java, in kaoscript, a function exposes the list of possible errors. Those errors will have to be handled by the caller. (This behaviour can be disabled with an attribute.)
+
+### Examples
+
+```kaoscript
+func foobar() ~ Error {
+}
+
+func handled() {
+	try {
+		foobar()
+	}
+}
+
+func passed() ~ Error {
+	foobar()
+}
+
+#[error(off)]
+func disabled() {
+	foobar()
+}
+
+#[error(ignore(Error))]
+func filtered() {
+	foobar()
+}
+```
+
+## lambda
+
+### Syntax
+
+```syntax
+[async] [func] [([[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]])[: *type*] [~ *class1* [, *class2* ... [, *classN*]]] | *parameter* ] => [ *expression* | {
+	*...statements*
+}]
+```
+
+### Examples
+
+```kaoscript
+const foo = (a:Number, b:Number) => a - b
+
+let four = (a => a / 10)(42)
+```
+
+## overloading
+
+kaoscript allows functions to be overloaded.
+
+### Examples
+
+```kaoscript
+func reverse(value: String): String => value.split('').reverse().join('')
+func reverse(value: Array): Array => value.slice().reverse()
+
+reverse('foobar')
+// 'raboof'
+
+reverse([1, 2, 3, 4])
+// [4, 3, 2, 1]
+```
+
+## currying
+
+|      |     `this` is     |
+|:----:|:-----------------:|
+| `^$` |  first argument   |
+| `^^` |      `null`       |
+| `^@` | function's `this` |
+
+### argument
+
+```kaoscript
+const log = console.log^$(console, 'hello:')
+
+log('foo')
+// hello: foo
+```
+
+### null
+
+```kaoscript
+func log(...args) {
+	console.log(...args)
+}
+
+const logHello = log^^('hello:')
+
+logHello('foo')
+// hello: foo
+```
+
+### self
+
+```kaoscript
+const log = console.log^@('hello:')
+
+log('foo')
+// hello: foo
+```
+
+## calling
+
+|      |     `this` is     |
+|:----:|:-----------------:|
+| `*$` |  first argument   |
+| `**` |      `null`       |
+
+### argument
+
+```kaoscript
+func log(...args) {
+	this.log(...args)
+}
+
+log*$(console, 'hello')
+```
+
+### null
+
+```kaoscript
+func log(...args) {
+	console.log(...args)
+}
+
+log**('hello')
+```

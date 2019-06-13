@@ -1,0 +1,29 @@
+---
+name: Dependencies
+menu: Guide
+route: /guide/dependencies
+---
+
+# Dependencies
+
+There are three basics ways to add external dependencies:
+- `extern`: from the global scope (`extern console`)
+- `import`: from other dependencies (`import 'fs' for readFile`)
+- `require`: from the module parameters (`require foo` -> `module.exports = function(foo)`)
+
+Three combined ways:
+- `extern|require`: first look into the global scope, and if not found, look into the module parameters
+- `require|extern`: first look into the module parameters, and if not found, look into the global scope
+- `require|import`: first look into the module parameters, and if not found, import it
+
+## extern
+
+## import
+
+```kaoscript
+import '../require/require.alt.roe.default'(seep Array)
+
+// require Array with the same type required by `require.alt.roe.default`
+// import '../require/require.alt.roe.default'(Array)
+```
+## require

@@ -1,0 +1,128 @@
+---
+name: Typing
+menu: Guide
+route: /guide/typing
+---
+
+# Typing
+
+## basic types
+
+|   name   | alias  |
+|:--------:|:------:|
+|  Array   | array  |
+| Boolean  |  bool  |
+|  Class   | class  |
+|   Date   |  date  |
+|   Enum   |  enum  |
+|  Error   |        |
+| Function |  func  |
+|  Number  | number |
+|  Object  | object |
+|  RegExp  | regex  |
+|  String  | string |
+|   Any    |  any   |
+|   Void   |  void  |
+
+`Void`/`void` can only be used as return type of a function.
+
+## nullable
+
+You can define a variable as nullable.
+
+```kaoscript
+let x?
+// type: Any, nullable
+
+let y: Number?
+// type: Number, nullable
+```
+
+## union
+
+Union type defines the variable as been one of the given types.
+
+```kaoscript
+let x: String | Number
+
+x = 42
+x = 'foobar'
+
+x = true
+// throw an error
+```
+
+## generics
+
+kaoscript has a very basic support for generics.
+
+In array, it's used to inference the type of the elements.
+
+```kaoscript
+let values: Array<String> = ['foo', 'bar', 'qux']
+
+const x = values[0]
+// type: String
+```
+
+## alias
+
+Type aliases create a new name for a type.
+
+```kaoscript
+type T = number | string
+
+let n: T = 42
+```
+
+## type checking
+
+kaoscript used the keywords `is` and `is not` to be able to test the type of a variable.
+
+```kaoscript
+if x is String {
+
+}
+
+if x is not String {
+
+}
+```
+
+## type casting
+
+The keyword `as` allows complex types but it would need to be surrounded by parentheses
+
+```kaoscript
+(x as String).toLowerCase()
+
+(x as String | Number).toFloat()
+```
+
+If the type is an identifier, you can use `:`. But for complex types, you will need to create aliases.
+
+```kaoscript
+x:String.toLowerCase()
+
+type T = String | Number
+x:T.toFloat()
+```
+
+## inference
+
+If a variable is not typed, kaoscript willl automatically deduce its type based on the current value.
+
+```kaoscript
+let name = 'John'
+// type: String
+
+name = 42
+// type: Number
+
+func foobar() {
+	return 'hello'
+}
+
+name = foobar()
+// no type
+```

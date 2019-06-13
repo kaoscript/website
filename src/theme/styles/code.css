@@ -1,8 +1,9 @@
+blockquote.syntax,
 code[class*="language-"] {
 	display: block;
     padding: 1em;
 	background: none;
-	font-family: Monaco, monospace;
+	font-family: "Source Code Pro", monospace;
 	font-size: 0.85em;
 	border-radius: 5px;
 	text-align: left;
@@ -19,6 +20,16 @@ code[class*="language-"] {
 	-ms-hyphens: none;
 	hyphens: none;
 	counter-reset: div;
+}
+
+blockquote.syntax {
+	white-space: normal;
+	background-color: #F5F6F7;
+}
+
+blockquote.syntax span.tab {
+	width: 2em;
+	display: inline-block;
 }
 
 @media print {

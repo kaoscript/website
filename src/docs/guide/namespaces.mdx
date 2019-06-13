@@ -5,3 +5,54 @@ route: /guide/namespaces
 ---
 
 # Namespaces
+
+Like TypeScript, a namespace is used for logical grouping of functionalities.
+A namespace can include interfaces, classes, functions and variables to support a single or a group of related functionalities.
+
+## syntax
+
+```syntax
+namespace *varname* {
+	*...statements*
+}
+```
+
+## export
+
+Entities declared inside a namespace aren't accessible externaly unless they are exported.
+
+## examples
+
+```kaoscript
+namespace Util {
+	func reverse(value: String): String => value.split('').reverse().join('')
+	func reverse(value: Array): Array => value.slice().reverse()
+
+	export reverse
+}
+
+const foo = Util.reverse('hello')
+```
+
+```kaoscript
+namespace Waldo {
+	export class Foobar {
+		private {
+			_name: String
+		}
+		constructor(@name = 'john')
+	}
+}
+
+const x = new Waldo.Foobar()
+```
+
+```kaoscript
+namespace Foobar {
+	export const PI = 3.14
+	export const name = 'john'
+}
+
+console.log(Foobar.PI)
+console.log(`\(Foobar.name)`)
+```

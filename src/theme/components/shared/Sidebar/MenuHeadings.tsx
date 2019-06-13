@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { SFC } from 'react'
-import { Entry, useDocs, useConfig } from 'docz'
+import { Entry, useDocs, useConfig } from '@daiyam/docz'
 import { Location } from '@reach/router'
 import styled from 'styled-components'
 import get from 'lodash/get'

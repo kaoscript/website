@@ -5,3 +5,205 @@ route: /guide/basic-operators
 ---
 
 # Basic Operators
+
+<!-- Unlike most languages, kaoscript supports four types of operators:
+
+- Unary operators operate on a single operand (such as `-x`)
+- Binary operators operate on two operands (such as `a += 42`)
+- Ternary operators operate on three operands (such as `x ? 42 : 24`)
+- Polyadic operators operator on infinite operands (such as `x + y + z` or `24 < x < 42`) -->
+
+> :construction: kaoscript will allow to override operators.
+
+## arithmetic
+
+|      Operator      |      Meaning      |
+|:------------------:|:-----------------:|
+|     `-`*expr*      |     Negative      |
+| *expr* `-` *expr*  |    Subtraction    |
+| *expr* `+` *expr*  |     Addition      |
+| *expr* `*` *expr*  |  Multiplication   |
+| *expr* `/` *expr*  |     Division      |
+| *expr* `/.` *expr* | Quotient division |
+| *expr* `%` *expr*  |      Modulo       |
+|     `++`*var*      |   Pre-increment   |
+|     *var*`++`      |  Post-increment   |
+|     `--`*var*      |   Pre-decrement   |
+|     *var*`--`      |  Post-decrement   |
+
+```kaoscript
+// Numbers
+1 + 2			// 3
+1 + 2 + 3		// 6
+1 - 2			// -1
+-2				// -2
+2 * 3			// 6
+18 / 3			// 6
+18 / 5			// 3.6
+18 /. 5			// 3
+18 % 3			// 0
+18 % 5			// 3
+18 % 10 % 5		// 3
+
+let x = 0
+++x				// 1
+x++				// 2
+--x				// 1
+x--				// 0
+
+// Strings
+'foo' + 'bar'	// foobar
+```
+
+## comparison
+
+|      Operator      |        Meaning        |
+|:------------------:|:---------------------:|
+| *expr* `==` *expr* |         Equal         |
+| *expr* `!=` *expr* |       Not equal       |
+| *expr* `>` *expr*  |     Greater than      |
+| *expr* `<` *expr*  |       Less than       |
+| *expr* `>=` *expr* | Greater than or equal |
+| *expr* `<=` *expr* |  Less than or equal   |
+
+```kaoscript
+1 == 1			// true
+1 == 1 == 2		// false
+1 != 2			// true
+3 > 2 > 1		// true
+3 < 5 < 1		// false
+3 <= 3 <= 5		// true
+4 >= 1			// true
+```
+
+### Chaining comparisons
+
+Comparisons can be chained.
+
+```kaoscript
+1 < 2 <= 2 < 3 == 3 > 2 >= 1 == 1 < 3 != 5
+// true
+
+if 1 < x() < 42 {
+	// `x()` is evaluated only once, its result is saved in a temporary variable
+}
+```
+
+## logical
+
+|      Operator      | Meaning  |
+|:------------------:|:--------:|
+|     `!`*expr*      | Negation |
+| *expr* `||` *expr* |    Or    |
+| *expr* `&&` *expr* |   And    |
+| *expr* `^^` *expr* |   Xor    |
+| *expr* `->` *expr* |  Imply   |
+
+```kaoscript
+!true			// false
+true || false	// true
+true && false	// false
+true ^^ false	// true
+true -> false	// false
+```
+
+|  `x`  |  `y`  | `x || y` | `x && y` | `x ^^ y` | `x -> y` |
+|:-----:|:-----:|:--------:|:--------:|:--------:|:--------:|
+| false | false |  false   |  false   |  false   |   true   |
+| true  | false |   true   |  false   |   true   |  false   |
+| false | true  |   true   |  false   |   true   |   true   |
+| true  | true  |   true   |   true   |  false   |   true   |
+
+## bitwise & shift
+
+|      Operator      |   Meaning   |
+|:------------------:|:-----------:|
+|     `~`*expr*      |     Not     |
+| *expr* `|` *expr*  |     Or      |
+| *expr* `&` *expr*  |     And     |
+| *expr* `^` *expr*  |     Xor     |
+| *expr* `<<` *expr* | Shift left  |
+| *expr* `>>` *expr* | Shift right |
+
+```kaoscript
+0x22 & 0x0f		// 0x02
+0x22 & ~0x0f	// 0x20
+0x22 | 0x0f		// 0x2f
+0x22 ^ 0x0f		// 0x2d
+0x22 << 4		// 0x220
+0x22 >> 4		// 0x02
+```
+
+## conditional
+
+|           Operator           |      Meaning      |
+|:----------------------------:|:-----------------:|
+|          `?`*expr*           |    Existential    |
+|          *expr*`?`           |    Existential    |
+|      *expr* `??` *expr*      |  Null coalescing  |
+| *expr* `?` *expr* `:` *expr* | Ternary condition |
+
+
+```kaoscript
+if ?value {
+	// `value` is not null
+}
+
+if value? {
+	// `value` is not null
+}
+
+t = x ?? y ?? z			// `t` is equal to the first not-null variable from `x`, `y` or `z` (in that order)
+
+x = y == 42 ? 0 : 1		// `x` is equal to 0 is `y` equals `42`, if not `1`
+```
+
+The operator `??` is a polyadic operator.
+
+## typing
+
+|        Operator         |      Meaning      |
+|:-----------------------:|:-----------------:|
+|   *expr* `is` *class*   |   Type matching   |
+| *expr* `is not` *class* | Type not matching |
+|   *expr* `as` *class*   |   Type casting    |
+|  *expr*`:`*className*   |   Type casting    |
+
+```kaoscript
+class Foobar {
+
+}
+
+if x is Foobar {
+	// `x`'s type is `Foobar`
+}
+
+if x is not Foobar {
+	// `x`'s type isn't `Foobar`
+}
+
+t = (x as String).toUpperCase()
+
+t = x:String.toUpperCase()
+
+t = x as Array<String>
+```
+
+## assignment
+
+|      Operator       |      Meaning      |
+|:-------------------:|:-----------------:|
+|  *expr* `=` *expr*  |    Assignement    |
+| *expr* `-=` *expr*  |    Subtraction    |
+| *expr* `+=` *expr*  |     Addition      |
+| *expr* `*=` *expr*  |  Multiplication   |
+| *expr* `/=` *expr*  |     Division      |
+| *expr* `/.=` *expr* | Quotient division |
+| *expr* `%=` *expr*  |      Modulo       |
+| *expr* `&=` *expr*  |    Bitwise and    |
+| *expr* `|=` *expr*  |    Bitwise or     |
+| *expr* `^=` *expr*  |    Bitwise xor    |
+| *expr* `<<=` *expr* |    Shift left     |
+| *expr* `>>=` *expr* |    Shift right    |
+| *expr* `?=` *expr*  |  Non existential  |
+| *expr* `??=` *expr* |  Null coalescing  |

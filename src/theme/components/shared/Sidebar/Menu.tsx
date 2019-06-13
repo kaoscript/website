@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { useState } from 'react'
-import { MenuItem } from 'docz'
+import { MenuItem } from '@daiyam/docz'
 import ChevronDown from 'react-feather/dist/icons/chevron-down'
 import styled from 'styled-components'
 

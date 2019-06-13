@@ -1,6 +1,6 @@
 import * as React from 'react'
 import { ThemeProvider as StyledThemeProvider } from 'styled-components'
-import { useConfig } from 'docz'
+import { useConfig } from '@daiyam/docz'
 import getter from 'lodash/get'
 
 export const get = (val: string, defaultValue?: any) => (p: any) => getter(p, `theme.docz.${val}`, defaultValue)

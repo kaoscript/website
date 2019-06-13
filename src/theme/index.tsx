@@ -2,7 +2,7 @@ import './styles/code.css'
 import './styles/code.themed.css'
 
 import * as React from 'react'
-import { theme, ComponentsProvider } from 'docz'
+import { theme, ComponentsProvider } from '@daiyam/docz'
 import { Global } from './styles/global'
 import { config } from './config'
 import * as components from '@components/ui'
