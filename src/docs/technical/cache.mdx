@@ -1,0 +1,17 @@
+---
+name: Cache
+menu: Technical
+route: /technical/cache
+---
+
+# Cache
+
+Since kaoscript compilation is on the heavy side, its compiler use cache files to avoid to have to recompile every files when it doesn't need to.
+
+|   type   | extension | description                                                | example                 |
+|:--------:|:---------:| ---------------------------------------------------------- | ----------------------- |
+|  binary  |  `.ksb`   | this is the compiled code for a targeted engine            | `.index.ks.v8-v6.6.ksb` |
+|  hashes  |  `.ksh`   | includes all the used files with their hashes              | `.index.ks.ksh`         |
+| metadata |  `.ksm`   | include the metadata use when importing the current module | `.index.ks.ksm`         |
+
+You can use the command `kaoscript clean` to clean all those caches files.

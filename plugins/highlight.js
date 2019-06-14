@@ -34,18 +34,21 @@ function loadTheme(name, filename, language) {
 
 	const attrFilter = language ? `class~="language-${language}"` : `class*="language-"`
 
+	const foreground = theme.colors['editor.foreground'] || theme.colors['foreground']
+	const ruler = (theme.colors['editorRuler.foreground'] || foreground).substr(0, 7)
+
 	css.push(`
 		code[${attrFilter}] {
-			color: ${theme.colors['editor.foreground'] || theme.colors['foreground']};
+			color: ${foreground};
 			background-color: ${theme.colors['editor.background'] || theme.colors['background']};
 		}
 
 		code[${attrFilter}] .code-lines {
-			border-left: 1px solid ${theme.colors['editorRuler.foreground'].substr(0, 7)};
+			border-left: 1px solid ${ruler};
 		}
 
 		code[${attrFilter}] .code-lines .line:before {
-			color: ${theme.colors['editorRuler.foreground'].substr(0, 7)};
+			color: ${ruler};
 		}
 	`)
 
@@ -72,6 +75,9 @@ function registerTheme(extension, theme, language) {
 
 registerTheme('theme-zokugun', 'Zokugun')
 registerTheme('theme-horizon', 'Horizon Bright', 'javascript')
+registerTheme('theme-test', 'Ysgrifennwr', 'sh')
+
+console.log(css)
 
 fs.writeFileSync('./src/theme/styles/code.themed.css', css.join(''), 'utf8')
 // }}}

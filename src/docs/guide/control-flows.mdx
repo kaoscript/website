@@ -353,3 +353,27 @@ switch view {
 												=> console.log("It's some other UIView or subclass")
 }
 ```
+
+## include & include again
+
+`include` copies the code from the given file into the current code.
+
+### syntax
+
+```syntax
+include "*file-name*"
+
+include again "*file-name*"
+```
+
+### examples
+
+```kaoscript
+include '@kaoscript/util'
+```
+
+### include again
+
+By default, if the same file is included a second times, nothing will append.
+
+`include again` is to be used to include a file several times.

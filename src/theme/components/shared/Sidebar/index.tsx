@@ -8,6 +8,7 @@ import { Search } from '../Search'
 import { Menu } from './Menu'
 import { Docz } from './Docz'
 import { Hamburger } from './Hamburger'
+import { Version } from '../version'
 
 import { get } from '@utils/theme'
 import { mq, breakpoints } from '@styles/responsive'
@@ -154,6 +155,7 @@ export const Sidebar: SFC = () => {
         <Content>
           <Hamburger opened={!hidden} onClick={handleSidebarToggle} />
           <Logo showBg={!hidden} />
+		  <Version />
           <Search onSearch={setQuery} />
 
           {menus && menus.length === 0 ? (

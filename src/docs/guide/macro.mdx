@@ -5,3 +5,186 @@ route: /guide/macro
 ---
 
 # Macro
+
+In kaoscript, macros are executed when the modules are compiled. They are inspired by Rust and Haxe.
+They are working on AST but are generating kaoscript code.
+
+## syntax
+
+```syntax
+macro *varname*([[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]]) {
+	*statement*
+	macro *macro-line*
+	macro {
+		*...macro-lines*
+	}
+}
+macro *varname*([[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]]) => *macro-line*
+
+macro-line = *text* | macro-expression
+macro-expression = "#" (*varname* | [(b|e|i)] "(" *expression* ")")
+```
+
+## quick example
+
+```kaoscript
+macro trace_build_age() {
+	const d = new Date(2013, 2, 15)
+
+	d.setUTCDate(1)
+	d.setUTCHours(0, 0, 0)
+
+	const buildTime = Math.floor(d.getTime() / 1000)
+
+	macro {
+		const runTime = Math.floor(Date.now() / 1000)
+		const age = runTime - #buildTime
+
+		console.log(`Right now it's \(runTime), and this build is \(age) seconds old`)
+	}
+}
+
+trace_build_age!()
+```
+
+## expression reification
+
+| reification |                     description                     |
+|:-----------:|:---------------------------------------------------:|
+|      b      |    generates a ***b***lock from the given value     |
+|      e      | generates an ***e***xpression from the given value  |
+|      i      | generates an ***i***dentifier from the given string |
+
+## parameters
+
+The parameters are AST and can be typed as:
+
+- `Array`
+- `Expression`
+- `Identifier`
+- `Number`
+- `Object`
+- `String`
+
+## auto-evaluated parameter
+
+A parameter can also be a typical kaoscript value. It need to be prefixed with an at sign (`@`).
+
+```kaoscript
+macro foobar(@x: Array) {
+	macro #(x.length)
+}
+```
+
+## overloading
+
+kaoscript supports macro overloading.
+
+```kaoscript
+macro match_tokens(a) => 'any'
+macro match_tokens(a: Identifier) => 'identifier'
+macro match_tokens(a: Number) => 'number'
+
+console.log(match_tokens!(a))
+// console.log("identifier")
+
+console.log(match_tokens!(42))
+// console.log("number")
+
+console.log(match_tokens!('foobar'))
+// console.log("any")
+
+console.log(match_tokens!(1 + 1))
+// console.log("any")
+```
+
+## examples
+
+```kaoscript
+macro times_five(e) => 5 * #e
+
+macro times_five_bb(e) {
+	macro {
+		5 * #e
+	}
+}
+
+macro times_five_bl(e) {
+	macro 5 * #e
+}
+
+console.log(times_five!(42))
+// console.log(5 * 42)
+
+console.log(times_five!(x * y))
+// console.log(5 * x * y)
+```
+
+```kaoscript
+export enum Space<string> {
+	RGB
+	SRGB
+}
+
+export class Color {
+	macro registerSpace(@space: Object) {
+		if space.components? {
+			const fields: Array = []
+			const methods: Array = []
+
+			let field
+			for const component, name of space.components {
+				field = `_\(name)`
+
+				fields.push(macro private #i(field): Number)
+
+				methods.push(macro {
+					override #i(name)() => this.getField(#(name))
+					override #i(name)(value) => this.setField(#(name), value)
+				})
+			}
+
+			macro {
+				Color.registerSpace(#(space))
+
+				impl Color {
+					#b(fields)
+					#b(methods)
+				}
+			}
+		}
+		else {
+			macro Color.registerSpace(#(space))
+		}
+	}
+}
+
+Color.registerSpace!({
+	name: Space::SRGB
+	alias: [Space::RGB]
+	formatters: {
+		hex(that: Color): string { // {{{
+			return $hex(that)
+		} // }}}
+		srgb(that: Color): string { // {{{
+			if that._alpha == 1 {
+				return `rgb(\(that._red), \(that._green), \(that._blue))`
+			}
+			else {
+				return `rgba(\(that._red), \(that._green), \(that._blue), \(that._alpha))`
+			}
+		} // }}}
+	}
+	components: {
+		red: {
+			max: 255
+		}
+		green: {
+			max: 255
+		}
+		blue: {
+			max: 255
+		}
+	}
+})
+```

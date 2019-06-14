@@ -16,14 +16,226 @@ Three combined ways:
 - `require|extern`: first look into the module parameters, and if not found, look into the global scope
 - `require|import`: first look into the module parameters, and if not found, import it
 
+> :exclamation: All dependencies can only be used at the root of the module. No `import` inside a function.
+
 ## extern
+
+`extern` statements define external elements. Usually, those elements are from a global context defined by the engine on which the code will be executed.
+
+### examples
+
+```kaoscript
+extern sealed namespace Math
+```
+
+```kaoscript
+extern sealed class Number {
+	toString(): String
+}
+```
+
+## require
+
+If a file doesn't have the attribute `#![bin]`, then it is a module.
+
+The following module:
+```kaoscript
+extern console
+
+console.log('Hello world!')
+```
+
+for ES6, generates:
+```javascript
+module.exports = function() {
+	console.log('Hello world!');
+}
+```
+
+`require` define the parameters required by the module.
+
+### examples
+
+```kaoscript
+require Color: class
+```
+
+```kaoscript
+require {
+	enum Space<String> {
+		RGB
+	}
+
+	class Color {
+		space(): Space
+		space(space: Space): Color
+	}
+}
+```
 
 ## import
 
-```kaoscript
-import '../require/require.alt.roe.default'(seep Array)
+`import` is used to import bindings which are exported by another module.
 
-// require Array with the same type required by `require.alt.roe.default`
-// import '../require/require.alt.roe.default'(Array)
+### syntax
+
+```syntax
+ import "*module-name*"['(' *parameter1*, ..., *parameterN* ')'] [=> *varname*[: *type*]]
+ import "*module-name*"['(' *parameter1*, ..., *parameterN* ')'] for (*varname1*[: *type*] | *type1*), ..., (*varnameN*[: *type*] | *typeN*) [=> *varname*[: *type*]]
+ import "*module-name*"['(' *parameter1*, ..., *parameterN* ')'] {
+	(*varname1*[: *type*] | *type1*)[,]
+	...[,]
+	(*varnameN*[: *type*] | *typeN*)[,]
+
+	\* => *varname*
+ }
+
+ parameter = [seep] (*varname* | *module-varname*: *local-varname*)
 ```
-## require
+
+### examples
+
+```kaoscript
+import 'chai' for expect
+
+import 'foobar.ks' for name => foo
+
+import 'quxbaz'(foo)
+```
+
+```kaoscript
+import 'color' for Color => C, Space => S
+// variables: C, S
+
+import 'color.srgb'(Color: C, Space: S) {
+	* => T
+
+	Color => C
+	Space => S
+}
+// variables: C, S, T
+// C == T.Color
+// S == T.Space
+```
+
+```kaoscript
+import 'parser' {
+	func createToken
+	sealed class Lexer
+	sealed class Parser
+	sealed class Token
+}
+// functions: createToken
+// classes: Lexer, Parser, Token
+
+import 'parser' => CT {
+	func createToken
+	sealed class Lexer
+	sealed class Parser
+	sealed class Token
+}
+// namespace: CT
+// functions: CT.createToken
+// classes: CT.Lexer, CT.Parser, CT.Token
+```
+
+### unnamed JavaScript module
+
+Unnamed import will generate a *variable* whose name will based on the module name.
+
+```kaoscript
+import 'fs'
+// variable: fs
+
+import 'klaw-sync'
+// variable: klawSync
+```
+
+### seep
+
+`seep` is modifier for import parameter.
+
+```kaoscript
+import 'moduleX'(seep ClassY)
+```
+
+kaoscript will *require* the class `ClassY` with the same type as expected by the module `moduleX`.
+
+## export
+
+`export` is used when creating modules to export functions, objects, or primitive values from the module so they can be used by other programs with the `import` statement.
+
+### syntax
+
+```syntax
+ export *statement*
+ export *member1* [=> *alias*], ..., *memberN* [=> *alias*]
+ export {
+	*statement*
+	*member* [=> *alias*]
+ }
+ export *namespace* for *varname1* [=> *alias*], ..., *varnameN* [=> *alias*]
+
+ member = (*varname* | *member*.*varname*)
+```
+
+### examples
+
+```kaoscript
+const PI = 3.14
+
+export PI
+```
+
+```kaoscript
+export enum Space<String> {
+	RGB
+	SRGB
+}
+```
+
+```kaoscript
+namespace NS {
+	export {
+		func foo() {
+		}
+
+		func bar() {
+		}
+
+		func qux() {
+		}
+	}
+}
+export NS for foo, bar, qux
+```
+
+## extern|require
+
+`extern|require` will look for the item in the global context, if not found, look into the module parameters.
+
+### example
+
+```kaoscript
+extern|require sealed class Array
+```
+
+## require|extern
+
+`require|extern` will look for the item in the module parameters, if not found, look intothe global context.
+
+### example
+
+```kaoscript
+require|extern sealed class Array
+```
+
+## require|import
+
+`require|import` will look for the item the module parameters, if not found, it will import them.
+
+### example
+
+```kaoscript
+require|import 'array' for Array
+```

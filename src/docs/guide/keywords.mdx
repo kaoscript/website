@@ -5,3 +5,30 @@ route: /guide/keywords
 ---
 
 # Keywords
+
+kaoscript does retrict the use of keywords as variable's name.
+So you can code like that:
+
+```kaoscript
+class Foobar {
+
+}
+
+const class = Foobar
+```
+
+The name 'class' is valid, no need to use a name like 'clazz'!
+
+Or like:
+
+```kaoscript
+let let = 0
+let if = 0
+
+if if == 42 {
+
+}
+
+```
+
+It's allowed even it's not pretty.

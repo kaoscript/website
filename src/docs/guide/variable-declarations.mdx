@@ -80,7 +80,7 @@ If a type is provided at the declaration of a variable, its type can't be change
 let name: String = 'John'
 
 name = 42
-// throws an error
+// throws a TypeException error
 ```
 
 ### Auto-Typing
@@ -92,7 +92,7 @@ let name := 'John'
 // type: String
 
 name = 42
-// throws an error
+// throws a TypeException error
 ```
 
 ## assignement
@@ -116,7 +116,7 @@ foobar()
 // 42
 
 console.log(x)
-// throw the error 'Undefined'
+// throw the ReferenceException error: "x" is not defined
 ```
 
 > :exclamation: You will able to disable the creation of variables via assignments, with an attribute

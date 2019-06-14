@@ -1,0 +1,134 @@
+---
+name: Augmentations
+menu: Guide
+route: /guide/augmentations
+---
+
+# Augmentations
+
+## implements
+
+`impl` statement allows the developer to augment the given class or namespace.
+
+### syntax
+
+```syntax
+impl *varname* {
+	(*field* | *method*)*
+}
+
+field = *varname*[: *type*] [= *value*]
+
+method = [async] *varname*([[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]])[: *type*] [~ *class1* [, *class2* ... [, *classN*]]] [ => *expression* | {
+	*...statements*
+}]
+```
+
+### example
+
+```kaoscript
+impl Shape {
+	draw(shape): String {
+		return `I'm drawing a \(@color) \(shape).`
+	}
+}
+// adds the method 'draw(shape)' to the class 'Shape'
+
+let s = new Shape('red')
+
+console.log(s.draw())
+// I'm drawing with a red pen
+
+console.log(s.draw('circle'))
+// I'm drawing a red circle.
+```
+
+## implements & native class
+
+`impl` doesn't modify classes that have been flagged as `sealed`.
+
+```kaoscript
+extern sealed class Number
+// import the external class 'Number' and flag it as `sealed` to avoid to directly modify it
+
+impl Number {
+	mod(max: Number): Number {
+		if this == NaN {
+			return 0
+		}
+		else {
+			const n = this % max
+
+			if n < 0 {
+				return n + max
+			}
+			else {
+				return n
+			}
+		}
+	}
+}
+// adds the method 'mod' to the class 'Number'
+// under the hood, the object `__ks_Number` is created to avoid to modify the object 'Number'
+
+let i = 42
+// inferred type: Number
+
+console.log(i.mod(2))
+// 0
+// javascript code: console.log(__ks_Number._im_mod(i, 2))
+```
+
+### override
+
+The modifier `override` indicate that the new method will replace the existing one.
+
+```kaoscript
+class LetterBox {
+	format(message: String) => message.toUpperCase()
+}
+
+impl LetterBox {
+	override format(message: String) => message.toLowerCase()
+}
+```
+
+## disclose
+
+`disclose` is used to reveal members of classes or namespaces to kaoscript.
+It's mainly used for external classes.
+
+### syntax
+
+```syntax
+disclose *varname* {
+	(*field* | *method*)*
+}
+
+field = *varname*[: *type*]
+
+method = [async] *varname*([[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]])[: *type*] [~ *class1* [, *class2* ... [, *classN*]]]
+```
+
+### examples
+
+```kaoscript
+extern sealed namespace String
+
+disclose String {
+	length: Number
+	substring(indexStart: Number, indexEnd: Number = -1): String
+	toLowerCase(): String
+	toUpperCase(): String
+	trim(): String
+}
+```
+
+```kaoscript
+extern sealed namespace Math
+
+disclose Math {
+	PI: Number
+	abs(value: Number): Number
+}
+```

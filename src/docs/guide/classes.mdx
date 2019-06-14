@@ -9,7 +9,7 @@ route: /guide/classes
 ## syntax
 
 ```syntax
-[abstract] class *varname*["<" *type* ">"] [extends *varname*] {
+[abstract] class *varname*["<" *type* ">"][@ *version*] [extends *varname*] {
 	(
 		[private | protected | public] (*field* | *method*)
 		|
@@ -94,6 +94,24 @@ delete s
 // the destructor is called and the variable `s` is unreferenced
 ```
 
+## class members
+
+Class members are declared with the modifier `static`.
+
+```kaoscript
+class Rectangle {
+	public static shape() => 'Rectangle'
+
+	static {
+		color() {
+			return '1.0.0'
+		}
+	}
+}
+
+console.log(Rectangle.shape(), Rectangle.color())
+```
+
 ## superclass & subclass
 
 ```kaoscript
@@ -153,73 +171,25 @@ class Greetings extends AbstractGreetings {
 }
 ```
 
-## implements
+## versioning
 
-`impl` statement allows the developer to augment the given class.
-
-```kaoscript
-impl Shape {
-	draw(shape): String {
-		return `I'm drawing a \(@color) \(shape).`
-	}
-}
-// adds the method 'draw(shape)' to the class 'Shape'
-
-let s = new Shape('red')
-
-console.log(s.draw())
-// I'm drawing with a red pen
-
-console.log(s.draw('circle'))
-// I'm drawing a red circle.
-```
-
-## implements & native class
-
-`impl` doesn't modify classes that have been flagged as `sealed`.
+kaoscript classes can be signed with a version which could be used for serialization.
 
 ```kaoscript
-extern sealed class Number
-// import the external class 'Number' and flag it as `sealed` to avoid to directly modify it
+class Rectangle@1.0.0 {
+    private {
+    	_color: String
+    }
 
-impl Number {
-	mod(max: Number): Number {
-		if this == NaN {
-			return 0
-		}
-		else {
-			const n = this % max
+    constructor(@color = 'black')
 
-			if n < 0 {
-				return n + max
-			}
-			else {
-				return n
-			}
-		}
-	}
+    draw(canvas) {
+        return `I'm drawing a \(@color) rectangle.`
+    }
 }
-// adds the method 'mod' to the class 'Number'
-// under the hood, the object `__ks_Number` is created to avoid to modify the object 'Number'
 
-let i = 42
-// inferred type: Number
-
-console.log(i.mod(2))
-// 0
-// javascript code: console.log(__ks_Number._im_mod(i, 2))
-```
-
-## disclose
-
-`disclose` is
-
-```kaoscript
-disclose String {
-	length: Number
-	substring(indexStart: Number, indexEnd: Number = -1): String
-	toLowerCase(): String
-	toUpperCase(): String
-	trim(): String
-}
+console.log(Rectangle.name)
+// Rectangle
+console.log(Rectangle.version)
+// 1.0.0
 ```

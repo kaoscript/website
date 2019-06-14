@@ -50,6 +50,7 @@ export default {
 				'Classes',
 				'Enums',
 				'Namespaces',
+				'Augmentations',
 				'Error Handling',
 				'Attributes',
 				'Dependencies',
@@ -58,10 +59,18 @@ export default {
 			]
 		},
 		{
+			name: 'Technical',
+			menu: [
+				"Compilation",
+				"Cache",
+			]
+		},
+		{
 			name: 'Tools',
 			menu: [
+				"CLI",
 				"Syntax Highlighting",
-				"Coverage",
+				"Coverage"
 			]
 		},
 	],
@@ -90,7 +99,6 @@ export default {
 	],
 	onCreateWebpackChain: config => {
 		config.resolve.alias
-			// .set('@fonts', `${PUBLIC}/fonts`)
 			.set('@images', `${PUBLIC}/images`)
 			.set('@components', `${SRC}/theme/components`)
 			.set('@styles', `${SRC}/theme/styles`)

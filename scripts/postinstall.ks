@@ -16,7 +16,10 @@ await download('github:zokugun/theme-zokugun-vscode', './vscode_extensions/theme
 	shallow: true
 })
 
-
 await download('github:jolaleye/horizon-theme-vscode', './vscode_extensions/theme-horizon', {
+	shallow: true
+})
+
+await download('github:xaverh/theme-ysgrifennwr', './vscode_extensions/theme-test', {
 	shallow: true
 })
