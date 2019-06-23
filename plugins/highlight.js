@@ -77,8 +77,6 @@ registerTheme('theme-zokugun', 'Zokugun')
 registerTheme('theme-horizon', 'Horizon Bright', 'javascript')
 registerTheme('theme-test', 'Ysgrifennwr', 'sh')
 
-console.log(css)
-
 fs.writeFileSync('./src/theme/styles/code.themed.css', css.join(''), 'utf8')
 // }}}
 

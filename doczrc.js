@@ -53,7 +53,9 @@ export default {
 				'Augmentations',
 				'Error Handling',
 				'Attributes',
+				'Import & Export',
 				'Dependencies',
+				'File Inclusion',
 				'Macro',
 				'Keywords',
 			]
@@ -69,8 +71,7 @@ export default {
 			name: 'Tools',
 			menu: [
 				"CLI",
-				"Syntax Highlighting",
-				"Coverage"
+				"awesome-kaoscript",
 			]
 		},
 	],

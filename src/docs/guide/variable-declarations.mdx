@@ -119,6 +119,18 @@ console.log(x)
 // throw the ReferenceException error: "x" is not defined
 ```
 
-> :exclamation: You will able to disable the creation of variables via assignments, with an attribute
+### no-undefined
 
-> :question: By default, should this behaviour be allowed?
+You can disable the creation of variables via assignments, with the attribute `#[rules(no-undefined)]`
+
+```kaoscript
+#![rules(no-undefined)]
+
+func foobar() {
+	x = 42
+	// throw the ReferenceException error: "x" is not defined
+
+	console.log(x)
+}
+
+```

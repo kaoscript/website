@@ -188,7 +188,7 @@ for x in 0..10..2 while test(x) {
 }
 ```
 
-## while and do...while
+## while & do...while
 
 `while` executes the loop while the condition is `true`.
 
@@ -222,7 +222,7 @@ do {
 while supply > demand
 ```
 
-## until and do...until
+## until & do...until
 
 `until` executes the loop and stops it when the condition becomes `true`.
 
@@ -255,10 +255,6 @@ do {
 }
 until supply > demand
 ```
-
-## break and continue
-
-
 
 ## switch
 
@@ -354,26 +350,12 @@ switch view {
 }
 ```
 
-## include & include again
+## break & continue
 
-`include` copies the code from the given file into the current code.
+### break
 
-### syntax
+The `break` statement ends execution of an entire control flow statement immediately.
 
-```syntax
-include "*file-name*"
+### continue
 
-include again "*file-name*"
-```
-
-### examples
-
-```kaoscript
-include '@kaoscript/util'
-```
-
-### include again
-
-By default, if the same file is included a second times, nothing will append.
-
-`include again` is to be used to include a file several times.
+The `continue` statement tells a loop to stop what it is doing and start again at the beginning of the next iteration through the loop.

@@ -1,0 +1,144 @@
+---
+name: Import & Export
+menu: Guide
+route: /guide/import-export
+---
+
+# Import & Export
+
+## import
+
+`import` is used to import bindings which are exported by another module.
+
+### syntax
+
+```syntax
+ import "*module-name*"['(' *parameter1*, ..., *parameterN* ')'] [=> *varname*[: *type*]]
+ import "*module-name*"['(' *parameter1*, ..., *parameterN* ')'] for (*varname1*[: *type*] | *type1*), ..., (*varnameN*[: *type*] | *typeN*) [=> *varname*[: *type*]]
+ import "*module-name*"['(' *parameter1*, ..., *parameterN* ')'] {
+	(*varname1*[: *type*] | *type1*)[,]
+	...[,]
+	(*varnameN*[: *type*] | *typeN*)[,]
+
+	\* => *varname*
+ }
+
+ parameter = ([*module-varname*:] *expression* | require [*module-varname*:] *varname*)
+```
+
+### examples
+
+```kaoscript
+import 'chai' for expect
+
+import 'foobar.ks' for name => foo
+
+import 'quxbaz'(foo)
+```
+
+```kaoscript
+import 'color' for Color => C, Space => S
+// variables: C, S
+
+import 'color.srgb'(Color: C, Space: S) {
+	* => T
+
+	Color => C
+	Space => S
+}
+// variables: C, S, T
+// C == T.Color
+// S == T.Space
+```
+
+```kaoscript
+import 'parser' {
+	func createToken
+	sealed class Lexer
+	sealed class Parser
+	sealed class Token
+}
+// functions: createToken
+// classes: Lexer, Parser, Token
+
+import 'parser' => CT {
+	func createToken
+	sealed class Lexer
+	sealed class Parser
+	sealed class Token
+}
+// namespace: CT
+// functions: CT.createToken
+// classes: CT.Lexer, CT.Parser, CT.Token
+```
+
+### unnamed JavaScript module
+
+Unnamed import will generate a *variable* whose name will based on the module name.
+
+```kaoscript
+import 'fs'
+// variable: fs
+
+import 'klaw-sync'
+// variable: klawSync
+```
+
+### require modifier
+
+`require` is a modifier for import parameter.
+
+```kaoscript
+import 'moduleX'(require ClassY)
+```
+
+kaoscript will *require* the class `ClassY` with the same type as expected by the module `moduleX`.
+
+## export
+
+`export` is used when creating modules to export functions, objects, or primitive values from the module so they can be used by other programs with the `import` statement.
+
+### syntax
+
+```syntax
+ export *statement*
+ export *member1* [=> *alias*], ..., *memberN* [=> *alias*]
+ export {
+	*statement*
+	*member* [=> *alias*]
+ }
+ export *namespace* for *varname1* [=> *alias*], ..., *varnameN* [=> *alias*]
+
+ member = (*varname* | *member*.*varname*)
+```
+
+### examples
+
+```kaoscript
+const PI = 3.14
+
+export PI
+```
+
+```kaoscript
+export enum Space<String> {
+	RGB
+	SRGB
+}
+```
+
+```kaoscript
+namespace NS {
+	export {
+		func foo() {
+		}
+
+		func bar() {
+		}
+
+		func qux() {
+		}
+	}
+}
+export NS for foo, bar, qux
+```

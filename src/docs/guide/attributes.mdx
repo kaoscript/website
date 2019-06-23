@@ -74,6 +74,19 @@ By default, the only available targets are *ecma-v5* and *ecma-v6*.
 |        `gt`(item)         |              greater than              |
 |        `gte`(item)        |         greater than or equals         |
 
+
+## rules
+
+kaoscript allows to apply some rules about the code.
+
+|     rule     |            desciption            |
+|:------------:|:--------------------------------:|
+| no-undefined | variables must have been defined |
+
+```kaoscript
+#![rules(no-undefined)]
+```
+
 ## runtime
 
 kaoscript needs a runtime to add dynamics functions on classes (`Helper`) and to do type checking (`Type`).

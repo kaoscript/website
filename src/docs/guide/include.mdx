@@ -1,0 +1,35 @@
+---
+name: File Inclusion
+menu: Guide
+route: /guide/include
+---
+
+# File Inclusion
+
+## include
+
+`include` copies the code from the given file into the current code.
+
+### syntax
+
+```syntax
+include "*file-name*"
+```
+
+### examples
+
+```kaoscript
+include '@kaoscript/util'
+```
+
+## include again
+
+By default, if the same file is included a second times, nothing will append.
+
+`include again` is to be used to include a file several times.
+
+### syntax
+
+```syntax
+include again "*file-name*"
+```
