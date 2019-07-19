@@ -79,9 +79,10 @@ By default, the only available targets are *ecma-v5* and *ecma-v6*.
 
 kaoscript allows to apply some rules about the code.
 
-|     rule     |            desciption            |
-|:------------:|:--------------------------------:|
-| no-undefined | variables must have been defined |
+|      rule      |                          desciption                           |
+|:--------------:|:-------------------------------------------------------------:|
+|  no-undefined  |               variables must have been defined                |
+| non-exhaustive | do not throw an error if the matching function can't be found |
 
 ```kaoscript
 #![rules(no-undefined)]

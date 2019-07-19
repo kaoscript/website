@@ -1,4 +1,4 @@
-require("kaoscript/register")
+require('kaoscript/register')
 
 import breaks from 'remark-breaks'
 import emoji from 'remark-emoji'
@@ -63,15 +63,16 @@ export default {
 		{
 			name: 'Technical',
 			menu: [
-				"Compilation",
-				"Cache",
+				'Compilation',
+				'Cache',
+				'Known Issues',
 			]
 		},
 		{
 			name: 'Tools',
 			menu: [
-				"CLI",
-				"awesome-kaoscript",
+				'CLI',
+				'awesome-kaoscript',
 			]
 		},
 	],

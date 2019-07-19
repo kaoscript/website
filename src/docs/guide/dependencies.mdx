@@ -122,7 +122,7 @@ method = [async] *varname*([[*parameter1*] [, [*parameter2*] ... [, [*parameterN
 ### examples
 
 ```kaoscript
-extern sealed namespace String
+extern sealed class String
 
 disclose String {
 	length: Number
@@ -140,4 +140,45 @@ disclose Math {
 	PI: Number
 	abs(value: Number): Number
 }
+```
+
+## sealed
+
+`sealed` is a modifier for dependencies to indicate that the dependency isn't directly modifiable.
+It mostly used to declared native classes like Array or String.
+
+### implements & native class
+
+`impl` doesn't modify classes that have been flagged as `sealed`.
+
+```kaoscript
+extern sealed class Number
+// import the external class 'Number' and flag it as `sealed` to avoid to directly modify it
+
+impl Number {
+	mod(max: Number): Number {
+		if this == NaN {
+			return 0
+		}
+		else {
+			const n = this % max
+
+			if n < 0 {
+				return n + max
+			}
+			else {
+				return n
+			}
+		}
+	}
+}
+// adds the method 'mod' to the class 'Number'
+// under the hood, the object `__ks_Number` is created to avoid to modify the object 'Number'
+
+let i = 42
+// inferred type: Number
+
+console.log(i.mod(2))
+// 0
+// javascript code: console.log(__ks_Number._im_mod(i, 2))
 ```

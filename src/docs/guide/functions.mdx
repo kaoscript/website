@@ -62,18 +62,26 @@ expect(foo(1, 2, 3, 4, 5)).to.eql([1, 2, 3, 4, 5])
 
 ### Distribution
 
-|                              | Required | Nullable | Typed | Default Value |
-| ---------------------------- |:--------:|:--------:|:-----:|:-------------:|
-| `foo(x)`                     |   YES    |          |       |               |
-| `foo(x?)`                    |   YES    |   YES    |       |               |
-| `foo(x = null)`              |          |   YES    |       |      YES      |
-| `foo(x = 'foobar')`          |          |          |       |      YES      |
-| `foo(x: String)`             |   YES    |          |  YES  |               |
-| `foo(x: String?)`            |   YES    |   YES    |  YES  |               |
-| `foo(x: String = null)`      |          |   YES    |  YES  |      YES      |
-| `foo(x: String = 'foobar')`  |          |          |  YES  |      YES      |
-| `foo(x: String? = null)`     |          |   YES    |  YES  |      YES      |
-| `foo(x: String? = 'foobar')` |          |   YES    |  YES  |      YES      |
+|                               | Required | Nullable | Typed | Default Value |
+| ----------------------------- |:--------:|:--------:|:-----:|:-------------:|
+| `foo(x)`                      |   YES    |          |       |               |
+| `foo(x?)`                     |   YES    |   YES    |       |               |
+| `foo(x = null)`               |          |   YES    |       |      YES      |
+| `foo(x = 'foobar')`           |          |          |       |      YES      |
+| `foo(x? = 'foobar')`          |          |   YES    |       |      YES      |
+| `foo(x! = null)`              |   YES    |   YES    |       |      YES      |
+| `foo(x! = 'foobar')`          |   YES    |          |       |      YES      |
+| `foo(x!? = 'foobar')`         |   YES    |   YES    |       |      YES      |
+| `foo(x: String)`              |   YES    |          |  YES  |               |
+| `foo(x: String?)`             |   YES    |   YES    |  YES  |               |
+| `foo(x: String = null)`       |          |   YES    |  YES  |      YES      |
+| `foo(x: String = 'foobar')`   |          |          |  YES  |      YES      |
+| `foo(x: String? = null)`      |          |   YES    |  YES  |      YES      |
+| `foo(x: String? = 'foobar')`  |          |   YES    |  YES  |      YES      |
+| `foo(x!: String = null)`      |   YES    |   YES    |  YES  |      YES      |
+| `foo(x!: String = 'foobar')`  |   YES    |          |  YES  |      YES      |
+| `foo(x!: String? = null)`     |   YES    |   YES    |  YES  |      YES      |
+| `foo(x!: String? = 'foobar')` |   YES    |   YES    |  YES  |      YES      |
 
 ## rest parameter
 
@@ -92,6 +100,28 @@ func quux(x = 1, ...items, z = 1) {
 
 func corge(...items = [1..5]) {
 	console.log(items)
+}
+```
+
+### Arity
+
+The `rest` parameter can have arity like:
+
+```kaoscript
+func foo(...{1,3}args) {
+// args will contain between 1 and 3 elements
+}
+
+func bar(...{3,}args) {
+// args will contain at least 3 elements
+}
+
+func quux(...{,3}args) {
+// args will contain at most 3 elements
+}
+
+func corge(...{3}args) {
+// args will contain 3 elements
 }
 ```
 
