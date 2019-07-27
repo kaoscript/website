@@ -6,7 +6,20 @@ route: /guide/functions
 
 # Functions
 
-## statement
+In kaoscript, there is three types of functions:
+- named functions
+- anonymous functions
+- arrow functions
+
+|                    | new `this` | shared `this` | overload-able | async-able | return type | error types | statement | expression |
+| ------------------ |:----------:|:-------------:|:-------------:|:----------:|:-----------:|:-----------:|:---------:|:----------:|
+| named function     |    YES     |               |      YES      |    YES     |     YES     |     YES     |    YES    |            |
+| anonymous function |    YES     |               |               |    YES     |     YES     |     YES     |           |    YES     |
+| arrow function     |            |      YES      |               |    YES     |     YES     |     YES     |           |    YES     |
+
+An arrow function shares the same `this` as its caller.
+
+## named function
 
 ### Syntax
 
@@ -28,6 +41,44 @@ func alpha(n: Number, percentage = false): Number {
 }
 
 func red() => '#FF0000'
+```
+
+## anonymous function
+
+### Syntax
+
+```syntax
+[async] func([[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]])[: *type*] [~ *class1* [, *class2* ... [, *classN*]]] [ => *expression* | {
+	*...statements*
+}]
+```
+
+### Examples
+
+```kaoscript
+foobar(func(a:Number, b:Number) {
+	return a - b
+})
+
+foobar(func(a:Number, b:Number): Number => a - b)
+```
+
+## arrow function
+
+### Syntax
+
+```syntax
+[async] [([[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]])[: *type*] [~ *class1* [, *class2* ... [, *classN*]]] | *parameter* ] => [ *expression* | {
+	*...statements*
+}]
+```
+
+### Examples
+
+```kaoscript
+const foo = (a:Number, b:Number) => a - b
+
+let four = (a => a / 10)(42)
 ```
 
 ## parameters
@@ -206,27 +257,9 @@ func filtered() {
 }
 ```
 
-## lambda
-
-### Syntax
-
-```syntax
-[async] [func] [([[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]])[: *type*] [~ *class1* [, *class2* ... [, *classN*]]] | *parameter* ] => [ *expression* | {
-	*...statements*
-}]
-```
-
-### Examples
-
-```kaoscript
-const foo = (a:Number, b:Number) => a - b
-
-let four = (a => a / 10)(42)
-```
-
 ## overloading
 
-kaoscript allows functions to be overloaded.
+kaoscript allows named functions to be overloaded.
 
 ### Examples
 
