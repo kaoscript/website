@@ -59,7 +59,7 @@ disclose String {
 ```
 
 By default, the only available targets are *ecma-v5* and *ecma-v6*.
-[@kaoscript/target-commons](@kaoscript/target-commons) provides those additional targets.
+[@kaoscript/target-commons]() provides those additional targets.
 
 ### operators
 
@@ -79,13 +79,88 @@ By default, the only available targets are *ecma-v5* and *ecma-v6*.
 
 kaoscript allows to apply some rules about the code.
 
-|      rule      |                          desciption                           |
-|:--------------:|:-------------------------------------------------------------:|
-|  no-undefined  |               variables must have been defined                |
-| non-exhaustive | do not throw an error if the matching function can't be found |
+|      rule      |                                         desciption                                          |
+|:--------------:|:-------------------------------------------------------------------------------------------:|
+|  no-undefined  |                            all variables must have been defined                             |
+| ignore-misfit  |                    accessing an unmatched member doesn't throw an error                     |
+| non-exhaustive | the declaration is not exhaustive;<br />access to unmatched members will not throw an error |
+
+### no-undefined
+
+By default, undefined variables assigned will be created.
+
+```kaoscript
+name = 'John'
+// like: let name = 'John'
+```
+
+You can change this behaviour with the rule `no-undefined`.
 
 ```kaoscript
 #![rules(no-undefined)]
+
+func foobar() {
+	x = 42
+	// throw the ReferenceException error: "x" is not defined
+
+	console.log(x)
+}
+```
+
+### ignore-misfit
+
+By default, if a member (field/method for a class, variable/function for a namespace or field for an enum) or a function is accessed and can't be matched with the given arguments, it will throw an error.
+
+The rule `ignore-misfit` disables this behaviour and ignores mismatched members or functions.
+
+### non-exhaustive
+
+The rule `non-exhaustive` can only be applied to external declarations or to the statement `disclose`.
+
+By default, external declarations without any definitions are considered as `non-exhaustive`, whereas those with a definition are considired as `exhaustive`.
+The statement `disclose` forces the associated declaration to be considired as `exhaustive`.
+
+```kaoscript
+extern namespace console
+// console: non-exhaustive
+
+console.log('foobar')
+```
+
+```kaoscript
+extern namespace console {
+	func log(...)
+}
+// console: exhaustive
+
+console.log('foobar')
+// print: foobar
+
+console.debug('foobar')
+// throw an error
+```
+
+```kaoscript
+extern class Foobar
+// Foobar: non-exhaustive
+
+Foobar.log('foobar')
+```
+
+```kaoscript
+extern class Foobar
+// Foobar: non-exhaustive
+
+disclose Foobar {
+	log(...)
+}
+// Foobar: exhaustive
+
+console.log('foobar')
+// print: foobar
+
+console.debug('foobar')
+// throw an error
 ```
 
 ## runtime
