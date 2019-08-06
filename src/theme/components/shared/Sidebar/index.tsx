@@ -7,7 +7,7 @@ import { Logo } from '../Logo'
 import { Search } from '../Search'
 import { Menu } from './Menu'
 import { Hamburger } from './Hamburger'
-import { Version } from '../version'
+import { Version } from '../Version'
 
 import { get } from '@utils/theme'
 import { mq, breakpoints } from '@styles/responsive'
