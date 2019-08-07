@@ -37,7 +37,7 @@
 		"facepaint": "^1.2.1",
 		"hotkeys-js": "^3.6.13",
 		"jsonc-parser": "^2.1.0",
-		"kaoscript": "github:kaoscript/kaoscript",
+		"kaoscript": "^0.9.1",
 		"lodash": "^4.17.15",
 		"polished": "^3.4.1",
 		"prop-types": "15.7.2",
