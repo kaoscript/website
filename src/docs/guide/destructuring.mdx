@@ -1,0 +1,188 @@
+---
+name: Destructuring
+menu: Guide
+route: /guide/destructuring
+---
+
+# Destructuring
+
+## variable declaration
+
+An destructiong expression in the variable declaration can be:
+
+- computed
+- typed
+
+### Syntax
+
+```syntax
+destructuring = *array* | *dictionary*
+
+array = '[' [*arrayItem1*] [, *arrayItem2*] ... [, *arrayItemN*] ']' [: *type*] [= *expression*]
+arrayItem = (('_' | '...') [: *type*] | ['...'] *varname* [: *type*] [= *expression*] | *array* | *dictionary*)
+
+dictionary = '{' [*dictionaryItem1*] [, *dictionaryItem2*] ... [, *dictionaryItemN*] '}' [: *type*] [= *expression*]
+dictionaryItem = ('...' *varname* | ('[' *varname* ']' | *varname*) [: *array* | *dictionary* | *varname* [= *expression*]])
+```
+
+### Examples
+
+```kaoscript
+const [x1, y1]: [Number, Number] = foobar()
+console.log(x1, y1)
+
+const [x2, y2]: Array<Number> = foobar()
+console.log(x2, y2)
+
+const {x3, y3}: {x: Number, y: Number} = foobar()
+console.log(x3, y3)
+
+const {x4, y4}: Object<Number> = foobar()
+console.log(x4, y4)
+
+let foo = { bar: { n1: 'hello', n2: 'world' } }
+console.log(foo)
+
+let {bar: { n1, n2: qux }} = foo
+console.log(bar, n1, qux)
+
+let key = 'qux'
+console.log(key)
+
+let { [key]: baz } = { qux: 'bar' }
+console.log(baz)
+```
+
+## function parameter
+
+An destructiong expression as a function parameter can be:
+
+- typed
+
+### Syntax
+
+```syntax
+destructuring = *array* | *dictionary*
+
+array = '[' [*arrayItem1*] [, *arrayItem2*] ... [, *arrayItemN*] ']' [: *type*] [= *expression*]
+arrayItem = (('_' | '...') [: *type*] | ['...'] *varname* [: *type*] [= *expression*] | *array* | *dictionary*)
+
+dictionary = '{' [*dictionaryItem1*] [, *dictionaryItem2*] ... [, *dictionaryItemN*] '}' [: *type*] [= *expression*]
+dictionaryItem = ['...'] *varname* [: *array* | *dictionary* | *varname* [= *expression*]]
+```
+
+### Examples
+
+```kaoscript
+func fn1([x: Number = 1, y: Number = 2, z: Number = 3] = []) {
+	console.log(x, y, z)
+}
+
+func fn2([x = 1, y = 2, z = 3]: [Number, Number, Number] = []) {
+	console.log(x, y, z)
+}
+
+func fn3([x = 1, y = 2, z = 3]: Array<Number> = []) {
+	console.log(x, y, z)
+}
+
+func fn4([x, y, z]: Array<Number> = [1, 2, 3]) {
+	console.log(x, y, z)
+}
+
+func fn5([_ , y, ...z]) {
+	console.log(y, z)
+}
+
+func fn6({x = 1, y = 2, z = 3}: {x: Number, y: Number, z: Number} = {}) {
+	console.log(x, y, z)
+}
+
+func fn7({x: a = 1, y: b = 2, z: c = 3}: Object<Number> = {}) {
+	console.log(a, b, c)
+}
+
+func fn8({x, y, ...z}) {
+	console.log(x, y, z)
+}
+
+func fn9({name, scores: {x = 0, y = 0, z = 0} = {}} = {}) {
+	console.log(name, x, y, z)
+}
+
+func drawCircle({center: [x, y], radius: r}) {
+	console.log(x, y, z)
+}
+```
+
+## method parameter
+
+An destructiong expression as a method parameter can be:
+
+- typed
+- this aliased
+
+### Syntax
+
+```syntax
+destructuring = *array* | *dictionary*
+
+array = '[' [*arrayItem1*] [, *arrayItem2*] ... [, *arrayItemN*] ']' [: *type*] [= *expression*]
+arrayItem = (('_' | '...') [: *type*] | ['...'] [@] *varname* [: *type*] [= *expression*] | *array* | *dictionary*)
+
+dictionary = '{' [*dictionaryItem1*] [, *dictionaryItem2*] ... [, *dictionaryItemN*] '}' [: *type*] [= *expression*]
+dictionaryItem = (['...'] *varname* [: *array* | *dictionary* | [@] *varname* [= *expression*]] | ['...'] @ *varname* [= *expression*])
+```
+
+### Examples
+
+```kaoscript
+class Foobar {
+	private {
+		@x
+		@y
+		@z
+	}
+	fn1([@x, [@y, [@z]]]) {
+		console.log(@x, @y, @z)
+	}
+	fn2({@x, y: {@y, z: {@z}}}) {
+		console.log(@x, @y, @z)
+	}
+	fn3({x: a = 1, y: b = 2, z: c = 3}: Object<Number> = {}) {
+		console.log(a, b, c)
+	}
+	fn4([x = 1, y = 2, z = 3]: Array<Number> = []) {
+		console.log(x, y, z)
+	}
+	fn5([name, [x = 0, y = 0, z = 0] = []] = []) {
+		console.log(name, x, y, z)
+	}
+}
+```
+
+## expression
+
+An destructiong expression in an expression can be:
+
+- computed
+
+### Syntax
+
+```syntax
+destructuring = *array* | *dictionary*
+
+array = '[' [*arrayItem1*] [, *arrayItem2*] ... [, *arrayItemN*] ']' [= *expression*])
+arrayItem = ('_' | '...' | ['...'] *varname* [= *expression*] | *array* | *dictionary*)
+
+dictionary = '{' [*dictionaryItem1*] [, *dictionaryItem2*] ... [, *dictionaryItemN*] '}' [= *expression*])
+dictionaryItem = ('...' *varname* | ('[' *varname* ']' | *varname*) [: *array* | *dictionary* | *varname* [= *expression*]])
+```
+
+### Examples
+
+```kaoscript
+if {bar = 1, baz = 2} ?= foo {
+	console.log(bar, baz)
+}
+```

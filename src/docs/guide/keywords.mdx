@@ -6,7 +6,8 @@ route: /guide/keywords
 
 # Keywords
 
-kaoscript does retrict the use of keywords as variable's name.
+kaoscript does not retrict the use of keywords as variable's name.
+
 So you can code like that:
 
 ```kaoscript
@@ -17,7 +18,7 @@ class Foobar {
 const class = Foobar
 ```
 
-The name 'class' is valid, no need to use a name like 'clazz'!
+The name `class` is valid, no need to use a name like `clazz`!
 
 Or like:
 
@@ -31,4 +32,8 @@ if if == 42 {
 
 ```
 
-It's allowed even it's not pretty.
+It's allowed even it's not recommended or pretty.
+
+## underscore
+
+The identifier `_` is reserved so it can't be used in kaoscript (sorry Underscore.js).

@@ -19,7 +19,7 @@ impl *varname* {
 
 field = *varname*[: *type*] [= *value*]
 
-method = [async] *varname*([[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]])[: *type*] [~ *class1* [, *class2* ... [, *classN*]]] [ => *expression* | {
+method = [override | overwrite] [async] *varname*([[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]])[: *type*] [~ *class1* [, *class2* ... [, *classN*]]] [ => *expression* | {
 	*...statements*
 }]
 ```
@@ -79,9 +79,9 @@ console.log(i.mod(2))
 // javascript code: console.log(__ks_Number._im_mod(i, 2))
 ```
 
-### override
+## override
 
-The modifier `override` indicate that the new method will replace the existing one.
+The `override` keyword indicates that the method must inherit a method from the augmented class. If not, it will generate an error.
 
 ```kaoscript
 class LetterBox {
@@ -89,6 +89,30 @@ class LetterBox {
 }
 
 impl LetterBox {
-	override format(message: String) => message.toLowerCase()
+	override format(message) => message.toLowerCase()
+	// message is a String due to the overridden method
 }
 ```
+
+## overwrite
+
+The `override` keyword indicates that the method replace at least one method from the augmented class. If not, it will generate an error.
+At the moment, the augmented class must be a `sealed` class.
+
+The new method replaces all the methods that its parameters can match.
+
+```kaoscript
+extern sealed class Date {
+    setDate(value: Number): Number
+}
+
+impl Date {
+    overwrite setDate(value: Number): Date {
+        precursor(value)
+
+        return this
+    }
+}
+```
+
+> :construction: If the method is directly replaced in a non-sealed class, the signature won't match for its internal usage which can generate runtime error. To avoid this, the new method must be generated like a method of a sealed class. So the non-sealed class would require an half-sealed state.

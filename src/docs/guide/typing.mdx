@@ -8,23 +8,87 @@ route: /guide/typing
 
 ## basic types
 
-|   name   | alias  |
-|:--------:|:------:|
-|  Array   | array  |
-| Boolean  |  bool  |
-|  Class   | class  |
-|   Date   |  date  |
-|   Enum   |  enum  |
-|  Error   |        |
-| Function |  func  |
-|  Number  | number |
-|  Object  | object |
-|  RegExp  | regex  |
-|  String  | string |
-|   Any    |  any   |
-|   Void   |  void  |
+|    name    | alias  |
+|:----------:|:------:|
+|    Any     |  any   |
+|   Array    | array  |
+|  Boolean   |  bool  |
+|   Class    | class  |
+|    Date    |  date  |
+| Dictionary |  dict  |
+|    Enum    |  enum  |
+|   Error    |        |
+|  Function  |  func  |
+| Namespace  |        |
+|   Never    | never  |
+|   Number   | number |
+|   Object   | object |
+| Primitive  |        |
+|   RegExp   | regex  |
+|   String   | string |
+|    Void    |  void  |
 
-`Void`/`void` can only be used as return type of a function.
+The following types are **only** useable **as return type** of a function:
+- `Never`/`never`
+- `Void`/`void`
+
+## any
+
+`Any` is a type that represents any types (except for `Void` and `Never`).
+
+```kaoscript
+let tmp: Any = 42
+
+tmp = 'White'
+```
+
+## void
+
+`Void` is the return type of a function that does not return any value.
+Since, it doesn't generate any value, it can't be used as a part of an operation.
+
+```kaoscript
+func hello(): void {
+	console.log('Hello!')
+}
+
+hello()
+// print: Hello!
+
+const x = hello()
+// throw an error
+```
+
+## never
+
+`Never` is the return type of a function that does not return normally, i.e. that will always throw an error.
+
+```kaoscript
+func throwError(message: String): never {
+	throw new Error(message)
+}
+```
+
+## primitive
+
+`Primitive` is a type that represents an union of the following types:
+
+- `Boolean`
+- `Number`
+- `String`
+
+## object
+
+`Object` is a type that represents an exclusion of the following types from type `Any`:
+
+- `Array`
+- `Boolean`
+- `Dictionary`
+- `Enum`
+- `Function`
+- `Namespace`
+- `Number`
+- `String`
 
 ## nullable
 
@@ -36,6 +100,16 @@ let x?
 
 let y: Number?
 // type: Number, nullable
+```
+
+## alias
+
+Type aliases create a new name for a type.
+
+```kaoscript
+type T = number | string
+
+let n: T = 42
 ```
 
 ## union
@@ -52,6 +126,26 @@ x = true
 // throw an error
 ```
 
+## fusion
+
+A fusion type is a combination of several types.
+
+```kaoscript
+type RegExpExecArray = Array<String?> & {
+    index: Number
+    input: String
+}
+```
+
+## exclusion
+
+An exclusion type represents an union type without one or more types.
+
+```kaoscript
+type Instance = Object ^ Array ^ Enum ^ Function ^ Namespace
+// Instance is the type Object without the types: Array, Enum, Function, Namespace
+```
+
 ## generics
 
 kaoscript has a very basic support for generics.
@@ -63,16 +157,6 @@ let values: Array<String> = ['foo', 'bar', 'qux']
 
 const x = values[0]
 // type: String
-```
-
-## alias
-
-Type aliases create a new name for a type.
-
-```kaoscript
-type T = number | string
-
-let n: T = 42
 ```
 
 ## type checking
@@ -106,6 +190,34 @@ x:String.toLowerCase()
 
 type T = String | Number
 x:T.toFloat()
+```
+
+Alternatively, you can use the unary operators `!?` or `!!`.
+
+If `x`'s type is `Number?`, then `x!?` is `Number`.
+
+```kaoscript
+func foobar(): Number? {
+	return 42
+}
+
+func quxbaz(x: Number) {
+}
+
+quxbaz(foobar()!?)
+```
+
+`!!` forces the type to be same as the expected type.
+
+```kaoscript
+func foobar(): Array {
+	return [42]
+}
+
+func quxbaz(x: Array<Number>) {
+}
+
+quxbaz(foobar()!!)
 ```
 
 ## inference

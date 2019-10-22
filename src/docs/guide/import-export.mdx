@@ -22,6 +22,7 @@ route: /guide/import-export
 
 	\* => *varname*
  }
+ import "*module-name*" but *varname1*, ..., *varnameN*
 
  parameter = ([*module-varname*:] *expression* | require [*module-varname*:] *varname*)
 ```
@@ -108,6 +109,8 @@ kaoscript will *require* the class `ClassY` with the same type as expected by th
 	*member* [=> *alias*]
  }
  export *namespace* for *varname1* [=> *alias*], ..., *varnameN* [=> *alias*]
+ export \*
+ export \* but *varname1*, ..., *varnameN*
 
  member = (*varname* | *member*.*varname*)
 ```

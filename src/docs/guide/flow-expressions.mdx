@@ -1,10 +1,10 @@
 ---
-name: Inline Control Flows
+name: Flow Expressions
 menu: Guide
-route: /guide/inline-control-flows
+route: /guide/flow-expressions
 ---
 
-# Inline Control Flows
+# Flow Expressions
 
 ## array comprehensions
 
@@ -21,7 +21,7 @@ route: /guide/inline-control-flows
 			[by *expression:Number*]
 			[(while | until) *expression:Boolean*]
 			[when *expression:Boolean*]
-		| [const | let] ((*varname*[: *type*] | *destructuring*)[, *index*] | :*index*)
+		| [const | let] (*varname* | *destructuring* | '_') [: *type*] [, *index*]
 			in *expression:Array*
 			[desc]
 			[from *expression:Number*]
@@ -29,7 +29,7 @@ route: /guide/inline-control-flows
 			[by *expression:Number*]
 			[(while | until) *expression:Boolean*]
 			[when *expression:Boolean*]
-		| [const | let] ((*varname*[: *type*] | *destructuring*)[, *key*] | :*key*)
+		| [const | let] (*varname* | *destructuring* | '_') [: *type*] [, *index*]
 			of *expression:Object*
 			[(while | until) *expression:Boolean*]
 			[when *expression:Boolean*]
@@ -58,7 +58,7 @@ spicyHeroes = [hero for like, hero of likes when like == 'spice']
 a = [i for const i from 0 to 10 by 2 until foo(i)]
 ```
 
-## assignement statement
+## in assignement statement
 
 ### Syntax
 
@@ -75,7 +75,7 @@ a = [i for const i from 0 to 10 by 2 until foo(i)]
 y = 10 if x == 5 else 15
 ```
 
-## expression statement
+## in expression statement
 
 ### Syntax
 
@@ -90,7 +90,7 @@ y = 10 if x == 5 else 15
 				[by *expression:Number*]
 				[(while | until) *expression:Boolean*]
 				[when *expression:Boolean*]
-			| [const | let] ((*varname*[: *type*] | *destructuring*)[, *index*] | :*index*)
+			| [const | let] (*varname* | *destructuring* | '_') [: *type*] [, *index*]
 				in *expression:Array*
 				[desc]
 				[from *expression:Number*]
@@ -98,7 +98,7 @@ y = 10 if x == 5 else 15
 				[by *expression:Number*]
 				[(while | until) *expression:Boolean*]
 				[when *expression:Boolean*]
-			| [const | let] ((*varname*[: *type*] | *destructuring*)[, *key*] | :*key*)
+			| [const | let] (*varname* | *destructuring* | '_') [: *type*] [, *index*]
 				of *expression:Object*
 				[(while | until) *expression:Boolean*]
 				[when *expression:Boolean*]
@@ -125,7 +125,7 @@ heroes = ['leto', 'duncan', 'goku']
 console.log(hero) for hero in heroes
 ```
 
-## let statement
+## in let statement
 
 ### Syntax
 
@@ -142,7 +142,7 @@ let ... = *expression* [
 let y = 10 if x == 5 else 15
 ```
 
-## return statement
+## in return statement
 
 ### Syntax
 
@@ -167,7 +167,7 @@ return if lang == 'en'
 return 'hello' if lang == 'en' else 'bonjour'
 ```
 
-## throw statement
+## in throw statement
 
 ### Syntax
 

@@ -1,10 +1,15 @@
 ---
-name: Control Flows
+name: Flow Statements
 menu: Guide
-route: /guide/control-flows
+route: /guide/flow-statements
 ---
 
-# Control Flow
+# Flow Statements
+
+> Any tests require a boolean.
+
+If the test can't be a boolean, an error will thrown at compilation time.
+If the type is unknow, the test's valiue must be equal to `true`.
 
 ## if...else
 
@@ -13,13 +18,13 @@ route: /guide/control-flows
 ```syntax
 if
 	*expression:Boolean*
-	| (const | let) (*varname*[: *type*] | *destructuring*) = *expression*
+	| (const | let) (*varname* | *destructuring*) [: *type*] = *expression*
 {
 	*...statements*
 }
 [else if
 	*expression:Boolean*
-	| (const | let) (*varname*[: *type*] | *destructuring*) = *expression*
+	| (const | let) (*varname* | *destructuring*) [: *type*] = *expression*
 {
 	*...statements*
 }]
@@ -97,7 +102,7 @@ Unlike JavaScript, in kaoscript, `for...in` loops an array.
 
 ```syntax
 for
-	[const | let] ((*varname*[: *type*] | *destructuring*)[, *index*] | :*index*)
+	[const | let] (*varname* | *destructuring* | '_') [: *type*] [, *index*]
 	in *expression:Array*
 	[desc]
 	[from *expression:Number*]
@@ -115,8 +120,7 @@ for
 ```kaoscript
 heroes = ['leto', 'duncan', 'goku']
 
-for const hero, index in heroes when index % 2 == 0
-{
+for const hero, index in heroes when index % 2 == 0 {
 	console.log(hero)
 }
 // leto, goku
@@ -125,8 +129,7 @@ for const hero, index in heroes when index % 2 == 0
 ```kaoscript
 heroes = ['leto', 'duncan', 'goku']
 
-for hero in heroes until hero == 'duncan'
-{
+for hero in heroes until hero == 'duncan' {
 	console.log(hero)
 }
 // leto
@@ -140,7 +143,7 @@ Unlike JavaScript, in kaoscript, `for...in` loops an object.
 
 ```syntax
 for
-	[const | let] ((*varname*[: *type*] | *destructuring*)[, *key*] | :*key*)
+	[const | let] (*varname* | *destructuring* | '_') [: *type*] [, *key*]
 	of *expression:Object*
 	[(while | until) *expression:Boolean*]
 	[when *expression:Boolean*]
@@ -172,7 +175,7 @@ for value, key of likes {
 
 ```syntax
 for
-	[const | let] *varname*[, *index*] | :*index*
+	[const | let] (*varname* | '_') [, *index*]
 	in *operand:Number*[<]..[<]*operand:Number*[..*operand:Number*]
 	[(while | until) *expression:Boolean*]
 	[when *expression:Boolean*]
@@ -195,7 +198,10 @@ for x in 0..10..2 while test(x) {
 ### Syntax
 
 ```syntax
-while *expression:Boolean* {
+while
+	*expression:Boolean*
+	| (const | let) (*varname* | *destructuring*) [: *type*] = *expression*
+{
 
 }
 ```
@@ -265,7 +271,7 @@ It executes only and only one branch. (No `break` needed)
 
 ```syntax
 switch *expression* {
-	[*expression1*[, *expression2* ... [*expressionN*]] | is *class*]
+	[*expression1*[, *expression2* ... [*expressionN*]] | is *class* | '_']
 	[with (*varname* [as *type*] | *destructuring*) ]
 	[where *expression:Boolean*]
 	=> (
@@ -284,7 +290,7 @@ switch number {
 	1               => console.log("One!")
 	2, 3, 5, 7, 11  => console.log("This is a prime")
 	13..19          => console.log("A teen")
-	                => console.log("Ain't special")
+	_               => console.log("Ain't special")
 }
 ```
 
@@ -302,10 +308,10 @@ let somePoint = [1, 1]
 
 switch somePoint {
 	[0, 0]			=> console.log(`(0, 0) is at the origin`)
-	[, 0]			=> console.log(`(\(somePoint[0]), 0) is on the x-axis`)
-	[0,]			=> console.log(`(0, \(somePoint[1])) is on the y-axis`)
+	[_, 0]			=> console.log(`(\(somePoint[0]), 0) is on the x-axis`)
+	[0, _]			=> console.log(`(0, \(somePoint[1])) is on the y-axis`)
 	[-2..2, -2..2]	=> console.log(`(\(somePoint[0]), \(somePoint[1])) is inside the box`)
-					=> console.log(`(\(somePoint[0]), \(somePoint[1])) is outside of the box`)
+	_				=> console.log(`(\(somePoint[0]), \(somePoint[1])) is outside of the box`)
 }
 ```
 
@@ -318,7 +324,7 @@ switch somePoint {
 	with [x, y] where x == 0						=> console.log(`(0, \(y)) is on the y-axis`)
 	with [x, y] where -2 <= x <= 2 && -2 <= y <= 2	=> console.log(`(\(x), \(y)) is inside the box`)
 	with [x, y]										=> console.log(`(\(x), \(y)) is outside of the box`)
-													=> console.log(`Not a point`)
+	_												=> console.log(`Not a point`)
 }
 ```
 
@@ -333,8 +339,8 @@ switch value {
 	{foo: 1} 							=> console.log('foo: 1')
 	{foo}								=> console.log('has foo')
 	{qux}								=> console.log('has qux')
-				where value.bar() == 0	=> console.log('bar() == 0')
-										=> console.log('oops!')
+	_			where value.bar() == 0	=> console.log('bar() == 0')
+	_									=> console.log('oops!')
 }
 ```
 
@@ -346,7 +352,7 @@ switch view {
 						let sectionCount = tblv.numberOfSections()
 						console.log(`It's a table view with \(sectionCount) sections`)
 					}
-												=> console.log("It's some other UIView or subclass")
+	_											=> console.log("It's some other UIView or subclass")
 }
 ```
 

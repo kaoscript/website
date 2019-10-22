@@ -31,9 +31,6 @@ macro-expression = "#" (*varname* | [(b|e|i)] "(" *expression* ")")
 macro trace_build_age() {
 	const d = new Date(2013, 2, 15)
 
-	d.setUTCDate(1)
-	d.setUTCHours(0, 0, 0)
-
 	const buildTime = Math.floor(d.getTime() / 1000)
 
 	macro {
@@ -47,23 +44,16 @@ macro trace_build_age() {
 trace_build_age!()
 ```
 
-## expression reification
-
-| reification |                     description                     |
-|:-----------:|:---------------------------------------------------:|
-|      b      |    generates a ***b***lock from the given value     |
-|      e      | generates an ***e***xpression from the given value  |
-|      i      | generates an ***i***dentifier from the given string |
-
 ## parameters
 
 The parameters are AST and can be typed as:
 
 - `Array`
+- `Boolean`
+- `Dictionary`
 - `Expression`
 - `Identifier`
 - `Number`
-- `Object`
 - `String`
 
 ## auto-evaluated parameter
@@ -74,6 +64,65 @@ A parameter can also be a typical kaoscript value. It need to be prefixed with a
 macro foobar(@x: Array) {
 	macro #(x.length)
 }
+```
+
+## expression reification
+
+AST values aren't ignoring any reification.
+
+| reification |   reification    |                      description                      |
+|:-----------:|:----------------:|:-----------------------------------------------------:|
+|  argument   |    `#a(...)`     |             generates a list of arguments             |
+| expression  | `#e(...)` `#...` |     generates an expression from the given value      |
+|    join     |  `#j(..., sep)`  | generates a list separated by the specified separator |
+|  statement  |    `#s(...)`     |            generates a list of statements             |
+|    write    |    `#w(...)`     |                  write out the value                  |
+
+### examples
+
+|    type    |  argument   | expression  |    join     |  statement  |    write    |
+|:----------:|:-----------:|:-----------:|:-----------:|:-----------:|:-----------:|
+|  Boolean   |   `true`    |   `true`    |   `true`    |   `true`    |   `true`    |
+| Dictionary | `{x: '42'}` | `{x: '42'}` | `{x: '42'}` | `{x: '42'}` | `{x: '42'}` |
+|   Number   |   `3.14`    |   `3.14`    |   `3.14`    |   `3.14`    |   `3.14`    |
+|   String   |  `foobar`   | `'foobar'`  |  `foobar`   |  `foobar`   |  `foobar`   |
+
+### array
+
+```kaoscript
+#a(['foobar()', 'quxbaz()'])
+
+// generates:
+foobar(), quxbaz()
+```
+
+```kaoscript
+#e(['foobar()', 'quxbaz()'])
+
+// generates:
+['foobar()', 'quxbaz()']
+```
+
+```kaoscript
+#j(['foobar()', 'quxbaz()'], ' && ')
+
+// generates:
+foobar() && quxbaz()
+```
+
+```kaoscript
+#s(['foobar()', 'quxbaz()'])
+
+// generates:
+foobar()
+quxbaz()
+```
+
+```kaoscript
+#w(['foobar()', 'quxbaz()'])
+
+// generates:
+foobar()quxbaz()
 ```
 
 ## overloading
@@ -136,11 +185,11 @@ export class Color {
 			for const component, name of space.components {
 				field = `_\(name)`
 
-				fields.push(macro private #i(field): Number)
+				fields.push(macro private #w(field): Number)
 
 				methods.push(macro {
-					override #i(name)() => this.getField(#(name))
-					override #i(name)(value) => this.setField(#(name), value)
+					override #w(name)() => this.getField(#(name))
+					override #w(name)(value) => this.setField(#(name), value)
 				})
 			}
 
@@ -148,8 +197,8 @@ export class Color {
 				Color.registerSpace(#(space))
 
 				impl Color {
-					#b(fields)
-					#b(methods)
+					#s(fields)
+					#s(methods)
 				}
 			}
 		}

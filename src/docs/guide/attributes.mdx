@@ -79,11 +79,25 @@ By default, the only available targets are *ecma-v5* and *ecma-v6*.
 
 kaoscript allows to apply some rules about the code.
 
-|      rule      |                                         desciption                                          |
-|:--------------:|:-------------------------------------------------------------------------------------------:|
-|  no-undefined  |                            all variables must have been defined                             |
-| ignore-misfit  |                    accessing an unmatched member doesn't throw an error                     |
-| non-exhaustive | the declaration is not exhaustive;<br />access to unmatched members will not throw an error |
+|         rule         |                                         desciption                                          |
+|:--------------------:|:-------------------------------------------------------------------------------------------:|
+|   no-param-assert    |                     the parameters won't be asserted (existence, type)                      |
+| no-param-type-assert |                           the parameters' types won't be asserted                           |
+|     no-undefined     |                            all variables must have been defined                             |
+|    non-exhaustive    | the declaration is not exhaustive;<br />access to unmatched members will not throw an error |
+|    ignore-misfit     |                    accessing an unmatched member doesn't throw an error                     |
+
+### no-param-assert
+
+`no-param-assert` disables all the assertions of the parameter, its existence, its type, ...
+
+### no-param-type-assert
+
+By default, every arguments are checked against the expected type. If not matched, it will throw an error.
+
+`no-param-type-assert` will disable that behaviour by simply disabling the type checking.
+
+The generated code will be based on the expected type so if the argument is of another type, it might generate runtime errors.
 
 ### no-undefined
 
@@ -106,12 +120,6 @@ func foobar() {
 	console.log(x)
 }
 ```
-
-### ignore-misfit
-
-By default, if a member (field/method for a class, variable/function for a namespace or field for an enum) or a function is accessed and can't be matched with the given arguments, it will throw an error.
-
-The rule `ignore-misfit` disables this behaviour and ignores mismatched members or functions.
 
 ### non-exhaustive
 
@@ -163,9 +171,15 @@ console.debug('foobar')
 // throw an error
 ```
 
+### ignore-misfit
+
+By default, if a member (field/method for a class, variable/function for a namespace or field for an enum) or a function is accessed and can't be matched with the given arguments, it will throw an error.
+
+The rule `ignore-misfit` disables this behaviour and ignores mismatched members or functions.
+
 ## runtime
 
-kaoscript needs a runtime to add dynamics functions on classes (`Helper`) and to do type checking (`Type`).
+kaoscript needs a runtime to add dynamics functions on classes (`Helper`), to do type checking (`Type`), to do arithmetic operations (`Operator`).
 
 The runtime is imported only when it's needed.
 
@@ -177,4 +191,5 @@ But you can provide your own runtime with the following attributes
 #![runtime(package="@kaoscript/runtime")]
 #![runtime(type(alias="Type", member="Type"))]
 #![runtime(helper(alias="Helper", member="Helper"))]
+#![runtime(prefix='KS')]
 ```

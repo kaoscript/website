@@ -21,7 +21,7 @@ route: /guide/classes
 
 field = *varname*[: *type*] [= *value*]
 
-method = [abstract] [async] *varname*([[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]])[: *type*] [~ *class1* [, *class2* ... [, *classN*]]] [ => *expression* | {
+method = [abstract | override] [async] *varname*([[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]])[: *type*] [~ *class1* [, *class2* ... [, *classN*]]] [ => *expression* | {
 	*...statements*
 }]
 ```
@@ -47,7 +47,8 @@ class Shape {
 ```kaoscript
 class Shape {
 	private {
-		_color: String
+		@color: String
+		// same as: _color: String
 	}
 
 	draw(): String {
@@ -148,6 +149,43 @@ let r = new Rectangle('black')
 console.log(r.draw())
 // I'm drawing with a black pen. I'm drawing a black rectangle.
 ```
+
+## override
+
+The `override` keyword indicates that the method must inherit a method from the superclass. If not, it will generate an error.
+
+```kaoscript
+class Shape {
+	draw(): String {
+        return `I'm drawing a shape.`
+    }
+}
+
+class Rectangle extends Shape {
+	override draw() {
+        return `I'm drawing a rectangle.`
+    }
+}
+```
+
+If a parameter type, return type or error type is missing, it will be replaced but the type of the overridden type.
+If the type isn't missing, it will need to be equal to the overridden type.
+
+<!-- ## final
+
+The `final` keyword indicates that the class or the method is final. It can't be extended or augmented.
+
+```kaoscript
+final class Shape {
+	draw(): String {
+        return `I'm drawing a shape.`
+    }
+}
+
+class Rectangle extends Shape {
+}
+// will throw an error
+``` -->
 
 ## abstract
 

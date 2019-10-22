@@ -63,6 +63,74 @@ catch {
 }
 ```
 
+## try expression
+
+```kaoscript
+func foobar(x) ~ Error {
+    if x {
+        return 42
+    }
+    else {
+        throw new Error('foobar')
+    }
+}
+
+let x = try foobar(false)
+
+let y = try foobar(false) ~~ 24
+
+let z = try foobar(false) ?? 24
+
+let a = try! foobar(true)
+```
+
+### try
+
+```kaoscript
+let x = try foobar(false)
+```
+
+If `foobar()` throws an error, then `try` catch it and return `null`
+
+### error coalescing
+
+```kaoscript
+let y = try foobar(false) ~~ 24
+```
+
+If `foobar()` throws an error, then `try` catch it and return the default value `24`
+
+### null coalescing
+
+```kaoscript
+let z = try foobar(false) ?? 24
+```
+
+`try foobar(false) ?? 24` is equivalent to `(try foobar(false)) ?? 24`.
+So if `foobar()` throws an error or return `null`, then the null coalescing failed and return `24`.
+
+### forced-unwraping
+
+```kaoscript
+let a = try! foobar(true)
+```
+
+`try!` disables the error propagation. If an error actually is thrown, you’ll get a runtime error.
+It should be used only when you are sure that no errors are generated.
+
+### conditional
+
+```kaoscript
+if try foobar(true) {
+    // no error has occured
+}
+else {
+    // an error has occured
+}
+```
+
+When a `try` expression is casted to a Boolean, it returns `true` when no errors are thrown. If not, it returns `false`.
+
 ## disabling
 
 koascript allows to disable the disable the default error handling.

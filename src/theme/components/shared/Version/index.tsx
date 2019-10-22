@@ -13,6 +13,6 @@ const Wrapper = styled.div<WrapperProps>`
 
 export const Version: React.SFC = () => {
   return (
-	  <Wrapper>v0.9.0</Wrapper>
+	  <Wrapper>v0.10.0</Wrapper>
   )
 }

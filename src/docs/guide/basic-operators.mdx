@@ -55,6 +55,8 @@ x--				// 0
 'foo' + 'bar'	// foobar
 ```
 
+Unlike javascript, if an operand is `null`, the result will be `null`. And if an operand is not a number, an error will be thrown.
+
 ## comparison
 
 |      Operator      |        Meaning        |
@@ -162,12 +164,14 @@ The operator `??` is a polyadic operator.
 
 ## typing
 
-|        Operator         |      Meaning      |
-|:-----------------------:|:-----------------:|
-|   *expr* `is` *class*   |   Type matching   |
-| *expr* `is not` *class* | Type not matching |
-|   *expr* `as` *class*   |   Type casting    |
-|  *expr*`:`*className*   |   Type casting    |
+|        Operator         |       Meaning        |
+|:-----------------------:|:--------------------:|
+|   *expr* `is` *class*   |    Type matching     |
+| *expr* `is not` *class* |  Type not matching   |
+|   *expr* `as` *class*   |     Type casting     |
+|  *expr*`:`*className*   |     Type casting     |
+|       *expr*`!?`        | Null removal casting |
+|       *expr*`!!`        | Forced type casting  |
 
 ```kaoscript
 class Foobar {
@@ -207,3 +211,21 @@ t = x as Array<String>
 | *expr* `>>=` *expr* |    Shift right    |
 | *expr* `?=` *expr*  |  Non existential  |
 | *expr* `??=` *expr* |  Null coalescing  |
+
+## junction
+
+|         Operator          |             Meaning              |
+|:-------------------------:|:--------------------------------:|
+|      *expr*`.`*name*      |          member access           |
+|     *expr*`?.`*name*      |    conditional member access     |
+|    *expr*`[`*expr*`]`     |           array access           |
+|    *expr*`?[`*expr*`]`    |     conditional array access     |
+|  *expr*`(`*arguments*`)`  |       function application       |
+| *expr*`?(`*arguments*`)`  | conditional function application |
+| *expr*`^$(`*arguments*`)` |          curry function          |
+| *expr*`^^(`*arguments*`)` |          curry function          |
+| *expr*`^@(`*arguments*`)` |          curry function          |
+| *expr*`*$(`*arguments*`)` |       function application       |
+| *expr*`**(`*arguments*`)` |       function application       |
+|     *expr*`::`*name*      |           enum access            |
+| *expr*`!(`*arguments*`)`  |        macro application         |

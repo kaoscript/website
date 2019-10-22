@@ -86,7 +86,9 @@ let four = (a => a / 10)(42)
 ### Syntax
 
 ```syntax
-[*varname* | *destructuring* | ...[*varname*]] [!] [: *type*] [?] [= *expression*]
+(*varname* | *destructuring* | ...[arity][*varname*] | '_') [!] [: *type*] [?] [= *expression*]
+
+arity = { ([*min*], [*max*] | *quantity*) }
 ```
 
 ### Examples
@@ -178,7 +180,8 @@ func corge(...{3}args) {
 
 ## anonymous parameter
 
-In kaoscript, a parameter can be ignored.
+In kaoscript, a parameter can be ignored with the placeholder `_` (can be ignored for a rest parameter).
+Even if a parameter is ignored, it will be validated (`_` won't accept `null`, whereas `_?` will)
 
 ### Examples
 
@@ -186,7 +189,7 @@ In kaoscript, a parameter can be ignored.
 func foo(...) {
 }
 
-func bar(, x, y) {
+func bar(_, x, y) {
 	console.log(x, y)
 }
 ```
@@ -226,9 +229,61 @@ async func disks() {
 let d = await disks()
 ```
 
+## return type
+
+### Syntax
+
+```syntax
+: *type*
+```
+
+### Examples
+
+```kaoscript
+func foobar(): Number => 42
+```
+
+### void
+
+```kaoscript
+func foobar(): void {
+}
+```
+
+`void` indicates that the function won't ever return any values. So it can never be an operand.
+The `void` type can only be used as a return type, it doesn't have any meaning in others contexts.
+
+### never
+
+```kaoscript
+func foobar(): never {
+	throw new Error()
+}
+```
+
+`never` indicates that the function will never return, it will always generate an error.
+As for `void`, `never` can only be used as a return type.
+
+The previous code is equivalent to:
+
+```kaoscript
+func foobar(): never ~ Error {
+	throw new Error()
+}
+```
+
+`~ Error` can be omitted since `never` is already indicating that the function will throw an error.
+
 ## error handling
 
 Like Java, in kaoscript, a function exposes the list of possible errors. Those errors will have to be handled by the caller. (This behaviour can be disabled with an attribute.)
+
+
+### Syntax
+
+```syntax
+~ *class1* [, *class2* ... [, *classN*]]
+```
 
 ### Examples
 
