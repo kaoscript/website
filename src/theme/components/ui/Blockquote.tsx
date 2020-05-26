@@ -18,6 +18,10 @@ export const Blockquote = styled.blockquote`
 		margin: 5px 0 10px;
 	}
 
+	p + p {
+		margin-top: 1.5em;
+	}
+
 	code {
 		background: #FFF;
 	}

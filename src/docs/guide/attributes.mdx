@@ -79,25 +79,44 @@ By default, the only available targets are *ecma-v5* and *ecma-v6*.
 
 kaoscript allows to apply some rules about the code.
 
-|         rule         |                                         desciption                                          |
-|:--------------------:|:-------------------------------------------------------------------------------------------:|
-|   no-param-assert    |                     the parameters won't be asserted (existence, type)                      |
-| no-param-type-assert |                           the parameters' types won't be asserted                           |
-|     no-undefined     |                            all variables must have been defined                             |
-|    non-exhaustive    | the declaration is not exhaustive;<br />access to unmatched members will not throw an error |
-|    ignore-misfit     |                    accessing an unmatched member doesn't throw an error                     |
+|            rule            |                                        desciption                                        |
+|:--------------------------:|:----------------------------------------------------------------------------------------:|
+|        no-undefined        |                           all variables must have been defined                           |
+|       non-exhaustive       | the declaration is not exhaustive;<br />access to unmatched members don't throw an error |
+|       ignore-misfit        |                   accessing an unmatched member doesn't throw an error                   |
+|     dont-ignore-misfit     |                      accessing an unmatched member throws an error                       |
+|      assert-parameter      |                     the parameters aren't asserted (existence, type)                     |
+|   dont-assert-parameter    |                      the parameters are asserted (existence, type)                       |
+|   assert-parameter-type    |                          the parameters' types aren't asserted                           |
+| dont-assert-parameter-type |                            the parameters' types are asserted                            |
+|     assert-new-struct      |                         the values of a new struct are asserted                          |
+|   dont-assert-new-struct   |                        the values of a new struct aren't asserted                        |
+|      assert-new-tuple      |                          the values of a new tuple are asserted                          |
+|   dont-assert-new-tuple    |                        the values of a new tuple aren't asserted                         |
+|      assert-override       |              assert that overriding methods are matching an existing method              |
+|    dont-assert-override    |                overriding methods don't need to match an existing method                 |
 
-### no-param-assert
+<!-- ### assert-parameter
 
-`no-param-assert` disables all the assertions of the parameter, its existence, its type, ...
+`assert-parameter`/`dont-assert-parameter` enables/disables all the assertions of the parameter, its existence, its type, ... -->
 
-### no-param-type-assert
+### assert-parameter-type
 
-By default, every arguments are checked against the expected type. If not matched, it will throw an error.
+<!-- `assert-parameter-type`/`dont-assert-parameter-type` enables/disables the type checking of the arguments. -->
 
-`no-param-type-assert` will disable that behaviour by simply disabling the type checking.
+If the type checking is disable, a function might generate unexpected runtime errors.
 
-The generated code will be based on the expected type so if the argument is of another type, it might generate runtime errors.
+<!-- ### assert-new-struct
+
+`assert-new-struct`/`dont-assert-new-struct` enables/disables all the assertions of the values given to create a new struct.
+
+### assert-new-tuple
+
+`assert-new-tuple`/`dont-assert-new-tuple` enables/disables all the assertions of the values given to create a new tuple.
+
+### assert-override
+
+`assert-override`/`dont-assert-override` enables/disables all the assertions for overriding an existing method. -->
 
 ### no-undefined
 
@@ -175,7 +194,8 @@ console.debug('foobar')
 
 By default, if a member (field/method for a class, variable/function for a namespace or field for an enum) or a function is accessed and can't be matched with the given arguments, it will throw an error.
 
-The rule `ignore-misfit` disables this behaviour and ignores mismatched members or functions.
+`ignore-misfit` disables this behaviour and ignores mismatched members or functions.
+`dont-ignore-misfit` re-enables this behaviour.
 
 ## runtime
 

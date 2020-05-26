@@ -14,10 +14,58 @@ route: /guide/augmentations
 
 ```syntax
 impl *varname* {
-	(*field* | *method*)*
+	(
+		[private | internal | protected | public] (
+			(override | overwrite) *method*
+			|
+			(override | overwrite) {
+				*method*+
+			}
+			|
+			(*variable* | *method*)
+			|
+			{
+				(*variable* | *method*)+
+			}
+			|
+			static (*static_variable* | *method*)
+			|
+			static {
+				(*static_variable* | *method*)+
+			}
+			|
+			lateinit {
+				*lateinit_variable*+
+			}
+		)
+	)*
 }
 
-field = *varname*[: *type*] [= *value*]
+variable = (
+	auto [@]*varname* = *value*
+	|
+	const [@]*varname*[: *type*] = *value*
+	|
+	[@]*varname*[: *type*] [= *value*]
+	|
+	lateinit [const] [@]*varname*[: *type*]
+)
+
+static_variable = (
+	auto [@]*varname* = *value*
+	|
+	const [@]*varname*[: *type*] = *value*
+	|
+	[@]*varname*[: *type*] [= *value*]
+	|
+	lateinit const [@]*varname*[: *type*]
+)
+
+lateinit_variable = (
+	[const] [@]*varname*[: *type*] [= *value*]
+	|
+	auto [@]*varname* = *value*
+)
 
 method = [override | overwrite] [async] *varname*([[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]])[: *type*] [~ *class1* [, *class2* ... [, *classN*]]] [ => *expression* | {
 	*...statements*
@@ -79,9 +127,12 @@ console.log(i.mod(2))
 // javascript code: console.log(__ks_Number._im_mod(i, 2))
 ```
 
+You can add a new field to a native class. It won't modify the class but it will add the extra field to the instance of the class.
+
 ## override
 
 The `override` keyword indicates that the method must inherit a method from the augmented class. If not, it will generate an error.
+The overrinding method will have the same signature as the overridden method (same parameters, same return type and same throws).
 
 ```kaoscript
 class LetterBox {
@@ -96,7 +147,7 @@ impl LetterBox {
 
 ## overwrite
 
-The `override` keyword indicates that the method replace at least one method from the augmented class. If not, it will generate an error.
+The `overwrite` keyword indicates that the method replace at least one method from the augmented class. If not, it will generate an error.
 At the moment, the augmented class must be a `sealed` class.
 
 The new method replaces all the methods that its parameters can match.

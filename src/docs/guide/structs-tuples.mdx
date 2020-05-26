@@ -1,0 +1,178 @@
+---
+name: Structs & Tuples
+menu: Guide
+route: /guide/structs-tuples
+---
+
+# Structs & Tuples
+
+In kaoscript, there is 3 kinds of data types:
+
+- tuple: a tuple is a finite ordered list (sequence) of values,
+- named tuple: a named tuple is a tuple but its values can also be accessed by their names,
+- struct: a struct is a group of variables, only accessible by their names.
+
+The tuples and named tupled are stored as array, whereas the structs are stored as dictionary.
+
+## tuple
+
+### syntax
+
+```syntax
+tuple *varname*(*...element*) [extends *varname*]
+
+element = *type* [= *expression*]
+```
+
+### example
+
+```kaoscript
+tuple Pair(String, Number)
+
+const pair = Pair('x', 0.1)
+
+console.log(`\(pair[0])`, pair[1] + 1)
+
+pair[0] = 'foobar'
+pair[1] = 3.14
+
+pair.0 = 'foobar'
+pair.1 = 3.14
+
+console.log(`\(pair.0)`, pair.1 + 1)
+```
+
+### inheritance
+
+```kaoscript
+struct Pair(String, Number)
+
+struct Triple(Boolean) extends Pair
+
+const triple = Triple('x', 0.1, true)
+
+console.log(`\(triple.0)`, triple.1 + 1, !triple.2)
+```
+
+### default values
+
+```kaoscript
+tuple Pair(
+	String	= ''
+	Number	= 0
+)
+
+const pair = Pair()
+
+const pair2 = Pair(null, 3.14)
+
+const pair3 = Pair('foobar')
+
+const pair4 = Pair('foobar', null)
+
+const pair5 = Pair(null, null)
+```
+
+## named tuple
+
+### syntax
+
+```syntax
+tuple *varname* [extends *varname*] {
+	*...element*
+}
+
+element = *varname*[: *type*] [= *expression*]
+```
+
+### example
+
+```kaoscript
+tuple Pair {
+	x: String	= ''
+	y: Number	= 0
+}
+
+let pair = Pair('x', 0.1)
+
+console.log(`\(pair.x)`, pair.y + 1)
+
+pair = Pair()
+pair = Pair(x: 'x', y: 0.1)
+```
+
+### inheritance
+
+```kaoscript
+tuple Pair {
+	x: String	= ''
+	y: Number	= 0
+}
+
+tuple Triple extends Pair {
+	z: Boolean	= false
+}
+
+let triple = Triple('x', 0.1, true)
+
+console.log(`\(triple[0])`, triple[1] + 1, !triple[2])
+
+console.log(`\(triple.0)`, triple.1 + 1, !triple.2)
+
+console.log(`\(triple.x)`, triple.y + 1, !triple.z)
+
+triple = Triple()
+triple = Triple(z: true)
+```
+
+## struct
+
+### syntax
+
+```syntax
+struct *varname* [extends *varname*] {
+	*...element*
+}
+
+element = *varname*[: *type*] [= *expression*]
+```
+
+### example
+
+```kaoscript
+struct Point {
+    x: Number
+    y: Number
+}
+
+let point = Point(0.3, 0.4)
+
+console.log(point.x + 1, point.x + point.y)
+
+point.x = 3.14
+
+console.log(point.x + 1, point.x + point.y)
+
+point = Point(x: 0.3, y: 0.4)
+```
+
+### inheritance
+
+```kaoscript
+struct Point {
+    x: Number
+    y: Number
+}
+
+struct Point3D extends Point {
+	z: Number	= 0
+}
+
+let point = Point3D(x: 0.3, y: 0.4)
+
+console.log(point.x + 1, point.y + 2, point.z + 3)
+
+point = Point3D(0.3, 0.4)
+point = Point3D(0.3, 0.4, 1)
+point = Point3D(x: 0.3, y: 0.4, z: 1)
+```

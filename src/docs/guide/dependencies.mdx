@@ -13,6 +13,7 @@ There are three basics ways to add external dependencies:
 
 Three combined ways:
 - `extern|require`: first look into the global scope, and if not found, look into the module parameters
+- `extern|import`: first look into the global scope, and if not found, import it
 - `require|extern`: first look into the module parameters, and if not found, look into the global scope
 - `require|import`: first look into the module parameters, and if not found, import it
 
@@ -83,6 +84,16 @@ require {
 extern|require sealed class Array
 ```
 
+## extern|import
+
+`extern|import` will look for the item in the global context, if not found, it will import them.
+
+### example
+
+```kaoscript
+extern|import 'array' for Array
+```
+
 ## require|extern
 
 `require|extern` will look for the item in the module parameters, if not found, look intothe global context.
@@ -122,7 +133,7 @@ method = [async] *varname*([[*parameter1*] [, [*parameter2*] ... [, [*parameterN
 ### examples
 
 ```kaoscript
-extern sealed class String
+extern systemic class String
 
 disclose String {
 	length: Number
@@ -134,7 +145,7 @@ disclose String {
 ```
 
 ```kaoscript
-extern sealed namespace Math
+extern systemic namespace Math
 
 disclose Math {
 	PI: Number
@@ -142,17 +153,18 @@ disclose Math {
 }
 ```
 
-## sealed
+## systemic
 
-`sealed` is a modifier for dependencies to indicate that the dependency isn't directly modifiable.
-It mostly used to declared native classes like Array or String.
+`systemic` is a modifier for dependencies to indicate that the dependency isn't directly modifiable (`sealed`) and is from the system.
+
+So when importing, kaoscript won't try to overwrite that dependency.
 
 ### implements & native class
 
-`impl` doesn't modify classes that have been flagged as `sealed`.
+`impl` doesn't directly modify classes that have been flagged as `sealed` (a `systemic` class is `sealed`).
 
 ```kaoscript
-extern sealed class Number
+extern systemic class Number
 // import the external class 'Number' and flag it as `sealed` to avoid to directly modify it
 
 impl Number {

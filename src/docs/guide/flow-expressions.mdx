@@ -21,7 +21,8 @@ route: /guide/flow-expressions
 			[by *expression:Number*]
 			[(while | until) *expression:Boolean*]
 			[when *expression:Boolean*]
-		| [const | let] (*varname* | *destructuring* | '_') [: *type*] [, *index*]
+		|
+		[const | let] (*varname* | *destructuring* | '\_') [: *type*] [, *index*]
 			in *expression:Array*
 			[desc]
 			[from *expression:Number*]
@@ -29,11 +30,13 @@ route: /guide/flow-expressions
 			[by *expression:Number*]
 			[(while | until) *expression:Boolean*]
 			[when *expression:Boolean*]
-		| [const | let] (*varname* | *destructuring* | '_') [: *type*] [, *index*]
+		|
+		[const | let] (*varname* | *destructuring* | '\_') [: *type*] [, *index*]
 			of *expression:Object*
 			[(while | until) *expression:Boolean*]
 			[when *expression:Boolean*]
-		| [const | let] *varname*[, *index*] | :*index*
+		|
+		[const | let] *varname*[, *index*] | :*index*
 			in *operand:Number*[<]..[<]*operand:Number*[..*operand:Number*]
 			[(while | until) *expression:Boolean*]
 			[when *expression:Boolean*]
@@ -65,7 +68,8 @@ a = [i for const i from 0 to 10 by 2 until foo(i)]
 ```syntax
 ... = *expression* [
 	if *expression:Boolean* [else *expression*]
-	| unless *expression:Boolean*
+	|
+	unless *expression:Boolean*
 ]
 ```
 
@@ -80,8 +84,7 @@ y = 10 if x == 5 else 15
 ### Syntax
 
 ```syntax
-*expression*
-[
+*expression* [
 	for
 		(
 			[const | let] *varname*
@@ -90,7 +93,8 @@ y = 10 if x == 5 else 15
 				[by *expression:Number*]
 				[(while | until) *expression:Boolean*]
 				[when *expression:Boolean*]
-			| [const | let] (*varname* | *destructuring* | '_') [: *type*] [, *index*]
+			|
+			[const | let] (*varname* | *destructuring* | '\_') [: *type*] [, *index*]
 				in *expression:Array*
 				[desc]
 				[from *expression:Number*]
@@ -98,17 +102,21 @@ y = 10 if x == 5 else 15
 				[by *expression:Number*]
 				[(while | until) *expression:Boolean*]
 				[when *expression:Boolean*]
-			| [const | let] (*varname* | *destructuring* | '_') [: *type*] [, *index*]
+			|
+			[const | let] (*varname* | *destructuring* | '\_') [: *type*] [, *index*]
 				of *expression:Object*
 				[(while | until) *expression:Boolean*]
 				[when *expression:Boolean*]
-			| [const | let] *varname*[, *index*] | :*index*
+			|
+			[const | let] *varname*[, *index*] | :*index*
 				in *operand:Number*[<]..[<]*operand:Number*[..*operand:Number*]
 				[(while | until) *expression:Boolean*]
 				[when *expression:Boolean*]
 		)
-	| if *expression:Boolean*
-	| unless *expression:Boolean*
+	|
+	if *expression:Boolean*
+	|
+	unless *expression:Boolean*
 
 ]
 ```
@@ -132,7 +140,8 @@ console.log(hero) for hero in heroes
 ```syntax
 let ... = *expression* [
 	if *expression:Boolean* [else *expression*]
-	| unless *expression:Boolean*
+	|
+	unless *expression:Boolean*
 ]
 ```
 
@@ -149,10 +158,13 @@ let y = 10 if x == 5 else 15
 ```syntax
 return [
 	if *expression:Boolean*
-	| unless *expression:Boolean*
-	| *expression* [
+	|
+	unless *expression:Boolean*
+	|
+	*expression* [
 		if *expression:Boolean* [else *expression*]
-		| unless *expression:Boolean*
+		|
+		unless *expression:Boolean*
 	]
 ]
 ```
@@ -174,7 +186,8 @@ return 'hello' if lang == 'en' else 'bonjour'
 ```syntax
 throw *expression* [
 	if *expression:Boolean* [else *expression*]
-	| unless *expression:Boolean*
+	|
+	unless *expression:Boolean*
 ]
 ```
 

@@ -13,9 +13,9 @@ route: /guide/import-export
 ### syntax
 
 ```syntax
- import "*module-name*"['(' *parameter1*, ..., *parameterN* ')'] [=> *varname*[: *type*]]
- import "*module-name*"['(' *parameter1*, ..., *parameterN* ')'] for (*varname1*[: *type*] | *type1*), ..., (*varnameN*[: *type*] | *typeN*) [=> *varname*[: *type*]]
- import "*module-name*"['(' *parameter1*, ..., *parameterN* ')'] {
+ import "*module-name*"['(' *parameter1*, ..., *parameterN* ')' | '(...)'] [=> *varname*[: *type*]]
+ import "*module-name*"['(' *parameter1*, ..., *parameterN* ')' | '(...)'] for (*varname1*[: *type*] | *type1*), ..., (*varnameN*[: *type*] | *typeN*) [=> *varname*[: *type*]]
+ import "*module-name*"['(' *parameter1*, ..., *parameterN* ')' | '(...)'] {
 	(*varname1*[: *type*] | *type1*)[,]
 	...[,]
 	(*varnameN*[: *type*] | *typeN*)[,]
@@ -85,6 +85,36 @@ import 'klaw-sync'
 // variable: klawSync
 ```
 
+### parameters
+
+When importing a kaoscript module, this module might require some parameters (defined with the statement `require`).
+
+Those parameters are given like:
+
+```kaoscript
+class Color {
+}
+
+class Space {
+}
+
+import 'color.srgb'(Color, Space)
+```
+
+It's supporting named parameters, so you can do:
+
+```kaoscript
+class MyColor {
+}
+
+class MySpace {
+}
+
+import 'color.srgb'(Color: MyColor, Space: MySpace)
+```
+
+If any parameter is missing or doesn't match, kaoscript will throw an error.
+
 ### require modifier
 
 `require` is a modifier for import parameter.
@@ -94,6 +124,15 @@ import 'moduleX'(require ClassY)
 ```
 
 kaoscript will *require* the class `ClassY` with the same type as expected by the module `moduleX`.
+
+### autofill parameters
+
+```kaoscript
+import '@zokugun/lang'
+import '@zokugun/lang.color'(...)
+```
+
+`(...)` indicates to kaoscript that it needs to find the matching parameters from availables variables.
 
 ## export
 

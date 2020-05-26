@@ -11,17 +11,59 @@ route: /guide/classes
 ```syntax
 [abstract] class *varname*["<" *type* ">"][@ *version*] [extends *varname*] {
 	(
-		[private | protected | public] (*field* | *method*)
-		|
-		(private | protected | public) {
-			(*field* | *method*)+
-		}
+		[private | internal | protected | public] (
+			(abstract | override) *method*
+			|
+			(abstract | override) {
+				*method*+
+			}
+			|
+			(*variable* | *method*)
+			|
+			{
+				(*variable* | *method*)+
+			}
+			|
+			static (*static_variable* | *method*)
+			|
+			static {
+				(*static_variable* | *method*)+
+			}
+			|
+			lateinit {
+				*lateinit_variable*+
+			}
+		)
 	)*
 }
 
-field = *varname*[: *type*] [= *value*]
+variable = (
+	auto [@]*varname* = *value*
+	|
+	const [@]*varname*[: *type*] = *value*
+	|
+	[@]*varname*[: *type*] [= *value*]
+	|
+	lateinit [const] [@]*varname*[: *type*]
+)
 
-method = [abstract | override] [async] *varname*([[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]])[: *type*] [~ *class1* [, *class2* ... [, *classN*]]] [ => *expression* | {
+static_variable = (
+	auto [@]*varname* = *value*
+	|
+	const [@]*varname*[: *type*] = *value*
+	|
+	[@]*varname*[: *type*] [= *value*]
+	|
+	lateinit const [@]*varname*[: *type*]
+)
+
+lateinit_variable = (
+	[const] [@]*varname*[: *type*] [= *value*]
+	|
+	auto [@]*varname* = *value*
+)
+
+method = [async] *varname*([[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]])[: *type* | auto | this | @*varname*] [~ *class1* [, *class2* ... [, *classN*]]] [ => *expression* | {
 	*...statements*
 }]
 ```
@@ -35,10 +77,16 @@ class Shape {
 	}
 
 	draw(): String {
-        return `I'm drawing with a \(this._color) pen.`
-    }
+		return `I'm drawing with a \(this._color) pen.`
+	}
 }
 ```
+
+## class variable
+
+A mutable variable must be initialized by a constructor unless it is a **static**, **nullable** and **lateinit** variable or it has a default value.
+
+When no type is provided, the default type is `Any?`.
 
 ## this aliasing
 
@@ -51,9 +99,12 @@ class Shape {
 		// same as: _color: String
 	}
 
+	constructor(@color)
+	// automatically set the instance variable '_color' as the parameter 'color'
+
 	draw(): String {
-        return `I'm drawing with a \(@color) pen.`
-    }
+		return `I'm drawing with a \(@color) pen.`
+	}
 }
 ```
 
@@ -63,10 +114,11 @@ The constructor is called when creating a new object like `new Shape()`
 
 ```kaoscript
 class Shape {
-	private _color: String
+	private @color: String
 
-    constructor(@color)
-	// automatically set the instance variable '_color' as the parameter 'color'
+	constructor() {
+		@color = 'red'
+	}
 }
 ```
 
@@ -79,10 +131,10 @@ extern console
 
 class Shape {
 	private {
-		_color: String
+		@color: String
 	}
 
-    constructor(@color)
+	constructor(@color)
 
 	destructor() {
 		@color = null
@@ -95,23 +147,75 @@ delete s
 // the destructor is called and the variable `s` is unreferenced
 ```
 
-## class members
+## static
 
-Class members are declared with the modifier `static`.
+The modifier `static` declares members that are not bound to class instances.
 
 ```kaoscript
-class Rectangle {
-	public static shape() => 'Rectangle'
-
-	static {
-		color() {
-			return '1.0.0'
-		}
+class Shape {
+	private {
+		@color: String
+		@type: String
 	}
+	static {
+		const RED_CIRCLE = new Shape('circle', 'red')
+
+		makeCircle(color: String): Shape => new Shape('circle', color)
+		makeRectangle(color: String): Shape => new Shape('rectangle', color)
+	}
+	constructor(@type, @color)
 }
 
-console.log(Rectangle.shape(), Rectangle.color())
+const rb = Shape.makeRectangle('black')
+const cr = Shape.RED_CIRCLE
 ```
+
+## lateinit
+
+The modifier `lateinit` allows an immutable variable (`const`) to be initialized in a constructor. To be precise, it needs to be initialized in a constructor.
+
+Mutable variables won't require any initialization.
+It's up to the developer to make sure that the variable is correctly initialized when needed.
+
+```kaoscript
+class Shape {
+	public {
+		lateinit const color: String
+		lateinit const type: String
+	}
+	constructor(@type, @color)
+}
+
+const r = new Shape('rectangle', 'black')
+console.log(r.color)
+// black
+
+r.color = 'yellow'
+// throw a SyntaxException (immutable)
+```
+
+## method's return type
+
+In addition to the standard return type, a method allows 2 new return types:
+
+- a field with an alias (`@field`): return the field and the return type is the same as the field's type.
+- the `this` expression: return the current instance `this` and the return type is of the current class.
+
+```kaoscript
+class Shape {
+	private {
+		@color: String
+	}
+
+	color1(): @color
+	color1(@color): this
+
+	color2(): String => @color
+	color2(@color): Shape => this
+}
+```
+
+`color1` and `color2` methods are identicals.
 
 ## superclass & subclass
 
@@ -122,26 +226,21 @@ class Shape {
 	private {
 		_color: String
 	}
-
-    constructor(@color)
-	// automatically set the instance variable '_color' as the parameter 'color'
-
+	constructor(@color)
 	destructor() {
 		@color = null
 	}
-
 	color() => @color
 	color(@color) => this
-
-    draw(): String {
-        return `I'm drawing with a \(@color) pen.`
-    }
+	draw(): String {
+		return `I'm drawing with a \(@color) pen.`
+	}
 }
 
 class Rectangle extends Shape {
-    draw() {
-        return `\(super()) I'm drawing a \(@color) rectangle.`
-    }
+	draw() {
+		return `\(super()) I'm drawing a \(@color) rectangle.`
+	}
 }
 
 let r = new Rectangle('black')
@@ -157,14 +256,14 @@ The `override` keyword indicates that the method must inherit a method from the 
 ```kaoscript
 class Shape {
 	draw(): String {
-        return `I'm drawing a shape.`
-    }
+		return `I'm drawing a shape.`
+	}
 }
 
 class Rectangle extends Shape {
 	override draw() {
-        return `I'm drawing a rectangle.`
-    }
+		return `I'm drawing a rectangle.`
+	}
 }
 ```
 
@@ -178,8 +277,8 @@ The `final` keyword indicates that the class or the method is final. It can't be
 ```kaoscript
 final class Shape {
 	draw(): String {
-        return `I'm drawing a shape.`
-    }
+		return `I'm drawing a shape.`
+	}
 }
 
 class Rectangle extends Shape {
@@ -215,15 +314,15 @@ kaoscript classes can be signed with a version which could be used for serializa
 
 ```kaoscript
 class Rectangle@1.0.0 {
-    private {
-    	_color: String
-    }
+	private {
+		_color: String
+	}
 
-    constructor(@color = 'black')
+	constructor(@color = 'black')
 
-    draw(canvas) {
-        return `I'm drawing a \(@color) rectangle.`
-    }
+	draw(canvas) {
+		return `I'm drawing a \(@color) rectangle.`
+	}
 }
 
 console.log(Rectangle.name)

@@ -11,20 +11,25 @@ In kaoscript, there is three types of functions:
 - anonymous functions
 - arrow functions
 
-|                    | new `this` | shared `this` | overload-able | async-able | return type | error types | statement | expression |
-| ------------------ |:----------:|:-------------:|:-------------:|:----------:|:-----------:|:-----------:|:---------:|:----------:|
-| named function     |    YES     |               |      YES      |    YES     |     YES     |     YES     |    YES    |            |
-| anonymous function |    YES     |               |               |    YES     |     YES     |     YES     |           |    YES     |
-| arrow function     |            |      YES      |               |    YES     |     YES     |     YES     |           |    YES     |
-
-An arrow function shares the same `this` as its caller.
+|                                 | named function | anonymous function | arrow function |
+|:-------------------------------:|:--------------:|:------------------:|:--------------:|
+|        new local `this`         |      YES       |        YES         |                |
+| local `this` is parent's `this` |                |                    |      YES       |
+|    access module's variables    |      YES       |        YES         |      YES       |
+|    access parent's variables    |                |                    |      YES       |
+|          overload-able          |      YES       |                    |                |
+|           async-able            |      YES       |        YES         |      YES       |
+|           return type           |      YES       |        YES         |      YES       |
+|           error types           |      YES       |        YES         |      YES       |
+|            statement            |      YES       |                    |                |
+|           expression            |                |        YES         |      YES       |
 
 ## named function
 
 ### Syntax
 
 ```syntax
-[async] func *varname*([[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]])[: *type*] [~ *class1* [, *class2* ... [, *classN*]]] [ => *expression* | {
+[async] func *varname*([[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]])[: *type* | auto] [~ *class1* [, *class2* ... [, *classN*]]] [ => *expression* | {
 	*...statements*
 }]
 ```
@@ -156,6 +161,19 @@ func corge(...items = [1..5]) {
 }
 ```
 
+### Type
+
+The given type of a rest parameter is the type of its elements.
+
+```kaoscript
+func foobar(...args: Number) {
+	// args is Array<Number>
+	for const arg in args {
+		// arg is Number
+	}
+}
+```
+
 ### Arity
 
 The `rest` parameter can have arity like:
@@ -241,6 +259,15 @@ let d = await disks()
 
 ```kaoscript
 func foobar(): Number => 42
+```
+
+### auto
+
+With `auto`, kasocript will automatically determine the return type
+
+```kaoscript
+func foobar(): auto => 42
+// return type: Number
 ```
 
 ### void

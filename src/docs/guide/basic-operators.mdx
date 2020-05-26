@@ -67,6 +67,11 @@ Unlike javascript, if an operand is `null`, the result will be `null`. And if an
 | *expr* `<` *expr*  |       Less than       |
 | *expr* `>=` *expr* | Greater than or equal |
 | *expr* `<=` *expr* |  Less than or equal   |
+| *expr* `~~` *expr* |       Matching        |
+| *expr* `!~` *expr* |     Not matching      |
+| *expr* `&` *expr*  |  Junctive AND (all)   |
+| *expr* `|` *expr*  |   Junctive OR (any)   |
+| *expr* `^` *expr*  |  Junctive XOR (one)   |
 
 ```kaoscript
 1 == 1			// true
@@ -88,6 +93,18 @@ Comparisons can be chained.
 
 if 1 < x() < 42 {
 	// `x()` is evaluated only once, its result is saved in a temporary variable
+}
+```
+
+### Junctive operations
+
+Both following statements are equivalent:
+
+```kaoscript
+if color == 'white' | 'black' | 'gray' | 'grey' {
+}
+
+if color == 'white' || color == 'black' || color == 'gray' || color == 'grey' {
 }
 ```
 
@@ -118,22 +135,21 @@ true -> false	// false
 
 ## bitwise & shift
 
-|      Operator      |   Meaning   |
-|:------------------:|:-----------:|
-|     `~`*expr*      |     Not     |
-| *expr* `|` *expr*  |     Or      |
-| *expr* `&` *expr*  |     And     |
-| *expr* `^` *expr*  |     Xor     |
-| *expr* `<<` *expr* | Shift left  |
-| *expr* `>>` *expr* | Shift right |
+|      Operator       |       Meaning       |
+|:-------------------:|:-------------------:|
+|     `~~~`*expr*     |         Not         |
+| *expr* `&&&` *expr* |         And         |
+| *expr* `|||` *expr* |         Or          |
+| *expr* `^^^` *expr* |         Xor         |
+| *expr* `<<<` *expr* |     Shift left      |
+| *expr* `>>>` *expr* |     Shift right     |
 
 ```kaoscript
-0x22 & 0x0f		// 0x02
-0x22 & ~0x0f	// 0x20
-0x22 | 0x0f		// 0x2f
-0x22 ^ 0x0f		// 0x2d
-0x22 << 4		// 0x220
-0x22 >> 4		// 0x02
+0x22 &&& 0x0f	// 0x02
+0x22 ||| 0x0f	// 0x2f
+0x22 ^^^ 0x0f	// 0x2d
+0x22 <<< 4		// 0x220
+0x22 >>> 4		// 0x02
 ```
 
 ## conditional
@@ -164,14 +180,18 @@ The operator `??` is a polyadic operator.
 
 ## typing
 
-|        Operator         |       Meaning        |
-|:-----------------------:|:--------------------:|
-|   *expr* `is` *class*   |    Type matching     |
-| *expr* `is not` *class* |  Type not matching   |
-|   *expr* `as` *class*   |     Type casting     |
-|  *expr*`:`*className*   |     Type casting     |
-|       *expr*`!?`        | Null removal casting |
-|       *expr*`!!`        | Forced type casting  |
+|        Operator         |        Meaning        |
+|:-----------------------:|:---------------------:|
+|   *expr* `is` *class*   |     Type matching     |
+| *expr* `is not` *class* |   Type not matching   |
+|   *expr* `as` *class*   |     Type casting      |
+|  *expr* `as!` *class*   |  Forced type casting  |
+|  *expr* `as?` *class*   | Nullable type casting |
+|  *expr*`:`*className*   |     Type casting      |
+|  *expr*`:!`*className*  |  Forced type casting  |
+|  *expr*`:?`*className*  | Nullable type casting |
+|       *expr*`!?`        | Null removal matching |
+|       *expr*`!!`        | Forced type matching  |
 
 ```kaoscript
 class Foobar {
@@ -204,9 +224,9 @@ t = x as Array<String>
 | *expr* `/=` *expr*  |     Division      |
 | *expr* `/.=` *expr* | Quotient division |
 | *expr* `%=` *expr*  |      Modulo       |
-| *expr* `&=` *expr*  |    Bitwise and    |
-| *expr* `|=` *expr*  |    Bitwise or     |
-| *expr* `^=` *expr*  |    Bitwise xor    |
+| *expr* `&&=` *expr*  |    Bitwise and    |
+| *expr* `||=` *expr*  |    Bitwise or     |
+| *expr* `^^=` *expr*  |    Bitwise xor    |
 | *expr* `<<=` *expr* |    Shift left     |
 | *expr* `>>=` *expr* |    Shift right    |
 | *expr* `?=` *expr*  |  Non existential  |

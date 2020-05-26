@@ -6,6 +6,59 @@ route: /guide/variable-declarations
 
 # Variable Declarations
 
+## let
+
+### Syntax
+
+```syntax
+let (*varname*[: *type*] | *destructuring*) = *expression*
+let *varname1*[, *varname2* ... [, *varnamN*]]
+```
+
+### Description
+
+```kaoscript
+let name = 'John'
+```
+
+`let` declares the variable `name` and it's rebindable.
+
+```kaoscript
+let name = 'John'
+
+name = 42
+// no error
+```
+
+### Typing
+
+If a type is provided at the declaration of a variable, its type can't be changed.
+
+```kaoscript
+let name: String = 'John'
+
+name = 42
+// throws a TypeException error
+```
+
+## auto
+
+### Syntax
+
+```syntax
+auto (*varname* | *destructuring*) = *expression*
+```
+
+The type will be deduced from the initial value.
+
+```kaoscript
+auto name = 'John'
+// type: String
+
+name = 42
+// throws a TypeException error
+```
+
 ## const
 
 ### Syntax
@@ -47,52 +100,34 @@ const names: Array = []
 
 The type of a variable declared with `const` can't be changed.
 
-## let
+## lateinit const
 
 ### Syntax
 
 ```syntax
-let (*varname*[: *type*] | *destructuring*) = *expression*
-let (*varname* | *destructuring*) := *expression*
-let *varname1*[, *varname2* ... [, *varnamN*]]
+lateinit const *varname*[: *type*]
 ```
 
 ### Description
 
-```kaoscript
-let name = 'John'
-```
+`lateinit const` allows the assignment of an immutable variable's value to be deferred.
 
-`let` declares the variable `name` and it's rebindable.
+The variable can't be accessed before being assigned.
 
-```kaoscript
-let name = 'John'
-
-name = 42
-// no error
-```
-
-### Typing
-
-If a type is provided at the declaration of a variable, its type can't be changed.
+The assignement can only be in a `if/else` statement or a `swicth` statement with a default case.
 
 ```kaoscript
-let name: String = 'John'
+lateinit const x
 
-name = 42
-// throws a TypeException error
-```
+if test() {
+	x = 42
+}
+else {
+	x = 'quxbaz'
+}
+// type of x: Number | String
 
-### Auto-Typing
-
-`:=` make the variable's type to be immutable. The type will be deduced from the initial value.
-
-```kaoscript
-let name := 'John'
-// type: String
-
-name = 42
-// throws a TypeException error
+console.log(x)
 ```
 
 ## assignement

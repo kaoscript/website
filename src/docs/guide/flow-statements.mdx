@@ -9,7 +9,7 @@ route: /guide/flow-statements
 > Any tests require a boolean.
 
 If the test can't be a boolean, an error will thrown at compilation time.
-If the type is unknow, the test's valiue must be equal to `true`.
+If the type is unknow, the test's value must be equal to `true`.
 
 ## if...else
 
@@ -18,13 +18,19 @@ If the type is unknow, the test's valiue must be equal to `true`.
 ```syntax
 if
 	*expression:Boolean*
-	| (const | let) (*varname* | *destructuring*) [: *type*] = *expression*
+	|
+	(const | let) (*varname* | *destructuring*) [: *type*] = *expression*
+	|
+	auto (*varname* | *destructuring*) = *expression*
 {
 	*...statements*
 }
 [else if
 	*expression:Boolean*
-	| (const | let) (*varname* | *destructuring*) [: *type*] = *expression*
+	|
+	(const | let) (*varname* | *destructuring*) [: *type*] = *expression*
+	|
+	auto (*varname* | *destructuring*) = *expression*
 {
 	*...statements*
 }]
@@ -38,7 +44,10 @@ if
 ```kaoscript
 if x == 5 {
 }
-else if x == 6 {
+else if const x = getX() {
+	// x is:
+	// - immutable
+	// - not null
 }
 else {
 }
@@ -106,8 +115,8 @@ for
 	in *expression:Array*
 	[desc]
 	[from *expression:Number*]
-	[by *expression:Number*]
 	[(til | to) *expression:Number*]
+	[by *expression:Number*]
 	[(while | until) *expression:Boolean*]
 	[when *expression:Boolean*]
 {
@@ -200,7 +209,10 @@ for x in 0..10..2 while test(x) {
 ```syntax
 while
 	*expression:Boolean*
-	| (const | let) (*varname* | *destructuring*) [: *type*] = *expression*
+	|
+	(const | let) (*varname* | *destructuring*) [: *type*] = *expression*
+	|
+	auto (*varname* | *destructuring*) = *expression*
 {
 
 }
@@ -264,7 +276,7 @@ until supply > demand
 
 ## switch
 
-Unlike JavaScript, in kaoscript, `switch` doesn't support cascading.
+Unlike JavaScript, in kaoscript, `switch` won't automatically cascade.
 It executes only and only one branch. (No `break` needed)
 
 ### Syntax
@@ -273,7 +285,7 @@ It executes only and only one branch. (No `break` needed)
 switch *expression* {
 	[*expression1*[, *expression2* ... [*expressionN*]] | is *class* | '_']
 	[with (*varname* [as *type*] | *destructuring*) ]
-	[where *expression:Boolean*]
+	[when *expression:Boolean*]
 	=> (
 		*statement*
 		| {
@@ -319,10 +331,10 @@ switch somePoint {
 let somePoint = [1, 1]
 
 switch somePoint {
-	with [x, y] where x == 0 && y == 0				=> console.log(`(0, 0) is at the origin`)
-	with [x, y] where y == 0						=> console.log(`(\(x), 0) is on the x-axis`)
-	with [x, y] where x == 0						=> console.log(`(0, \(y)) is on the y-axis`)
-	with [x, y] where -2 <= x <= 2 && -2 <= y <= 2	=> console.log(`(\(x), \(y)) is inside the box`)
+	with [x, y] when x == 0 && y == 0				=> console.log(`(0, 0) is at the origin`)
+	with [x, y] when y == 0							=> console.log(`(\(x), 0) is on the x-axis`)
+	with [x, y] when x == 0							=> console.log(`(0, \(y)) is on the y-axis`)
+	with [x, y] when -2 <= x <= 2 && -2 <= y <= 2	=> console.log(`(\(x), \(y)) is inside the box`)
 	with [x, y]										=> console.log(`(\(x), \(y)) is outside of the box`)
 	_												=> console.log(`Not a point`)
 }
@@ -339,7 +351,7 @@ switch value {
 	{foo: 1} 							=> console.log('foo: 1')
 	{foo}								=> console.log('has foo')
 	{qux}								=> console.log('has qux')
-	_			where value.bar() == 0	=> console.log('bar() == 0')
+	_			when value.bar() == 0	=> console.log('bar() == 0')
 	_									=> console.log('oops!')
 }
 ```
@@ -353,6 +365,30 @@ switch view {
 						console.log(`It's a table view with \(sectionCount) sections`)
 					}
 	_											=> console.log("It's some other UIView or subclass")
+}
+```
+
+### fallthrough
+
+For cascading, the `fallthrough` statement is required
+
+```kaoscript
+func foobar(d) {
+	switch d {
+		'hour' => {
+			console.log('hour')
+
+			fallthrough
+		}
+		'minute' => {
+			console.log('minute')
+
+			fallthrough
+		}
+		'second' => {
+			console.log('second')
+		}
+	}
 }
 ```
 

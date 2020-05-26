@@ -10,11 +10,24 @@ route: /guide/enums
 
 ```syntax
 enum *varname*["<" *type* ">"] {
-	*varname1* [= *value*]
-	*varname2* [= *value*]
-	...
-	*varnameN* [= *value*]
+	(
+		*varname* [= *value*]
+		|
+		*method*
+	)*
 }
+
+bitflag *varname* {
+	(
+		*varname* [= *value*]
+		|
+		*method*
+	)*
+}
+
+method = [async] *varname*([[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]])[: *type* | auto] [~ *class1* [, *class2* ... [, *classN*]]] [ => *expression* | {
+	*...statements*
+}]
 ```
 
 ## number
@@ -80,26 +93,25 @@ enum CardSuit<String> {
 ## flags
 
 ```kaoscript
-#[flags]
-enum AnimalFlags {
+bitflag AnimalFlags {
 	None
 	HasClaws
 	CanFly
 	EatsFish
 	Endangered
 
-	EndangeredFlyingClawedFishEating = HasClaws | CanFly | EatsFish | Endangered
-	Predator = CanFly | HasClaws
+	EndangeredFlyingClawedFishEating = HasClaws + CanFly + EatsFish + Endangered
+	Predator = CanFly + HasClaws
 }
 
 func printAnimalAbilities(animal) {
 	let animalFlags = animal.flags
 
-	if animalFlags & AnimalFlags::HasClaws {
+	if animalFlags ~~ AnimalFlags::HasClaws {
 		console.log('animal has claws')
 	}
 
-	if animalFlags & AnimalFlags::CanFly {
+	if animalFlags ~~ AnimalFlags::CanFly {
 		console.log('animal can fly')
 	}
 
@@ -115,15 +127,56 @@ let animal = {
 printAnimalAbilities(animal)
 // nothing
 
-animal.flags |= AnimalFlags::HasClaws
+animal.flags += AnimalFlags::HasClaws
 printAnimalAbilities(animal)
 // animal has claws
 
-animal.flags &= ~AnimalFlags::HasClaws
+animal.flags -= AnimalFlags::HasClaws
 printAnimalAbilities(animal)
 // nothing
 
-animal.flags |= AnimalFlags::HasClaws | AnimalFlags::CanFly
+animal.flags += AnimalFlags::HasClaws + AnimalFlags::CanFly
 printAnimalAbilities(animal)
 // animal has claws, animal can fly
+```
+
+## methods
+
+The methods are always static and public.
+
+A method can be called as an instance method if its first argument's type is of the enum. In this case, the first argument must be omitted.
+The call will be rewrited to use the instance as the first argument of the method.
+
+### example
+
+```kaoscript
+enum Weekday {
+	MONDAY
+	TUESDAY
+	WEDNESDAY
+	THURSDAY
+	FRIDAY
+	SATURDAY
+	SUNDAY
+
+	isWeekend(day: Weekday): Boolean => day == SATURDAY + SUNDAY
+
+	fromString(value: String): Weekday? {
+		switch value {
+			'monday' => return MONDAY
+		}
+
+		return null
+	}
+}
+
+func foobar(day: Weekday) {
+	if Weekday.isWeekend(day) {
+	}
+
+	if day.isWeekend() {
+	}
+}
+
+foobar(Weekday.fromString('monday'))
 ```

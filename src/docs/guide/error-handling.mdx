@@ -77,7 +77,7 @@ func foobar(x) ~ Error {
 
 let x = try foobar(false)
 
-let y = try foobar(false) ~~ 24
+let y = try foobar(false) ~ 24
 
 let z = try foobar(false) ?? 24
 
@@ -95,7 +95,7 @@ If `foobar()` throws an error, then `try` catch it and return `null`
 ### error coalescing
 
 ```kaoscript
-let y = try foobar(false) ~~ 24
+let y = try foobar(false) ~ 24
 ```
 
 If `foobar()` throws an error, then `try` catch it and return the default value `24`
