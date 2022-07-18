@@ -59,6 +59,6 @@
 	"scripts": {
 		"postinstall": "kaoscript scripts/postinstall.ks",
 		"build": "docz build",
-		"start": "docz dev"
+		"start": "docz dev -p 3090"
 	}
 }

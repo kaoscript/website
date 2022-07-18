@@ -40,3 +40,21 @@ It enable you to comment out large blocks of code, even if it contains multiline
 	a multiline comment
 */
 ```
+
+## folding region
+
+A folding region is defined between `# {{{` and `# }}}`.
+
+```kaoscript
+# {{{
+print!('Hello world')
+# }}}
+```
+
+After the opening tag, a comment can be added:
+
+```kaoscript
+# {{{ this code prints hello world
+print!('Hello world!')
+# }}}
+```

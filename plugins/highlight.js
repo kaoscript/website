@@ -73,7 +73,7 @@ function registerTheme(extension, theme, language) {
 	}
 }
 
-registerTheme('theme-zokugun', 'Zokugun')
+registerTheme('theme-zokugun', 'Zokugun Obsidium', 'kaoscript')
 registerTheme('theme-horizon', 'Horizon Bright', 'javascript')
 registerTheme('theme-test', 'Ysgrifennwr', 'sh')
 
