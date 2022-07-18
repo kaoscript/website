@@ -261,14 +261,11 @@ class Shape {
 }
 
 class Rectangle extends Shape {
-	override draw() {
+	override draw(): String {
 		return `I'm drawing a rectangle.`
 	}
 }
 ```
-
-If a parameter type, return type or error type is missing, it will be replaced but the type of the overridden type.
-If the type isn't missing, it will need to be equal to the overridden type.
 
 <!-- ## final
 
@@ -291,7 +288,7 @@ class Rectangle extends Shape {
 ```kaoscript
 abstract class AbstractGreetings {
 	private {
-		_message: String: ''
+		@message: String: ''
 	}
 
 	constructor() {
@@ -304,9 +301,89 @@ abstract class AbstractGreetings {
 }
 
 class Greetings extends AbstractGreetings {
-	greet(name) => `\(@message)\nIt's nice to meet you, \(name).`
+	greet(name): String => `\(@message)\nIt's nice to meet you, \(name).`
 }
 ```
+
+## deduced types
+
+When overriding (with `override` keyword) or implementing an abstract method, the type of an argument or the return can be deduced from the base method.
+
+```kaoscript
+class Greetings {
+	greet(name: String): String => `It's nice to meet you, \(name).`
+}
+
+class MyGreetings extends Greetings {
+	override greet(name) => `Hi \(name)!`
+	// is the same as
+	override greet(name: String): String => `Hi \(name)!`
+}
+```
+
+
+```kaoscript
+abstract class Greetings {
+	abstract greet(name: String): String
+}
+
+class MyGreetings extends Greetings {
+	greet(name) => `Hi \(name)!`
+	// is the same as
+	greet(name: String): String => `Hi \(name)!`
+}
+```
+
+## extended types
+
+When overriding (with `override` keyword) or implementing an abstract method, the type of an argument or the return can be extended to cover a larger base.
+
+```kaoscript
+class Greetings {
+	greet(name: String): String => `It's nice to meet you, \(name).`
+}
+
+class MyGreetings extends Greetings {
+	override greet(name: Number | String) => `Hi \(name.toString())!`
+}
+```
+
+`methodB` overrides/implements `methodA` only and only if:
+- **argument's type** of `methodB` is a <ins>**subset**</ins> of **argument's type** `methodA`
+- **return's type** of `methodB` is a <ins>**subset**</ins> of **return's type** `methodA`
+- **exception's type** of `methodB` is a <ins>**subset**</ins> of **exception's type** `methodA`
+
+## this
+
+```kaoscript
+class Foobar {
+    constructor() {
+        this('John')
+    }
+    constructor(name: String) {
+        console.log(`Hello \(name).`)
+    }
+    foobar() {
+        this('John')
+    }
+    foobar(name: String) => `Hello \(name).`
+}
+
+class Quxbaz extends Foobar {
+    constructor() {
+        this('John')
+    }
+    constructor(name: String) {
+        console.log(`Hi \(name)!`)
+    }
+    foobar(name: String) => `Hi \(name)!`
+}
+```
+
+|             |         `this()`          |
+| :---------: | :-----------------------: |
+| constructor |   always current class    |
+|   method    | current class or subclass |
 
 ## versioning
 
@@ -314,15 +391,15 @@ kaoscript classes can be signed with a version which could be used for serializa
 
 ```kaoscript
 class Rectangle@1.0.0 {
-	private {
-		_color: String
-	}
+    private {
+        @color: String
+    }
 
-	constructor(@color = 'black')
+    constructor(@color = 'black')
 
-	draw(canvas) {
-		return `I'm drawing a \(@color) rectangle.`
-	}
+    draw(canvas) {
+        return `I'm drawing a \(@color) rectangle.`
+    }
 }
 
 console.log(Rectangle.name)

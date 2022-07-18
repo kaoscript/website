@@ -19,7 +19,7 @@ The tuples and named tupled are stored as array, whereas the structs are stored 
 ### syntax
 
 ```syntax
-tuple *varname*(*...element*) [extends *varname*]
+[abstract] tuple *varname*(*...element*) [extends *varname*]
 
 element = *type* [= *expression*]
 ```
@@ -45,9 +45,9 @@ console.log(`\(pair.0)`, pair.1 + 1)
 ### inheritance
 
 ```kaoscript
-struct Pair(String, Number)
+tuple Pair(String, Number)
 
-struct Triple(Boolean) extends Pair
+tuple Triple(Boolean) extends Pair
 
 const triple = Triple('x', 0.1, true)
 
@@ -78,7 +78,7 @@ const pair5 = Pair(null, null)
 ### syntax
 
 ```syntax
-tuple *varname* [extends *varname*] {
+[abstract] tuple *varname* [extends *varname*] {
 	*...element*
 }
 
@@ -130,7 +130,7 @@ triple = Triple(z: true)
 ### syntax
 
 ```syntax
-struct *varname* [extends *varname*] {
+[abstract] struct *varname* [extends *varname*] {
 	*...element*
 }
 

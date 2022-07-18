@@ -8,7 +8,7 @@ route: /guide/destructuring
 
 ## variable declaration
 
-An destructiong expression in the variable declaration can be:
+A destructuring expression in the variable declaration can be:
 
 - computed
 - typed
@@ -34,7 +34,7 @@ console.log(x1, y1)
 const [x2, y2]: Array<Number> = foobar()
 console.log(x2, y2)
 
-const {x3, y3}: {x: Number, y: Number} = foobar()
+const {x3, y3}: {x3: Number, y3: Number} = foobar()
 console.log(x3, y3)
 
 const {x4, y4}: Object<Number> = foobar()
@@ -51,11 +51,19 @@ console.log(key)
 
 let { [key]: baz } = { qux: 'bar' }
 console.log(baz)
+
+
+
+var {x3, mut y3} = foobar()
+var {x3: x, mut y3: y} = foobar()
+
+for var {x, mut y} in coords {
+}
 ```
 
 ## function parameter
 
-An destructiong expression as a function parameter can be:
+A destructuring expression as a function parameter can be:
 
 - typed
 
@@ -117,7 +125,7 @@ func drawCircle({center: [x, y], radius: r}) {
 
 ## method parameter
 
-An destructiong expression as a method parameter can be:
+A destructuring expression as a method parameter can be:
 
 - typed
 - this aliased
@@ -163,7 +171,7 @@ class Foobar {
 
 ## expression
 
-An destructiong expression in an expression can be:
+A destructuring expression in an expression can be:
 
 - computed
 
