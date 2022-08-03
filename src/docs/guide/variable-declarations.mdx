@@ -6,77 +6,55 @@ route: /guide/variable-declarations
 
 # Variable Declarations
 
-## let
+
+```syntax
+var (*varname* | *destructuring*)[: *type*] = *expression*
+var mut (*varname* | *destructuring*)[: *type*] = *expression*
+var mut *varname1*: *type*1[, *varname2*: *type*2 ... [, *varnameN*: *type*N]]
+var dyn (*varname* | *destructuring*) = *expression*
+var dyn *varname1*[, *varname2* ... [, *varnameN*]]
+var late *varname1*[: *type*1][, *varname2*[: *type*2] ... [, *varnameN*[: *type*N]]]
+```
+
+|            | immutable | typed | lateinit |
+| :--------: | :-------: | :---: | :------: |
+|   `var`    |    ✅     |  ✅   |    ❌    |
+| `var mut`  |    ❌     |  ✅   |    ❌    |
+| `var dyn`  |    ❌     |  ❌   |    ❌    |
+| `var late` |    ✅     |  ✅   |    ✅    |
+
+
+|                          | immutable | typed | inferred | assignment |                    |
+| :----------------------: | :-------: | :---: | :------: | :--------: | :----------------: |
+|         `let x`          |    ❌     |  ❌   |    ❌    |     ❌     |    `var dyn x`     |
+|      `let x: Type`       |    ❌     |  ✅   |    ❌    |     ❌     | `var mut x: Type`  |
+|         `auto x`         |    ❌     |  ✅   |    ✅    |     ✅     |    `var mut x`     |
+|        `const x`         |    ✅     |  ✅   |    ✅    |     ✅     |      `var x`       |
+|     `const x: Type`      |    ✅     |  ✅   |    ❌    |     ✅     |   `var x: Type`    |
+|    `lateinit const x`    |    ✅     |  ✅   |    ✅    |     ❌     |    `var late x`    |
+| `lateinit const x: Type` |    ✅     |  ✅   |    ❌    |     ❌     | `var late x: Type` |
+
+
+## var
+
+By default, a variable is **immutable**.
 
 ### Syntax
 
 ```syntax
-let (*varname*[: *type*] | *destructuring*) = *expression*
-let *varname1*[, *varname2* ... [, *varnamN*]]
+var (*varname* | *destructuring*)[: *type*] = *expression*
 ```
 
 ### Description
 
 ```kaoscript
-let name = 'John'
+var name = 'John'
 ```
 
-`let` declares the variable `name` and it's rebindable.
+`var` declares the variable `name` as **immutable reference**. But the referenced value can be modified.
 
 ```kaoscript
-let name = 'John'
-
-name = 42
-// no error
-```
-
-### Typing
-
-If a type is provided at the declaration of a variable, its type can't be changed.
-
-```kaoscript
-let name: String = 'John'
-
-name = 42
-// throws a TypeException error
-```
-
-## auto
-
-### Syntax
-
-```syntax
-auto (*varname* | *destructuring*) = *expression*
-```
-
-The type will be deduced from the initial value.
-
-```kaoscript
-auto name = 'John'
-// type: String
-
-name = 42
-// throws a TypeException error
-```
-
-## const
-
-### Syntax
-
-```syntax
-const (*varname*[: *type*] | *destructuring*) = *expression*
-```
-
-### Description
-
-```kaoscript
-const name = 'John'
-```
-
-`const` declares the variable `name` as **immutable reference**. But the referenced value can be modified.
-
-```kaoscript
-const names = ['John']
+var names = ['John']
 
 names.push('Jane')
 // names: ['John', 'Jane']
@@ -88,36 +66,94 @@ names = ['John']
 
 ### Typing
 
-If not type is provided, `const` will deduce the variable's type based on its value.
+If not type is provided, `var` will deduce the variable's type based on its value.
 
 ```kaoscript
-const name = 'John'
+var name = 'John'
 // type: String
 
-const names: Array = []
+var names: Array = []
 // type: Array
 ```
 
-The type of a variable declared with `const` can't be changed.
+The type of a variable declared with `var` can't be changed.
 
-## lateinit const
+## var mut
+
+With `var mut`, the variable is **mutable** but still **typed**
 
 ### Syntax
 
 ```syntax
-lateinit const *varname*[: *type*]
+var mut (*varname* | *destructuring*)[: *type*] = *expression*
+var mut *varname1*: *type*1[, *varname2*: *type*2 ... [, *varnameN*: *type*N]]
+```
+
+### Typing
+
+If a type is provided at the declaration of a variable, its type can't be changed.
+
+```kaoscript
+var mut name: String = 'John'
+
+name = 42
+// throws a TypeException error
+```
+
+If not provided, its type will be deduced from the initial value.
+
+```kaoscript
+var mut name = 'John'
+// type: String
+
+name = 42
+// throws a TypeException error
+```
+
+## var dyn
+
+With `var dyn`, the variable is `dynamic` (mutable, no type).
+
+### Syntax
+
+```syntax
+var dyn (*varname* | *destructuring*) = *expression*
+var dyn *varname1*[, *varname2* ... [, *varnameN*]]
 ```
 
 ### Description
 
-`lateinit const` allows the assignment of an immutable variable's value to be deferred.
+```kaoscript
+var dyn name = 'John'
+```
+
+`var dyn` declares the variable `name` and it's rebindable.
+
+```kaoscript
+var dyn name = 'John'
+
+name = 42
+// no error
+```
+
+## var late
+
+### Syntax
+
+```syntax
+var late *varname1*[: *type*1][, *varname2*[: *type*2] ... [, *varnameN*[: *type*N]]]
+```
+
+### Description
+
+`var late` allows the assignment of an immutable variable's value to be deferred.
 
 The variable can't be accessed before being assigned.
 
-The assignement can only be in a `if/else` statement or a `swicth` statement with a default case.
+The assignment can only be in a `if/else` statement or a `swicth` statement with a default case.
 
 ```kaoscript
-lateinit const x
+var late x
 
 if test() {
 	x = 42
@@ -130,9 +166,9 @@ else {
 console.log(x)
 ```
 
-## assignement
+## assignment
 
-Like JavaScript, kaoscript can create variables with assignements:
+Like JavaScript, kaoscript can create variables with assignments:
 
 ```kaoscript
 name = 'John'
@@ -171,7 +207,7 @@ func foobar() {
 
 ## naming
 
-Unlike JavaScript, an identifier is limited to ascii characters and `_` is a reserved keyword.
+Unlike JavaScript, an identifier is limited to ascii characters and `_` and `$` are reserved keywords.
 
 ### Syntax
 

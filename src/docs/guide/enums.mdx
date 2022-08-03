@@ -39,7 +39,7 @@ enum Color {
 	Blue
 }
 
-let color = Color::Red
+var color = Color::Red
 
 console.log(color)
 // 0
@@ -73,7 +73,7 @@ enum CardSuit<String> {
 	Spades
 }
 
-let card = CardSuit::Clubs
+var card = CardSuit::Clubs
 
 console.log(card)
 // clubs
@@ -105,7 +105,7 @@ bitflag AnimalFlags {
 }
 
 func printAnimalAbilities(animal) {
-	let animalFlags = animal.flags
+	var animalFlags = animal.flags
 
 	if animalFlags ~~ AnimalFlags::HasClaws {
 		console.log('animal has claws')
@@ -120,7 +120,7 @@ func printAnimalAbilities(animal) {
 	}
 }
 
-let animal = {
+var animal = {
 	flags: AnimalFlags::None
 }
 

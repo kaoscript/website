@@ -37,7 +37,7 @@ The following types are **only** useable **as return type** of a function:
 `Any` is a type that represents any types (except for `Void` and `Never`).
 
 ```kaoscript
-let tmp: Any = 42
+var mut tmp: Any = 42
 
 tmp = 'White'
 ```
@@ -55,7 +55,7 @@ func hello(): void {
 hello()
 // print: Hello!
 
-const x = hello()
+var x = hello()
 // throw an error
 ```
 
@@ -95,10 +95,10 @@ func throwError(message: String): never {
 You can define a variable as nullable.
 
 ```kaoscript
-let x?
+var x?
 // type: Any, nullable
 
-let y: Number?
+var y: Number?
 // type: Number, nullable
 ```
 
@@ -117,7 +117,7 @@ Type aliases create a new name for a type.
 ```kaoscript
 type T = number | string
 
-let n: T = 42
+var mut n: T = 42
 ```
 
 ## union
@@ -125,7 +125,7 @@ let n: T = 42
 Union type defines the variable as been one of the given types.
 
 ```kaoscript
-let x: String | Number
+var mut x: String | Number
 
 x = 42
 x = 'foobar'
@@ -161,9 +161,9 @@ kaoscript has a very basic support for generics.
 In array or dictionary, it's used to inference the type of the elements.
 
 ```kaoscript
-let values: Array<String> = ['foo', 'bar', 'qux']
+var mut values: Array<String> = ['foo', 'bar', 'qux']
 
-const x = values[0]
+var x = values[0]
 // type: String
 ```
 
@@ -206,7 +206,7 @@ You can use `as?` or `:?` to return `null` when the value doesn't match the type
 
 ```kaoscript
 func foobar(p: Point) {
-	if const d3 = p as? Point3D {
+	if var d3 = p as? Point3D {
 		console.log(d3.x + 1, d3.y + 2, d3.z + 3)
 	}
 }
@@ -249,7 +249,7 @@ quxbaz(foobar()!!)
 If a variable is not typed, kaoscript willl automatically deduce its type based on the current value.
 
 ```kaoscript
-let name = 'John'
+var mut name = 'John'
 // type: String
 
 name = 42

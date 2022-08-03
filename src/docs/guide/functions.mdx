@@ -40,7 +40,7 @@ In kaoscript, there is three types of functions:
 import '@zokugun/lang'
 
 func alpha(n: Number, percentage = false): Number {
-	const i = n.toInt()
+	var i = n.toInt()
 
 	return 1 if i == NaN else (percentage ? i / 100 : i).limit(0, 1).round(3)
 }
@@ -81,9 +81,9 @@ foobar(func(a:Number, b:Number): Number => a - b)
 ### Examples
 
 ```kaoscript
-const foo = (a:Number, b:Number) => a - b
+var foo = (a:Number, b:Number) => a - b
 
-let four = (a => a / 10)(42)
+var four = (a => a / 10)(42)
 ```
 
 ## parameters
@@ -91,7 +91,7 @@ let four = (a => a / 10)(42)
 ### Syntax
 
 ```syntax
-(*varname* | *destructuring* | ...[arity][*varname*] | '_') [!] [: *type*] [?] [= *expression*]
+[mut] (*varname* | *destructuring* | ...[arity][*varname*] | '_') [!] [: *type*] [?] [= *expression*]
 
 arity = { ([*min*], [*max*] | *quantity*) }
 ```
@@ -168,7 +168,7 @@ The given type of a rest parameter is the type of its elements.
 ```kaoscript
 func foobar(...args: Number) {
 	// args is Array<Number>
-	for const arg in args {
+	for var arg in args {
 		// arg is Number
 	}
 }
@@ -222,15 +222,15 @@ func bar(_, x, y) {
 import '@zokugun/lang'
 import 'child_process' for exec
 
-const df_regex = /([\/[a-z0-9\-\_\s]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+%)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+%)\s+(\/.*)/i
+var df_regex = /([\/[a-z0-9\-\_\s]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+%)\s+([0-9]+)\s+([0-9]+)\s+([0-9]+%)\s+(\/.*)/i
 
 async func disks() {
-	const stdout: string, stderr = await exec('df -k')
+	var stdout: string, stderr = await exec('df -k')
 
-	const disks = []
+	var disks = []
 
-	for const line in stdout.lines() {
-		if const matches = df_regex.exec(line) {
+	for var line in stdout.lines() {
+		if var matches = df_regex.exec(line) {
 			disks.push({
 				device: matches[1].trim(),
 				mount: matches[9],
@@ -244,7 +244,7 @@ async func disks() {
 	return disks
 }
 
-let d = await disks()
+var d = await disks()
 ```
 
 ## return type
@@ -367,7 +367,7 @@ reverse([1, 2, 3, 4])
 ### argument
 
 ```kaoscript
-const log = console.log^$(console, 'hello:')
+var log = console.log^$(console, 'hello:')
 
 log('foo')
 // hello: foo
@@ -380,7 +380,7 @@ func log(...args) {
 	console.log(...args)
 }
 
-const logHello = log^^('hello:')
+var logHello = log^^('hello:')
 
 logHello('foo')
 // hello: foo
@@ -389,7 +389,7 @@ logHello('foo')
 ### self
 
 ```kaoscript
-const log = console.log^@('hello:')
+var log = console.log^@('hello:')
 
 log('foo')
 // hello: foo

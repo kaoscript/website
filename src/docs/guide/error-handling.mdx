@@ -75,19 +75,19 @@ func foobar(x) ~ Error {
     }
 }
 
-let x = try foobar(false)
+var x = try foobar(false)
 
-let y = try foobar(false) ~ 24
+var y = try foobar(false) ~ 24
 
-let z = try foobar(false) ?? 24
+var z = try foobar(false) ?? 24
 
-let a = try! foobar(true)
+var a = try! foobar(true)
 ```
 
 ### try
 
 ```kaoscript
-let x = try foobar(false)
+var x = try foobar(false)
 ```
 
 If `foobar()` throws an error, then `try` catch it and return `null`
@@ -95,7 +95,7 @@ If `foobar()` throws an error, then `try` catch it and return `null`
 ### error coalescing
 
 ```kaoscript
-let y = try foobar(false) ~ 24
+var y = try foobar(false) ~ 24
 ```
 
 If `foobar()` throws an error, then `try` catch it and return the default value `24`
@@ -103,7 +103,7 @@ If `foobar()` throws an error, then `try` catch it and return the default value 
 ### null coalescing
 
 ```kaoscript
-let z = try foobar(false) ?? 24
+var z = try foobar(false) ?? 24
 ```
 
 `try foobar(false) ?? 24` is equivalent to `(try foobar(false)) ?? 24`.
@@ -112,7 +112,7 @@ So if `foobar()` throws an error or return `null`, then the null coalescing fail
 ### forced-unwraping
 
 ```kaoscript
-let a = try! foobar(true)
+var a = try! foobar(true)
 ```
 
 `try!` disables the error propagation. If an error actually is thrown, you’ll get a runtime error.

@@ -16,58 +16,116 @@ route: /guide/augmentations
 impl *varname* {
 	(
 		[private | internal | protected | public] (
-			(override | overwrite) *method*
+			[static] final late (
+				{
+					([@]*varname*[: *type*] [= *value*])+
+				}
+				|
+				[@]*varname*[: *type*]
+			)
 			|
-			(override | overwrite) {
-				*method*+
-			}
+			[static] late (
+				{
+					([final] [@]*varname*[: *type*] [= *value*])+
+				}
+				|
+				[@]*varname*[: *type*]
+			)
 			|
-			(*variable* | *method*)
+			static final (
+				{
+					(
+						late [@]*varname*[: *type*] [= *value*]
+						|
+						[@]*varname*[: *type*] = *value*
+						|
+						*property*
+						|
+						*method*
+					)+
+				}
+				|
+				[@]*varname*[: *type*] = *value*
+				|
+				*property*
+				|
+				*method*
+			)
+			|
+			static (
+				{
+					(
+						[final] late [@]*varname*[: *type*] [= *value*]
+						|
+						final [@]*varname*[: *type*] = *value*
+						|
+						[@]*varname*[: *type*] [= *value*]
+						|
+						*property*
+						|
+						*method*
+					)+
+				}
+				|
+				[@]*varname*[: *type*] [= *value*]
+				|
+				*property*
+				|
+				*method*
+			)
+			|
+			final (
+				{
+					(
+						late [@]*varname*[: *type*] [= *value*]
+						|
+						[@]*varname*[: *type*] = *value*
+						|
+						[override | overwrite] *property*
+						|
+						[override | overwrite] *method*
+					)+
+				}
+				|
+				[@]*varname*[: *type*] = *value*
+				|
+				*property*
+				|
+				*method*
+			)
+			|
+			[final] (override | overwrite) (
+				{
+					(
+						*property*
+						|
+						*method*
+					)+
+				}
+				|
+				*property*
+				|
+				*method*
+			)
 			|
 			{
-				(*variable* | *method*)+
+				(*variable* | *property* | *method*)+
 			}
 			|
-			static (*static_variable* | *method*)
-			|
-			static {
-				(*static_variable* | *method*)+
-			}
-			|
-			lateinit {
-				*lateinit_variable*+
-			}
+			(*variable* | *property* | *method*)
 		)
 	)*
 }
 
 variable = (
-	auto [@]*varname* = *value*
-	|
-	const [@]*varname*[: *type*] = *value*
-	|
 	[@]*varname*[: *type*] [= *value*]
 	|
-	lateinit [const] [@]*varname*[: *type*]
+	final [@]*varname*[: *type*] = *value*
+	|
+	[final] late [@]*varname*[: *type*]
 )
 
-static_variable = (
-	auto [@]*varname* = *value*
-	|
-	const [@]*varname*[: *type*] = *value*
-	|
-	[@]*varname*[: *type*] [= *value*]
-	|
-	lateinit const [@]*varname*[: *type*]
-)
-
-lateinit_variable = (
-	[const] [@]*varname*[: *type*] [= *value*]
-	|
-	auto [@]*varname* = *value*
-)
-
-method = [override | overwrite] [async] *varname*([[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]])[: *type*] [~ *class1* [, *class2* ... [, *classN*]]] [ => *expression* | {
+method = [async] *varname*([[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]])[: *type*] [~ *class1* [, *class2* ... [, *classN*]]] [ => *expression* | {
 	*...statements*
 }]
 ```
@@ -82,7 +140,7 @@ impl Shape {
 }
 // adds the method 'draw(shape)' to the class 'Shape'
 
-let s = new Shape('red')
+var s = new Shape('red')
 
 console.log(s.draw())
 // I'm drawing with a red pen
@@ -105,7 +163,7 @@ impl Number {
 			return 0
 		}
 		else {
-			const n = this % max
+			var n = this % max
 
 			if n < 0 {
 				return n + max
@@ -119,7 +177,7 @@ impl Number {
 // adds the method 'mod' to the class 'Number'
 // under the hood, the object `__ks_Number` is created to avoid to modify the object 'Number'
 
-let i = 42
+var i = 42
 // inferred type: Number
 
 console.log(i.mod(2))

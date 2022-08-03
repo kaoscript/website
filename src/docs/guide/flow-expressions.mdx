@@ -15,14 +15,14 @@ route: /guide/flow-expressions
 	*expression*
 	for
 	(
-		[const | let] *varname*
+		[var] *varname*
 			from *expression:Number*
 			(til | to) *expression:Number*
 			[by *expression:Number*]
 			[(while | until) *expression:Boolean*]
 			[when *expression:Boolean*]
 		|
-		[const | let] (*varname* | *destructuring* | '\_') [: *type*] [, *index*]
+		[var] (*varname* | *destructuring* | '\_') [: *type*] [, *index*]
 			in *expression:Array*
 			[desc]
 			[from *expression:Number*]
@@ -31,12 +31,12 @@ route: /guide/flow-expressions
 			[(while | until) *expression:Boolean*]
 			[when *expression:Boolean*]
 		|
-		[const | let] (*varname* | *destructuring* | '\_') [: *type*] [, *index*]
+		[var] (*varname* | *destructuring* | '\_') [: *type*] [, *index*]
 			of *expression:Object*
 			[(while | until) *expression:Boolean*]
 			[when *expression:Boolean*]
 		|
-		[const | let] *varname*[, *index*] | :*index*
+		[var] *varname*[, *index*] | :*index*
 			in *operand:Number*[<]..[<]*operand:Number*[..*operand:Number*]
 			[(while | until) *expression:Boolean*]
 			[when *expression:Boolean*]
@@ -58,7 +58,7 @@ spicyHeroes = [hero for like, hero of likes when like == 'spice']
 ```
 
 ```kaoscript
-a = [i for const i from 0 to 10 by 2 until foo(i)]
+a = [i for var i from 0 to 10 by 2 until foo(i)]
 ```
 
 ## in assignment statement
@@ -87,14 +87,14 @@ y = 10 if x == 5 else 15
 *expression* [
 	for
 		(
-			[const | let] *varname*
+			[var] *varname*
 				from *expression:Number*
 				(til | to) *expression:Number*
 				[by *expression:Number*]
 				[(while | until) *expression:Boolean*]
 				[when *expression:Boolean*]
 			|
-			[const | let] (*varname* | *destructuring* | '\_') [: *type*] [, *index*]
+			[var] (*varname* | *destructuring* | '\_') [: *type*] [, *index*]
 				in *expression:Array*
 				[desc]
 				[from *expression:Number*]
@@ -103,12 +103,12 @@ y = 10 if x == 5 else 15
 				[(while | until) *expression:Boolean*]
 				[when *expression:Boolean*]
 			|
-			[const | let] (*varname* | *destructuring* | '\_') [: *type*] [, *index*]
+			[var] (*varname* | *destructuring* | '\_') [: *type*] [, *index*]
 				of *expression:Object*
 				[(while | until) *expression:Boolean*]
 				[when *expression:Boolean*]
 			|
-			[const | let] *varname*[, *index*] | :*index*
+			[var] *varname*[, *index*] | :*index*
 				in *operand:Number*[<]..[<]*operand:Number*[..*operand:Number*]
 				[(while | until) *expression:Boolean*]
 				[when *expression:Boolean*]
@@ -133,12 +133,12 @@ heroes = ['leto', 'duncan', 'goku']
 console.log(hero) for hero in heroes
 ```
 
-## in let statement
+## in var statement
 
 ### Syntax
 
 ```syntax
-let ... = *expression* [
+var ... = *expression* [
 	if *expression:Boolean* [else *expression*]
 	|
 	unless *expression:Boolean*
@@ -148,7 +148,7 @@ let ... = *expression* [
 ### Examples
 
 ```kaoscript
-let y = 10 if x == 5 else 15
+var y = 10 if x == 5 else 15
 ```
 
 ## in return statement

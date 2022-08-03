@@ -28,28 +28,28 @@ dictionaryItem = ('...' *varname* | ('[' *varname* ']' | *varname*) [: *array* |
 ### Examples
 
 ```kaoscript
-const [x1, y1]: [Number, Number] = foobar()
+var [x1, y1]: [Number, Number] = foobar()
 console.log(x1, y1)
 
-const [x2, y2]: Array<Number> = foobar()
+var [x2, y2]: Array<Number> = foobar()
 console.log(x2, y2)
 
-const {x3, y3}: {x3: Number, y3: Number} = foobar()
+var {x3, y3}: {x3: Number, y3: Number} = foobar()
 console.log(x3, y3)
 
-const {x4, y4}: Object<Number> = foobar()
+var {x4, y4}: Object<Number> = foobar()
 console.log(x4, y4)
 
-let foo = { bar: { n1: 'hello', n2: 'world' } }
+var foo = { bar: { n1: 'hello', n2: 'world' } }
 console.log(foo)
 
-let {bar: { n1, n2: qux }} = foo
+var {bar: { n1, n2: qux }} = foo
 console.log(bar, n1, qux)
 
-let key = 'qux'
+var key = 'qux'
 console.log(key)
 
-let { [key]: baz } = { qux: 'bar' }
+var { [key]: baz } = { qux: 'bar' }
 console.log(baz)
 
 

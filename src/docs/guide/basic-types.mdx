@@ -12,14 +12,14 @@ The boolean literals are `true` and `false`.
 
 
 ```kaoscript
-let isDone = true
+var isDone = true
 ```
 
 ## string
 
 ```kaoscript
-let singleQuote = 'John'
-let doubleQuote = "Jane"
+var singleQuote = 'John'
+var doubleQuote = "Jane"
 ```
 > :construction: kaoscript will support multilines strings.
 
@@ -35,13 +35,13 @@ An unit can also be added at the end of the number.
 ### decimal
 
 ```kaoscript
-let int = 6
-let time = 10_000_ms
-let float = 3.14
-let group = 123_456.789_012
-let scientific = -7.2e+3		//-7200
-let dot = .789_012
-let dotScientific = .1E4		// 1000
+var int = 6
+var time = 10_000_ms
+var float = 3.14
+var group = 123_456.789_012
+var scientific = -7.2e+3		//-7200
+var dot = .789_012
+var dotScientific = .1E4		// 1000
 ```
 
 ![decimal-regex](@images/guide/basic-types/decimal.svg)
@@ -49,8 +49,8 @@ let dotScientific = .1E4		// 1000
 ### binary
 
 ```kaoscript
-let binary = 0b1010
-let binary = 0b1010010101
+var binary1 = 0b1010
+var binary2 = 0b1010010101
 ```
 
 ![binary-regex](@images/guide/basic-types/binary.svg)
@@ -60,12 +60,12 @@ let binary = 0b1010010101
 kaoscript supports hexadecimal floating literals introduced in [C99](https://en.cppreference.com/w/c/language/floating_constant) or [C++ 17](https://en.cppreference.com/w/cpp/language/floating_literal)
 
 ```kaoscript
-let hex = 0xf00d
-let group = 0x1234_5678
-let float1 = 0x10.1p0			// 16.0625
-let float2 = 0x1.2p3			// 9
-let float3 = 0x3.14p0			// 3.078125
-let float4 = 0xa.bp10			// 10944
+var hex = 0xf00d
+var group = 0x1234_5678
+var float1 = 0x10.1p0			// 16.0625
+var float2 = 0x1.2p3			// 9
+var float3 = 0x3.14p0			// 3.078125
+var float4 = 0xa.bp10			// 10944
 ```
 
 ![hex-regex](@images/guide/basic-types/hex.svg)
@@ -75,7 +75,7 @@ let float4 = 0xa.bp10			// 10944
 Octal literals are extented with same floating literal as the hexadecimal literals.
 
 ```kaoscript
-let octal = 0o744
+var octal = 0o744
 ```
 
 ![octal-regex](@images/guide/basic-types/octal.svg)
@@ -85,8 +85,8 @@ let octal = 0o744
 Radix literals allow you to define you own radix.
 
 ```kaoscript
-let radix36 = 36rNFfdH45
-let radix7 = 7r66.6
+var radix36 = 36rNFfdH45
+var radix7 = 7r66.6
 ```
 
 ![radix-regex](@images/guide/basic-types/radix.svg)
@@ -106,48 +106,48 @@ if y == Infinity {
 ## array
 
 ```kaoscript
-let array = [1, 2, 3]
+var array = [1, 2, 3]
 ```
 
 You can also define an array with a range.
 
 ```kaoscript
-let a = [1..5]
+var a = [1..5]
 // 1, 2, 3, 4, 5
 
-let b = [1..<5]
+var b = [1..<5]
 // 1, 2, 3, 4
 
-let c = [1<..5]
+var c = [1<..5]
 // 2, 3, 4, 5
 
-let d = [1<..<5]
+var d = [1<..<5]
 // 2, 3, 4
 
-let e = [1..6..2]
+var e = [1..6..2]
 // 1, 3, 5
 
-let f = [1<..<6..2]
+var f = [1<..<6..2]
 // 3, 5
 
-let g = [5..1]
+var g = [5..1]
 // 5, 4, 3, 2, 1
 
-let h = [5..1..2]
+var h = [5..1..2]
 // 5, 3, 1
 
-let i = [1..2..0.3]
+var i = [1..2..0.3]
 // 1.0, 1.3, 1.6, 1.9
 
-let i = [1..2..0.2]
+var i = [1..2..0.2]
 // 1.0, 1.2, 1.4, 1.6, 1.8, 2.0
 ```
 
 ```kaoscript
-let min = 1
-let max = 5
+var min = 1
+var max = 5
 
-let a = [min..max]
+var a = [min..max]
 // 1, 2, 3, 4, 5
 ```
 
@@ -156,10 +156,10 @@ let a = [min..max]
 Unlike javascript, in kaoscript, a empty dictionary doesn't contain any default properties (no `toString()`, ...).
 
 ```kaoscript
-let foo = {}
+var foo = {}
 // {}
 
-let bar = {
+var bar = {
 	bar: 'hello',
 	'qux': 'world'
 }
@@ -169,21 +169,21 @@ let bar = {
 ### shorthand
 
 ```kaoscript
-let x = 1
-let y = 2
-let z = 3
+var x = 1
+var y = 2
+var z = 3
 
-let foo1 = {x, y, z}
+var foo1 = {x, y, z}
 // {"x": "1", "y": "2", "z": "3"}
 
-let foo2 = {
+var foo2 = {
 	x,
 	y,
 	z
 }
 // {"x": "1", "y": "2", "z": "3"}
 
-let foo3 = {
+var foo3 = {
 	x
 	y
 	z
@@ -194,14 +194,14 @@ let foo3 = {
 ### computed & template
 
 ```kaoscript
-let bar = 'x'
+var bar = 'x'
 
-let foo1 = {
+var foo1 = {
 	[bar]: 42
 }
 // {"x": 42}
 
-let foo2 = {
+var foo2 = {
 	`\(bar)`: 42
 }
 // {"x": 42}
@@ -212,37 +212,37 @@ let foo2 = {
 kaoscript uses the RegExp class from JavaScript.
 
 ```kaoscript
-let r = /foobar/gim
+var r = /foobar/gim
 ```
 
 ## null
 
 ```kaoscript
-let n = null
+var n = null
 ```
 
 
 ## template string
 
 ```kaoscript
-let message = 'Hello!'
-let name = 'John'
+var message = 'Hello!'
+var name = 'John'
 
-let template = `\(message)\nIt's nice to meet you, \(name).`
+var template = `\(message)\nIt's nice to meet you, \(name).`
 // Hello! \nIt's nice to meet you, John.
 ```
 
 ## tagged template
 
 ```kaoscript
-let person = 'Mike'
-let age = 28
+var person = 'Mike'
+var age = 28
 
 func myTag(strings, personExp, ageExp) {
-	const str0 = strings[0]
-	const str1 = strings[1]
+	var str0 = strings[0]
+	var str1 = strings[1]
 
-	let ageStr
+	var late ageStr
 	if ageExp > 99 {
 		ageStr = 'centenarian'
 	}
@@ -253,6 +253,6 @@ func myTag(strings, personExp, ageExp) {
 	return `\(str0)\(personExp)\(str1)\(ageStr)`
 }
 
-const text = myTag`That \( person ) is a \( age )`
+var text = myTag`That \( person ) is a \( age )`
 // text: That Mike is a youngster
 ```

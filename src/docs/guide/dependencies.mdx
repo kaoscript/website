@@ -173,7 +173,7 @@ impl Number {
 			return 0
 		}
 		else {
-			const n = this % max
+			var n = this % max
 
 			if n < 0 {
 				return n + max
@@ -187,7 +187,7 @@ impl Number {
 // adds the method 'mod' to the class 'Number'
 // under the hood, the object `__ks_Number` is created to avoid to modify the object 'Number'
 
-let i = 42
+var i = 42
 // inferred type: Number
 
 console.log(i.mod(2))

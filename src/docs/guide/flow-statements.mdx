@@ -19,18 +19,14 @@ If the type is unknow, the test's value must be equal to `true`.
 if
 	*expression:Boolean*
 	|
-	(const | let) (*varname* | *destructuring*) [: *type*] = *expression*
-	|
-	auto (*varname* | *destructuring*) = *expression*
+	var [mut] (*varname* | *destructuring*) [: *type*] = *expression*
 {
 	*...statements*
 }
 [else if
 	*expression:Boolean*
 	|
-	(const | let) (*varname* | *destructuring*) [: *type*] = *expression*
-	|
-	auto (*varname* | *destructuring*) = *expression*
+	var [mut] (*varname* | *destructuring*) [: *type*] = *expression*
 {
 	*...statements*
 }]
@@ -44,7 +40,7 @@ if
 ```kaoscript
 if x == 5 {
 }
-else if const x = getX() {
+else if var x = getX() {
 	// x is:
 	// - immutable
 	// - not null
@@ -78,7 +74,7 @@ unless x == 0 {
 
 ```syntax
 for
-	[const | let] *varname*
+	[var [mut]] *varname*
 	from *expression:Number*
 	(til | to) *expression:Number*
 	[by *expression:Number*]
@@ -97,7 +93,7 @@ for x from 0 to 10 {
 }
 // 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 
-for const x from 0 til 10 {
+for var x from 0 til 10 {
 	console.log(x)
 }
 // 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
@@ -111,7 +107,7 @@ Unlike JavaScript, in kaoscript, `for...in` loops an array.
 
 ```syntax
 for
-	[const | let] (*varname* | *destructuring* | '_') [: *type*] [, *index*]
+	[var [mut]] (*varname* | *destructuring* | '_') [: *type*] [, *index*]
 	in *expression:Array*
 	[desc]
 	[from *expression:Number*]
@@ -129,7 +125,7 @@ for
 ```kaoscript
 heroes = ['leto', 'duncan', 'goku']
 
-for const hero, index in heroes when index % 2 == 0 {
+for var hero, index in heroes when index % 2 == 0 {
 	console.log(hero)
 }
 // leto, goku
@@ -152,7 +148,7 @@ Unlike JavaScript, in kaoscript, `for...in` loops an object.
 
 ```syntax
 for
-	[const | let] (*varname* | *destructuring* | '_') [: *type*] [, *key*]
+	[var [mut]] (*varname* | *destructuring* | '_') [: *type*] [, *key*]
 	of *expression:Object*
 	[(while | until) *expression:Boolean*]
 	[when *expression:Boolean*]
@@ -184,7 +180,7 @@ for value, key of likes {
 
 ```syntax
 for
-	[const | let] (*varname* | '_') [, *index*]
+	[var [mut]] (*varname* | '_') [, *index*]
 	in *operand:Number*[<]..[<]*operand:Number*[..*operand:Number*]
 	[(while | until) *expression:Boolean*]
 	[when *expression:Boolean*]
@@ -210,9 +206,7 @@ for x in 0..10..2 while test(x) {
 while
 	*expression:Boolean*
 	|
-	(const | let) (*varname* | *destructuring*) [: *type*] = *expression*
-	|
-	auto (*varname* | *destructuring*) = *expression*
+	var [mut] (*varname* | *destructuring*) [: *type*] = *expression*
 {
 
 }
@@ -316,7 +310,7 @@ switch age() {
 ```
 
 ```kaoscript
-let somePoint = [1, 1]
+var somePoint = [1, 1]
 
 switch somePoint {
 	[0, 0]			=> console.log(`(0, 0) is at the origin`)
@@ -328,7 +322,7 @@ switch somePoint {
 ```
 
 ```kaoscript
-let somePoint = [1, 1]
+var somePoint = [1, 1]
 
 switch somePoint {
 	with [x, y] when x == 0 && y == 0				=> console.log(`(0, 0) is at the origin`)
@@ -341,7 +335,7 @@ switch somePoint {
 ```
 
 ```kaoscript
-let value = {
+var value = {
 	foo: 1,
 	bar() => 2
 }
@@ -361,7 +355,7 @@ switch view {
 	is UIImageView								=> console.log("It's an image view")
 	is UILabel		with label as UILabel		=> console.log("It's a label")
 	is UITableView	with tblv as UITableView	=> {
-						let sectionCount = tblv.numberOfSections()
+						var sectionCount = tblv.numberOfSections()
 						console.log(`It's a table view with \(sectionCount) sections`)
 					}
 	_											=> console.log("It's some other UIView or subclass")

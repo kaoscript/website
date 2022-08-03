@@ -12,55 +12,123 @@ route: /guide/classes
 [abstract] class *varname*["<" *type* ">"][@ *version*] [extends *varname*] {
 	(
 		[private | internal | protected | public] (
-			(abstract | override) *method*
+			[static] final late (
+				{
+					([@]*varname*[: *type*] [= *value*])+
+				}
+				|
+				[@]*varname*[: *type*]
+			)
 			|
-			(abstract | override) {
-				*method*+
-			}
+			[static] late (
+				{
+					([final] [@]*varname*[: *type*] [= *value*])+
+				}
+				|
+				[@]*varname*[: *type*]
+			)
 			|
-			(*variable* | *method*)
+			static final (
+				{
+					(
+						late [@]*varname*[: *type*] [= *value*]
+						|
+						[@]*varname*[: *type*] = *value*
+						|
+						*property*
+						|
+						*method*
+					)+
+				}
+				|
+				[@]*varname*[: *type*] = *value*
+				|
+				*property*
+				|
+				*method*
+			)
+			|
+			static (
+				{
+					(
+						[final] late [@]*varname*[: *type*] [= *value*]
+						|
+						final [@]*varname*[: *type*] = *value*
+						|
+						[@]*varname*[: *type*] [= *value*]
+						|
+						*property*
+						|
+						*method*
+					)+
+				}
+				|
+				[@]*varname*[: *type*] [= *value*]
+				|
+				*property*
+				|
+				*method*
+			)
+			|
+			final (
+				{
+					(
+						late [@]*varname*[: *type*] [= *value*]
+						|
+						[@]*varname*[: *type*] = *value*
+						|
+						[override] *property*
+						|
+						[override] *method*
+					)+
+				}
+				|
+				[@]*varname*[: *type*] = *value*
+				|
+				*property*
+				|
+				*method*
+			)
+			|
+			(abstract | [final] override) (
+				{
+					(
+						*property*
+						|
+						*method*
+					)+
+				}
+				|
+				*property*
+				|
+				*method*
+			)
 			|
 			{
-				(*variable* | *method*)+
+				(*variable* | *property* | *method*)+
 			}
 			|
-			static (*static_variable* | *method*)
-			|
-			static {
-				(*static_variable* | *method*)+
-			}
-			|
-			lateinit {
-				*lateinit_variable*+
-			}
+			(*variable* | *property* | *method*)
 		)
 	)*
 }
 
 variable = (
-	auto [@]*varname* = *value*
-	|
-	const [@]*varname*[: *type*] = *value*
-	|
 	[@]*varname*[: *type*] [= *value*]
 	|
-	lateinit [const] [@]*varname*[: *type*]
+	final [@]*varname*[: *type*] = *value*
+	|
+	[final] late [@]*varname*[: *type*]
 )
 
-static_variable = (
-	auto [@]*varname* = *value*
-	|
-	const [@]*varname*[: *type*] = *value*
-	|
-	[@]*varname*[: *type*] [= *value*]
-	|
-	lateinit const [@]*varname*[: *type*]
-)
-
-lateinit_variable = (
-	[const] [@]*varname*[: *type*] [= *value*]
-	|
-	auto [@]*varname* = *value*
+property = (
+	[@]*varname*[: *type*] ({ get [, set] | set } | {
+		(
+			(get | set) [ | => *expression* | {
+				*...statements*
+			}]
+		)+
+	})
 )
 
 method = [async] *varname*([[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]])[: *type* | auto | this | @*varname*] [~ *class1* [, *class2* ... [, *classN*]]] [ => *expression* | {
@@ -90,7 +158,9 @@ When no type is provided, the default type is `Any?`.
 
 ## this aliasing
 
-`@x` is an alias for `this.x`, `this._x` or even `this.x()`.
+`@x` is an alias for:
+- `this.x`
+- `this._x`, if it's a field
 
 ```kaoscript
 class Shape {
@@ -141,7 +211,7 @@ class Shape {
 	}
 }
 
-let s = new Shape('red')
+var s = new Shape('red')
 
 delete s
 // the destructor is called and the variable `s` is unreferenced
@@ -158,7 +228,7 @@ class Shape {
 		@type: String
 	}
 	static {
-		const RED_CIRCLE = new Shape('circle', 'red')
+		final RED_CIRCLE = new Shape('circle', 'red')
 
 		makeCircle(color: String): Shape => new Shape('circle', color)
 		makeRectangle(color: String): Shape => new Shape('rectangle', color)
@@ -166,13 +236,13 @@ class Shape {
 	constructor(@type, @color)
 }
 
-const rb = Shape.makeRectangle('black')
-const cr = Shape.RED_CIRCLE
+var rb = Shape.makeRectangle('black')
+var cr = Shape.RED_CIRCLE
 ```
 
-## lateinit
+## late
 
-The modifier `lateinit` allows an immutable variable (`const`) to be initialized in a constructor. To be precise, it needs to be initialized in a constructor.
+The modifier `late` allows an immutable variable (`final`) to be initialized in a constructor. To be precise, it needs to be initialized in a constructor.
 
 Mutable variables won't require any initialization.
 It's up to the developer to make sure that the variable is correctly initialized when needed.
@@ -180,13 +250,13 @@ It's up to the developer to make sure that the variable is correctly initialized
 ```kaoscript
 class Shape {
 	public {
-		lateinit const color: String
-		lateinit const type: String
+		final late color: String
+		final late type: String
 	}
 	constructor(@type, @color)
 }
 
-const r = new Shape('rectangle', 'black')
+var r = new Shape('rectangle', 'black')
 console.log(r.color)
 // black
 
@@ -243,7 +313,7 @@ class Rectangle extends Shape {
 	}
 }
 
-let r = new Rectangle('black')
+var r = new Rectangle('black')
 
 console.log(r.draw())
 // I'm drawing with a black pen. I'm drawing a black rectangle.

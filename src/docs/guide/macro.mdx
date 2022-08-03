@@ -29,13 +29,13 @@ macro-expression = "#" (*varname* | [(b|e|i)] "(" *expression* ")")
 
 ```kaoscript
 macro trace_build_age() {
-	const d = new Date(2013, 2, 15)
+	var d = new Date(2013, 2, 15)
 
-	const buildTime = Math.floor(d.getTime() / 1000)
+	var buildTime = Math.floor(d.getTime() / 1000)
 
 	macro {
-		const runTime = Math.floor(Date.now() / 1000)
-		const age = runTime - #buildTime
+		var runTime = Math.floor(Date.now() / 1000)
+		var age = runTime - #buildTime
 
 		console.log(`Right now it's \(runTime), and this build is \(age) seconds old`)
 	}
@@ -178,12 +178,11 @@ export enum Space<string> {
 export class Color {
 	macro registerSpace(@space: Object) {
 		if space.components? {
-			const fields: Array = []
-			const methods: Array = []
+			var fields: Array = []
+			var methods: Array = []
 
-			let field
-			for const component, name of space.components {
-				field = `_\(name)`
+			for var component, name of space.components {
+				var field = `_\(name)`
 
 				fields.push(macro private #w(field): Number)
 

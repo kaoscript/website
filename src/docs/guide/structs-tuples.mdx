@@ -29,7 +29,7 @@ element = *type* [= *expression*]
 ```kaoscript
 tuple Pair(String, Number)
 
-const pair = Pair('x', 0.1)
+var pair = Pair('x', 0.1)
 
 console.log(`\(pair[0])`, pair[1] + 1)
 
@@ -49,7 +49,7 @@ tuple Pair(String, Number)
 
 tuple Triple(Boolean) extends Pair
 
-const triple = Triple('x', 0.1, true)
+var triple = Triple('x', 0.1, true)
 
 console.log(`\(triple.0)`, triple.1 + 1, !triple.2)
 ```
@@ -62,15 +62,15 @@ tuple Pair(
 	Number	= 0
 )
 
-const pair = Pair()
+var pair1 = Pair()
 
-const pair2 = Pair(null, 3.14)
+var pair2 = Pair(null, 3.14)
 
-const pair3 = Pair('foobar')
+var pair3 = Pair('foobar')
 
-const pair4 = Pair('foobar', null)
+var pair4 = Pair('foobar', null)
 
-const pair5 = Pair(null, null)
+var pair5 = Pair(null, null)
 ```
 
 ## named tuple
@@ -93,7 +93,7 @@ tuple Pair {
 	y: Number	= 0
 }
 
-let pair = Pair('x', 0.1)
+var mut pair = Pair('x', 0.1)
 
 console.log(`\(pair.x)`, pair.y + 1)
 
@@ -113,7 +113,7 @@ tuple Triple extends Pair {
 	z: Boolean	= false
 }
 
-let triple = Triple('x', 0.1, true)
+var mut triple = Triple('x', 0.1, true)
 
 console.log(`\(triple[0])`, triple[1] + 1, !triple[2])
 
@@ -145,7 +145,7 @@ struct Point {
     y: Number
 }
 
-let point = Point(0.3, 0.4)
+var mut point = Point(0.3, 0.4)
 
 console.log(point.x + 1, point.x + point.y)
 
@@ -168,7 +168,7 @@ struct Point3D extends Point {
 	z: Number	= 0
 }
 
-let point = Point3D(x: 0.3, y: 0.4)
+var mut point = Point3D(x: 0.3, y: 0.4)
 
 console.log(point.x + 1, point.y + 2, point.z + 3)
 

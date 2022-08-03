@@ -31,7 +31,7 @@ namespace Util {
 	export reverse
 }
 
-const foo = Util.reverse('hello')
+var foo = Util.reverse('hello')
 ```
 
 ```kaoscript
@@ -44,13 +44,13 @@ namespace Waldo {
 	}
 }
 
-const x = new Waldo.Foobar()
+var x = new Waldo.Foobar()
 ```
 
 ```kaoscript
 namespace Foobar {
-	export const PI = 3.14
-	export const name = 'john'
+	export var PI = 3.14
+	export var name = 'john'
 }
 
 console.log(Foobar.PI)
