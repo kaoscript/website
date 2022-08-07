@@ -421,3 +421,29 @@ func log(...args) {
 
 log**('hello')
 ```
+
+## preserved parameters
+
+By default, kaoscript generates functions without the list of parameters.
+But, if you need, you can use either:
+
+```kaoscript
+describe('', () => {
+	it('', (#[preserve] done) => {
+		done()
+	})
+})
+```
+or
+```kaoscript
+#![preserve-parameters]
+
+describe('#save()', () => {
+	it('should save without error', (done) => {
+		var user = new User('Luna')
+		var res, err = await user.save()
+
+		done(err)
+	})
+})
+```
