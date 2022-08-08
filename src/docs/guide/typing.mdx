@@ -90,6 +90,62 @@ func throwError(message: String): never {
 - `Number`
 - `String`
 
+## array
+
+```kaoscript
+func foobar(x: [Number, Number]) {}
+// x[0]: Number
+// x[1]: Number
+// x[2] throws an error
+```
+
+### rest
+
+```kaoscript
+func foobar(x: [Number, Number, ...String]) {}
+// x[0]: Number
+// x[1]: Number
+// x[2]: String
+// x[*]: String
+```
+
+## dictionary
+
+```kaoscript
+func foobar(x: {foo: Number, bar: String}) {}
+// x.foo: Number
+// x.bar: String
+// x.qux throws an error
+
+func foobar(x: {
+	foo: Number
+	bar: String
+}) {}
+// same definition as previous
+```
+
+### rest
+
+```kaoscript
+func foobar(x: {
+	...String
+}) {}
+// x.foo: String
+// x.bar: String
+// x.qux: String
+// x.*: String
+
+func foobar(x: {
+	foo: Number
+	bar: Number
+	...String
+}) {}
+// x.foo: Number
+// x.bar: Number
+// x.qux: String
+// x.*: String
+```
+
 ## nullable
 
 You can define a variable as nullable.
@@ -154,7 +210,7 @@ type Instance = Object ^ Array ^ Enum ^ Function ^ Namespace
 // Instance is the type Object without the types: Array, Enum, Function, Namespace
 ```
 
-## generics
+## generic type
 
 kaoscript has a very basic support for generics.
 
@@ -166,6 +222,15 @@ var mut values: Array<String> = ['foo', 'bar', 'qux']
 var x = values[0]
 // type: String
 ```
+
+### aliases
+
+|             full              |           rest           |     short      |
+| :---------------------------: | :----------------------: | :------------: |
+|        `Array<String>`        |     `[ ...String ]`      |   `String[]`   |
+|     `Dictionary<String>`      |     `{ ...String }`      |   `String{}`   |
+|   `Array<Array<String?>>?`    | `[ ...[ ...String? ] ]?` | `String?[][]?` |
+| `Array<Dictionary<String?>>?` | `[ ...{ ...String? } ]?` | `String?{}[]?` |
 
 ## type checking
 
