@@ -60,6 +60,8 @@ route: /guide/classes
 						*property*
 						|
 						*method*
+						|
+						*alias*
 					)+
 				}
 				|
@@ -68,6 +70,8 @@ route: /guide/classes
 				*property*
 				|
 				*method*
+				|
+				*alias*
 			)
 			|
 			final (
@@ -104,11 +108,15 @@ route: /guide/classes
 				*method*
 			)
 			|
-			{
-				(*variable* | *property* | *method*)+
+			[static] alias {
+				(*varname* = @*expression*)+
 			}
 			|
-			(*variable* | *property* | *method*)
+			{
+				(*variable* | *property* | *method* | *alias*)+
+			}
+			|
+			(*variable* | *property* | *method* | *alias*)
 		)
 	)*
 }
@@ -130,6 +138,8 @@ property = (
 		)+
 	})
 )
+
+alias = (alias *varname* = @*expression*)
 
 method = [async] *varname*([[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]])[: *type* | auto | this | @*varname*] [~ *class1* [, *class2* ... [, *classN*]]] [ => *expression* | {
 	*...statements*
@@ -262,6 +272,31 @@ console.log(r.color)
 
 r.color = 'yellow'
 // throw a SyntaxException (immutable)
+```
+
+## alias
+
+```kaoscript
+class Hello {
+	hello(name: String): String => `Hello \(name).`
+}
+
+class Proxy1 {
+	private @component: Hello
+
+	constructor(@component)
+
+	alias hello = @component.hello
+}
+
+class Proxy2 {
+	private @component: Hello?
+
+	constructor(@component)
+
+	alias hello = @component.hello
+	// throw an error since `@component` can not be null
+}
 ```
 
 ## method's return type
