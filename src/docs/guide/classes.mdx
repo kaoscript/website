@@ -122,11 +122,13 @@ route: /guide/classes
 }
 
 variable = (
-	[@]*varname*[: *type*] [= *value*]
+	[@]*varname*([: *type*] [= *value*] | ? = *value*)
 	|
 	final [@]*varname*[: *type*] = *value*
 	|
 	[final] late [@]*varname*[: *type*]
+	|
+	dyn [@]*varname* [= *value*]
 )
 
 property = (
@@ -162,9 +164,22 @@ class Shape {
 
 ## class variable
 
-A mutable variable must be initialized by a constructor unless it is a **static**, **nullable** and **lateinit** variable or it has a default value.
+```kaoscript
+class Foobar {
+	@a = 0
+	// type: Number
+	@b? = 0
+	// type: Number?
+	@c
+	// type: Any?
+	dyn @d = 0
+	// type: Any?
+	dyn @e
+	// type: Any?
+}
+```
 
-When no type is provided, the default type is `Any?`.
+A non-nullable variable must be initialized by a constructor (if the variable isn't `late`)
 
 ## this aliasing
 

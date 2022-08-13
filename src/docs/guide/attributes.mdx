@@ -85,38 +85,12 @@ kaoscript allows to apply some rules about the code.
 |       non-exhaustive       | the declaration is not exhaustive;<br />access to unmatched members don't throw an error |
 |       ignore-misfit        |                   accessing an unmatched member doesn't throw an error                   |
 |     dont-ignore-misfit     |                      accessing an unmatched member throws an error                       |
-|      assert-parameter      |                     the parameters aren't asserted (existence, type)                     |
-|   dont-assert-parameter    |                      the parameters are asserted (existence, type)                       |
-|   assert-parameter-type    |                          the parameters' types aren't asserted                           |
-| dont-assert-parameter-type |                            the parameters' types are asserted                            |
-|     assert-new-struct      |                         the values of a new struct are asserted                          |
-|   dont-assert-new-struct   |                        the values of a new struct aren't asserted                        |
-|      assert-new-tuple      |                          the values of a new tuple are asserted                          |
-|   dont-assert-new-tuple    |                        the values of a new tuple aren't asserted                         |
 |      assert-override       |              assert that overriding methods are matching an existing method              |
 |    dont-assert-override    |                overriding methods don't need to match an existing method                 |
 
-<!-- ### assert-parameter
-
-`assert-parameter`/`dont-assert-parameter` enables/disables all the assertions of the parameter, its existence, its type, ... -->
-
-### assert-parameter-type
-
-<!-- `assert-parameter-type`/`dont-assert-parameter-type` enables/disables the type checking of the arguments. -->
-
-If the type checking is disable, a function might generate unexpected runtime errors.
-
-<!-- ### assert-new-struct
-
-`assert-new-struct`/`dont-assert-new-struct` enables/disables all the assertions of the values given to create a new struct.
-
-### assert-new-tuple
-
-`assert-new-tuple`/`dont-assert-new-tuple` enables/disables all the assertions of the values given to create a new tuple.
-
 ### assert-override
 
-`assert-override`/`dont-assert-override` enables/disables all the assertions for overriding an existing method. -->
+`assert-override`/`dont-assert-override` enables/disables all the assertions for overriding an existing method.
 
 ### no-undefined
 
