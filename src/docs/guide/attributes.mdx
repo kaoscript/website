@@ -31,10 +31,26 @@ value = ( *number* | " *string* ")
 Unlike JavaScript, by default, a kaoscript file is a module.
 A module can not be executed by the command line `kaoscript`, it will need to be imported from another file.
 
-For a kaoscript file to be executed as binary, it would need the attribute `#![bin]`.
+For a kaoscript file to be executed as binary, it would need the attribute `#![bin]` or a **shebang**.
 
 ```kaoscript
 #![bin]
+
+extern console
+
+console.log('Hello World!')
+```
+
+```kaoscript
+#!/usr/bin/env kaoscript
+
+extern console
+
+console.log('Hello World!')
+```
+
+```kaoscript
+#!c:/kaoscript/bin/kaoscript.exe
 
 extern console
 
