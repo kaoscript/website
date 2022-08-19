@@ -110,11 +110,13 @@ if color == 'white' || color == 'black' || color == 'gray' || color == 'grey' {
 
 ## logical
 
+The following operations are only valid for boolean operands.
+
 |      Operator      | Meaning  |
 |:------------------:|:--------:|
 |     `!`*expr*      | Negation |
-| *expr* `||` *expr* |    Or    |
 | *expr* `&&` *expr* |   And    |
+| *expr* `||` *expr* |    Or    |
 | *expr* `^^` *expr* |   Xor    |
 | *expr* `->` *expr* |  Imply   |
 
@@ -135,21 +137,23 @@ true -> false	// false
 
 ## bitwise & shift
 
-|      Operator       |       Meaning       |
-|:-------------------:|:-------------------:|
-|     `~~~`*expr*     |         Not         |
-| *expr* `&&&` *expr* |         And         |
-| *expr* `|||` *expr* |         Or          |
-| *expr* `^^^` *expr* |         Xor         |
-| *expr* `<<<` *expr* |     Shift left      |
-| *expr* `>>>` *expr* |     Shift right     |
+The following operations are only valid for numeric operands.
+
+|      Operator      |   Meaning   |
+| :----------------: | :---------: |
+|     `!`*expr*      |     Not     |
+| *expr* `&&` *expr* |     And     |
+| *expr* `||` *expr* |     Or      |
+| *expr* `^^` *expr* |     Xor     |
+| *expr* `<<` *expr* | Shift left  |
+| *expr* `>>` *expr* | Shift right |
 
 ```kaoscript
-0x22 &&& 0x0f	// 0x02
-0x22 ||| 0x0f	// 0x2f
-0x22 ^^^ 0x0f	// 0x2d
-0x22 <<< 4		// 0x220
-0x22 >>> 4		// 0x02
+0x22 && 0x0f    // 0x02
+0x22 || 0x0f    // 0x2f
+0x22 ^^ 0x0f    // 0x2d
+0x22 << 4       // 0x220
+0x22 >> 4       // 0x02
 ```
 
 ## conditional
@@ -215,22 +219,40 @@ t = x as Array<String>
 
 ## assignment
 
-|      Operator       |      Meaning      |
-|:-------------------:|:-----------------:|
-|  *expr* `=` *expr*  |    Assignement    |
-| *expr* `-=` *expr*  |    Subtraction    |
-| *expr* `+=` *expr*  |     Addition      |
-| *expr* `*=` *expr*  |  Multiplication   |
-| *expr* `/=` *expr*  |     Division      |
-| *expr* `/.=` *expr* | Quotient division |
-| *expr* `%=` *expr*  |      Modulo       |
-| *expr* `&&=` *expr*  |    Bitwise and    |
-| *expr* `||=` *expr*  |    Bitwise or     |
-| *expr* `^^=` *expr*  |    Bitwise xor    |
-| *expr* `<<=` *expr* |    Shift left     |
-| *expr* `>>=` *expr* |    Shift right    |
-| *expr* `?=` *expr*  |  Non existential  |
-| *expr* `??=` *expr* |  Null coalescing  |
+|      Operator       |         Meaning          |
+| :-----------------: | :----------------------: |
+|  *expr* `=` *expr*  |       Assignement        |
+| *expr* `-=` *expr*  |       Subtraction        |
+| *expr* `+=` *expr*  |         Addition         |
+| *expr* `*=` *expr*  |      Multiplication      |
+| *expr* `/=` *expr*  |         Division         |
+| *expr* `/.=` *expr* |    Quotient division     |
+| *expr* `%=` *expr*  |          Modulo          |
+| *expr* `&&=` *expr* | And (bitwise or logical) |
+| *expr* `||=` *expr* | Or (bitwise or logical)  |
+| *expr* `^^=` *expr* | Xor (bitwise or logical) |
+| *expr* `<<=` *expr* |        Shift left        |
+| *expr* `>>=` *expr* |       Shift right        |
+| *expr* `?=` *expr*  |     Non existential      |
+| *expr* `??=` *expr* |     Null coalescing      |
+
+### non-existential and destructuring
+
+Both codes are equivalent:
+
+```kaoscript
+let method, type
+
+if const data = getData() {
+    { method, type } = data
+}
+```
+
+```kaoscript
+let method, type
+
+{ method, type } ?= getData()
+```
 
 ## junction
 
