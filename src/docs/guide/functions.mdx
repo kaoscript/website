@@ -12,17 +12,17 @@ In kaoscript, there is three types of functions:
 - arrow functions
 
 |                                 | named function | anonymous function | arrow function |
-|:-------------------------------:|:--------------:|:------------------:|:--------------:|
-|        new local `this`         |      YES       |        YES         |                |
-| local `this` is parent's `this` |                |                    |      YES       |
-|    access module's variables    |      YES       |        YES         |      YES       |
-|    access parent's variables    |                |                    |      YES       |
-|          overload-able          |      YES       |                    |                |
-|           async-able            |      YES       |        YES         |      YES       |
-|           return type           |      YES       |        YES         |      YES       |
-|           error types           |      YES       |        YES         |      YES       |
-|            statement            |      YES       |                    |                |
-|           expression            |                |        YES         |      YES       |
+| :-----------------------------: | :------------: | :----------------: | :------------: |
+|        new local `this`         |       ✅       |         ✅         |       ❌       |
+| local `this` is parent's `this` |       ❌       |         ❌         |       ✅       |
+|    access module's variables    |       ✅       |         ✅         |       ✅       |
+|    access parent's variables    |       ❌       |         ❌         |       ✅       |
+|          overload-able          |       ✅       |         ❌         |       ❌       |
+|           async-able            |       ✅       |         ✅         |       ✅       |
+|           return type           |       ✅       |         ✅         |       ✅       |
+|           error types           |       ✅       |         ✅         |       ✅       |
+|            statement            |       ✅       |         ❌         |       ❌       |
+|           expression            |       ❌       |         ✅         |       ✅       |
 
 ## named function
 
@@ -91,9 +91,27 @@ var four = (a => a / 10)(42)
 ### Syntax
 
 ```syntax
-[mut] (*varname* | *destructuring* | ...[arity][*varname*] | '_') [!] [: *type*] [?] [= *expression*]
-
-arity = { ([*min*], [*max*] | *quantity*) }
+[mut] (
+	[(# | \* | ([\*] *varname* | \_) %)] *varname* (
+		! [: *type*] [?] (= | ??= | ##=) *expression*
+		|
+		[: *type*] [?] [(= | ??= | ##=) *expression*]
+	)
+	|
+	[[\*] *varname* | \_) %] _ (
+		! [: *type*] [?] (= | ??= | ##=) *expression*
+		|
+		[: *type*] [?] [(= | ??= | ##=) *expression*]
+	)
+	|
+	[[\*] *varname* | \_) %] *destructuring* (
+		! [: *type*] [?] (= | ??= | ##=) *expression*
+		|
+		[: *type*] [?] [(= | ??= | ##=) *expression*]
+	)
+	|
+	[(*varname* | \_) %] ...[{( [*min*], [*max*] | *quantity* )}][*varname*] [: *type*] [?] [(= | ##=) *expression*]
+)
 ```
 
 ### Examples
@@ -121,25 +139,119 @@ expect(foo(1, 2, 3, 4, 5)).to.eql([1, 2, 3, 4, 5])
 ### Distribution
 
 |                               | Required | Nullable | Typed | Default Value |
-| ----------------------------- |:--------:|:--------:|:-----:|:-------------:|
-| `foo(x)`                      |   YES    |          |       |               |
-| `foo(x?)`                     |   YES    |   YES    |       |               |
-| `foo(x = null)`               |          |   YES    |       |      YES      |
-| `foo(x = 'foobar')`           |          |          |       |      YES      |
-| `foo(x? = 'foobar')`          |          |   YES    |       |      YES      |
-| `foo(x! = null)`              |   YES    |   YES    |       |      YES      |
-| `foo(x! = 'foobar')`          |   YES    |          |       |      YES      |
-| `foo(x!? = 'foobar')`         |   YES    |   YES    |       |      YES      |
-| `foo(x: String)`              |   YES    |          |  YES  |               |
-| `foo(x: String?)`             |   YES    |   YES    |  YES  |               |
-| `foo(x: String = null)`       |          |   YES    |  YES  |      YES      |
-| `foo(x: String = 'foobar')`   |          |          |  YES  |      YES      |
-| `foo(x: String? = null)`      |          |   YES    |  YES  |      YES      |
-| `foo(x: String? = 'foobar')`  |          |   YES    |  YES  |      YES      |
-| `foo(x!: String = null)`      |   YES    |   YES    |  YES  |      YES      |
-| `foo(x!: String = 'foobar')`  |   YES    |          |  YES  |      YES      |
-| `foo(x!: String? = null)`     |   YES    |   YES    |  YES  |      YES      |
-| `foo(x!: String? = 'foobar')` |   YES    |   YES    |  YES  |      YES      |
+| ----------------------------- | :------: | :------: | :---: | :-----------: |
+| `foo(x)`                      |    ✅    |    ❌    |  ❌   |      ❌       |
+| `foo(x?)`                     |    ✅    |    ✅    |  ❌   |      ❌       |
+| `foo(x = null)`               |   ☠️   |   ☠️   | ☠️  |     ☠️      |
+| `foo(x = 'foobar')`           |    ❌    |    ❌    |  ❌   |      ✅       |
+| `foo(x? = null)`              |    ❌    |    ✅    |  ❌   |      ✅       |
+| `foo(x? = 'foobar')`          |    ❌    |    ✅    |  ❌   |      ✅       |
+| `foo(x! = null)`              |   ☠️   |   ☠️   | ☠️  |     ☠️      |
+| `foo(x! = 'foobar')`          |    ✅    |    ❌    |  ❌   |      ✅       |
+| `foo(x!? = null)`             |    ✅    |    ✅    |  ❌   |      ✅       |
+| `foo(x!? = 'foobar')`         |   ☠️   |   ☠️   | ☠️  |     ☠️      |
+| `foo(x: String)`              |    ✅    |    ❌    |  ✅   |      ❌       |
+| `foo(x: String?)`             |    ✅    |    ✅    |  ✅   |      ❌       |
+| `foo(x: String = null)`       |   ☠️   |   ☠️   | ☠️  |     ☠️      |
+| `foo(x: String = 'foobar')`   |    ❌    |    ❌    |  ✅   |      ✅       |
+| `foo(x: String? = null)`      |    ❌    |    ✅    |  ✅   |      ✅       |
+| `foo(x: String? = 'foobar')`  |    ❌    |    ✅    |  ✅   |      ✅       |
+| `foo(x!: String = null)`      |   ☠️   |   ☠️   | ☠️  |     ☠️      |
+| `foo(x!: String = 'foobar')`  |    ✅    |    ❌    |  ✅   |      ✅       |
+| `foo(x!: String? = null)`     |    ✅    |    ✅    |  ✅   |      ✅       |
+| `foo(x!: String? = 'foobar')` |   ☠️   |   ☠️   | ☠️  |     ☠️      |
+
+| `x`                              |   `foo()`    | `foo(null)`  |  `foo('')`   | `foo('xyz')` |   type    |
+| :------------------------------- | :----------: | :----------: | :----------: | :----------: | :-------: |
+| `foo(x)`                         |     ☠️     |     ☠️     |     `''`     |   `'xyz'`    |   `Any`   |
+| `foo(x?)`                        |     ☠️     |    `null`    |     `''`     |   `'xyz'`    |  `Any?`   |
+| `foo(x = null)`                  |     ☠️     |     ☠️     |     ☠️     |     ☠️     |   ☠️    |
+| `foo(x = 'abc')`                 |   `'abc'`    |   `'abc'`    |     `''`     |   `'xyz'`    |   `Any`   |
+| `foo(x = 'abc'|null)`            |     ☠️     |     ☠️     |     ☠️     |     ☠️     |   ☠️    |
+| `foo(x ??= null)`                |     ☠️     |     ☠️     |     ☠️     |     ☠️     |   ☠️    |
+| `foo(x ??= 'abc')`               |   `'abc'`    |   `'abc'`    |     `''`     |   `'xyz'`    |   `Any`   |
+| `foo(x ??= 'abc'|null)`          |     ☠️     |     ☠️     |     ☠️     |     ☠️     |   ☠️    |
+| `foo(x ##= null)`                |     ☠️     |     ☠️     |     ☠️     |     ☠️     |   ☠️    |
+| `foo(x ##= 'abc')`               |   `'abc'`    |   `'abc'`    |   `'abc'`    |   `'xyz'`    |   `Any`   |
+| `foo(x ##= 'abc'|null)`          |     ☠️     |     ☠️     |     ☠️     |     ☠️     |   ☠️    |
+| `foo(x? = null)`                 |    `null`    |    `null`    |     `''`     |   `'xyz'`    |  `Any?`   |
+| `foo(x? = 'abc')`                |   `'abc'`    |    `null`    |     `''`     |   `'xyz'`    |  `Any?`   |
+| `foo(x? = 'abc'|null)`           | `'abc'|null` |    `null`    |     `''`     |   `'xyz'`    |  `Any?`   |
+| `foo(x? ??= null)`               |    `null`    |    `null`    |     `''`     |   `'xyz'`    |  `Any?`   |
+| `foo(x? ??= 'abc')`              |   `'abc'`    |   `'abc'`    |     `''`     |   `'xyz'`    |  `Any?`   |
+| `foo(x? ??= 'abc'|null)`         | `'abc'|null` | `'abc'|null` |     `''`     |   `'xyz'`    |  `Any?`   |
+| `foo(x? ##= null)`               |    `null`    |    `null`    |    `null`    |   `'xyz'`    |  `Any?`   |
+| `foo(x? ##= 'abc')`              |   `'abc'`    |   `'abc'`    |   `'abc'`    |   `'xyz'`    |  `Any?`   |
+| `foo(x? ##= 'abc'|null)`         | `'abc'|null` | `'abc'|null` | `'abc'|null` |   `'xyz'`    |  `Any?`   |
+| `foo(x: String)`                 |     ☠️     |     ☠️     |     `''`     |   `'xyz'`    | `String`  |
+| `foo(x: String?)`                |     ☠️     |    `null`    |     `''`     |   `'xyz'`    | `String?` |
+| `foo(x: String = null)`          |     ☠️     |     ☠️     |     ☠️     |     ☠️     |   ☠️    |
+| `foo(x: String = 'abc')`         |   `'abc'`    |   `'abc'`    |     `''`     |   `'xyz'`    | `String`  |
+| `foo(x: String = 'abc'|null)`    |     ☠️     |     ☠️     |     ☠️     |     ☠️     |   ☠️    |
+| `foo(x: String ??= 'abc')`       |   `'abc'`    |   `'abc'`    |     `''`     |   `'xyz'`    | `String`  |
+| `foo(x: String ##= 'abc')`       |   `'abc'`    |   `'abc'`    |   `'abc'`    |   `'xyz'`    | `String`  |
+| `foo(x: String? = null)`         |    `null`    |    `null`    |     `''`     |   `'xyz'`    | `String?` |
+| `foo(x: String? = 'abc')`        |   `'abc'`    |    `null`    |     `''`     |   `'xyz'`    | `String?` |
+| `foo(x: String? = 'abc'|null)`   | `'abc'|null` |    `null`    |     `''`     |   `'xyz'`    | `String?` |
+| `foo(x: String? ??= null)`       |    `null`    |    `null`    |     `''`     |   `'xyz'`    | `String?` |
+| `foo(x: String? ??= 'abc')`      |   `'abc'`    |   `'abc'`    |     `''`     |   `'xyz'`    | `String?` |
+| `foo(x: String? ??= 'abc'|null)` | `'abc'|null` | `'abc'|null` |     `''`     |   `'xyz'`    | `String?` |
+| `foo(x: String? ##= null)`       |    `null`    |    `null`    |    `null`    |   `'xyz'`    | `String?` |
+| `foo(x: String? ##= 'abc')`      |   `'abc'`    |   `'abc'`    |   `'abc'`    |   `'xyz'`    | `String?` |
+| `foo(x: String? ##= 'abc'|null)` | `'abc'|null` | `'abc'|null` | `'abc'|null` |   `'xyz'`    | `String?` |
+## named/positional parameter
+
+In `foo(*x) {}`, `*` forces the argument to be passed as a named argument, for example: `foo(x: 42)`.
+In `foo(#x) {}`, `#` forces the argument to be passed as a indexed argument. `foo(x: 42)` will throw an error.
+
+|                    | Pass with Index | Pass with Name | External Name | Internal Name |
+| ------------------ | :-------------: | :------------: | :-----------: | :-----------: |
+| `foo(x) {}`        |       ✅        |       ✅       |      `x`      |      `x`      |
+| `foo(*x) {}`       |       ❌        |       ✅       |      `x`      |      `x`      |
+| `foo(#x) {}`       |       ✅        |       ❌       |      ❌       |      `x`      |
+| `foo(_) {}`        |       ✅        |       ❌       |      ❌       |      ❌       |
+| `foo(x % val) {}`  |       ✅        |       ✅       |      `x`      |     `val`     |
+| `foo(*x % val) {}` |       ❌        |       ✅       |      `x`      |     `val`     |
+| `foo(#x % val) {}` |      ☠️       |      ☠️      |     ☠️      |     ☠️      |
+| `foo(_ % val) {}`  |       ✅        |       ❌       |      ❌       |     `val`     |
+| `foo(_ % _) {}`    |       ✅        |       ❌       |      ❌       |      ❌       |
+| `foo(x % _) {}`    |       ✅        |       ✅       |      `x`      |      ❌       |
+| `foo(*x % _) {}`   |       ❌        |       ✅       |      `x`      |      ❌       |
+| `foo(#x % _) {}`   |      ☠️       |      ☠️      |     ☠️      |     ☠️      |
+
+| `foo(x) {}` | Use Index | Use Name |
+| ----------- | :-------: | :------: |
+| `foo(0)`    |    ✅     |    ❌    |
+| `foo(x)`    |    ✅     |    ✅    |
+| `foo(y)`    |    ✅     |    ❌    |
+| `foo(x: y)` |    ❌     |    ✅    |
+| `foo(:x)`   |    ❌     |    ✅    |
+
+### Examples
+
+```kaoscript
+func foobar(mut coord % {x, y}: {x: Number, y: Number} = {x: 0, y: 0}) {}
+
+func foobar(mut *coord % {x, y}!: {x: Number, y: Number} = {x: 0, y: 0}) {}
+
+func foobar(mut *x!: Number = 0) {}
+
+func foobar(mut *x: Number = 0) {}
+func foobar(mut #x: Number = 0) {}
+
+func foobar(mut &x!: Number = 0) {}
+func foobar(mut #x!: Number = 0) {}
+```
+
+```kaoscript
+func placeOrder(*item, *price, *quantity) {}
+
+func powerMod(#x, #y, *mod) {}
+
+func combine(a, b, *validator = () => {}) {}
+
+func check(#x) {}
+```
 
 ## rest parameter
 
@@ -199,7 +311,13 @@ func corge(...{3}args) {
 ## anonymous parameter
 
 In kaoscript, a parameter can be ignored with the placeholder `_` (can be ignored for a rest parameter).
-Even if a parameter is ignored, it will be validated (`_` won't accept `null`, whereas `_?` will)
+
+|             | Required | Nullable | Typed | Default Value | No Arg | `null` Arg |
+| ----------- | :------: | :------: | :---: | :-----------: | :----: | :--------: |
+| `foo(_)`    |    ✅    |    ❌    |  ❌   |      ❌       |  ☠️  |    ☠️    |
+| `foo(_?)`   |    ✅    |    ✅    |  ❌   |      ❌       |  ☠️  |   `null`   |
+| `foo(...)`  |    ❌    |    ❌    |  ❌   |      ❌       |  `[]`  |    ☠️    |
+| `foo(...?)` |    ❌    |    ✅    |  ❌   |      ❌       |  `[]`  |  `[null]`  |
 
 ### Examples
 

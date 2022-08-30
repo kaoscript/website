@@ -19,14 +19,14 @@ If the type is unknow, the test's value must be equal to `true`.
 if
 	*expression:Boolean*
 	|
-	var [mut] (*varname* | *destructuring*) [: *type*] = *expression*
+	var [mut] (*varname* | *destructuring*) [: *type*] (?= | #=) *expression*
 {
 	*...statements*
 }
 [else if
 	*expression:Boolean*
 	|
-	var [mut] (*varname* | *destructuring*) [: *type*] = *expression*
+	var [mut] (*varname* | *destructuring*) [: *type*] (?= | #=) *expression*
 {
 	*...statements*
 }]
@@ -40,7 +40,7 @@ if
 ```kaoscript
 if x == 5 {
 }
-else if var x = getX() {
+else if var x ?= getX() {
 	// x is:
 	// - immutable
 	// - not null
@@ -206,7 +206,7 @@ for x in 0..10..2 while test(x) {
 while
 	*expression:Boolean*
 	|
-	var [mut] (*varname* | *destructuring*) [: *type*] = *expression*
+	var [mut] (*varname* | *destructuring*) [: *type*] (?= | #=) *expression*
 {
 
 }

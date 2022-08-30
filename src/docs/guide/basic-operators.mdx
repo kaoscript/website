@@ -26,30 +26,20 @@ route: /guide/basic-operators
 | *expr* `/` *expr*  |     Division      |
 | *expr* `/.` *expr* | Quotient division |
 | *expr* `%` *expr*  |      Modulo       |
-|     `++`*var*      |   Pre-increment   |
-|     *var*`++`      |  Post-increment   |
-|     `--`*var*      |   Pre-decrement   |
-|     *var*`--`      |  Post-decrement   |
 
 ```kaoscript
 // Numbers
 1 + 2			// 3
 1 + 2 + 3		// 6
 1 - 2			// -1
--2				// -2
 2 * 3			// 6
 18 / 3			// 6
-18 / 5			// 3.6
-18 /. 5			// 3
+28 / 5			// 5.6
+28 /. 5			// 5
 18 % 3			// 0
-18 % 5			// 3
-18 % 10 % 5		// 3
-
-var mut x = 0
-++x				// 1
-x++				// 2
---x				// 1
-x--				// 0
+28 % 5			// 3
+28 % 10 % 5		// 3
+-2				// -2
 
 // Strings
 'foo' + 'bar'	// foobar
@@ -159,19 +149,17 @@ The following operations are only valid for numeric operands.
 ## conditional
 
 |           Operator           |      Meaning      |
-|:----------------------------:|:-----------------:|
+| :--------------------------: | :---------------: |
 |          `?`*expr*           |    Existential    |
-|          *expr*`?`           |    Existential    |
+|          `#`*expr*           |     Non empty     |
 |      *expr* `??` *expr*      |  Null coalescing  |
+|      *expr* `##` *expr*      | Empty coalescing  |
 | *expr* `?` *expr* `:` *expr* | Ternary condition |
 
+### Examples
 
 ```kaoscript
 if ?value {
-	// `value` is not null
-}
-
-if value? {
 	// `value` is not null
 }
 
@@ -181,6 +169,39 @@ x = y == 42 ? 0 : 1		// `x` is equal to 0 is `y` equals `42`, if not `1`
 ```
 
 The operator `??` is a polyadic operator.
+
+### Distribution
+
+| `x`  | `null`  |   `0`   |   `8`   |  `''`   | `'x'`  |  `[]`   | `[1,2,3]` |
+| ---- | :-----: | :-----: | :-----: | :-----: | :----: | :-----: | :-------: |
+| `?x` | `false` | `true`  | `true`  | `true`  | `true` | `true`  |  `true`   |
+| `#x` | `false` | `false` | `false` | `false` | `true` | `false` |  `true`   |
+
+|    `x`    |    `y`    | `x ?? y` | `x ## y` |
+| :-------: | :-------: | :------: | :------: |
+|  `null`   |  `null`   |    𝗬    |    𝗬    |
+|  `null`   |    `0`    |    𝗬    |    𝗬    |
+|  `null`   | `[1,2,3]` |    𝗬    |    𝗬    |
+|    `8`    |  `null`   |    𝙓    |    𝗬    |
+|    `8`    |    `0`    |    𝙓    |    𝗬    |
+|    `8`    |  `'abc'`  |    𝙓    |    𝗬    |
+|    `8`    | `[1,2,3]` |    𝙓    |    𝗬    |
+|   `''`    |  `null`   |    𝙓    |    𝗬    |
+|   `''`    |    `0`    |    𝙓    |    𝗬    |
+|   `''`    |  `'abc'`  |    𝙓    |    𝗬    |
+|   `''`    | `[1,2,3]` |    𝙓    |    𝗬    |
+|  `'xyz'`  |  `null`   |    𝙓    |    𝙓    |
+|  `'xyz'`  |    `0`    |    𝙓    |    𝙓    |
+|  `'xyz'`  |  `'abc'`  |    𝙓    |    𝙓    |
+|  `'xyz'`  | `[1,2,3]` |    𝙓    |    𝙓    |
+|   `[]`    |  `null`   |    𝙓    |    𝗬    |
+|   `[]`    |    `0`    |    𝙓    |    𝗬    |
+|   `[]`    |  `'abc'`  |    𝙓    |    𝗬    |
+|   `[]`    | `[1,2,3]` |    𝙓    |    𝗬    |
+| `[4,5,6]` |  `null`   |    𝙓    |    𝙓    |
+| `[4,5,6]` |    `0`    |    𝙓    |    𝙓    |
+| `[4,5,6]` |  `'abc'`  |    𝙓    |    𝙓    |
+| `[4,5,6]` | `[1,2,3]` |    𝙓    |    𝙓    |
 
 ## typing
 
@@ -221,7 +242,8 @@ t = x as Array<String>
 
 |      Operator       |         Meaning          |
 | :-----------------: | :----------------------: |
-|  *expr* `=` *expr*  |       Assignement        |
+|  *expr* `=` *expr*  |       Assignment        |
+| *expr* `<-` *expr*  | Assignment with return  |
 | *expr* `-=` *expr*  |       Subtraction        |
 | *expr* `+=` *expr*  |         Addition         |
 | *expr* `*=` *expr*  |      Multiplication      |
@@ -233,26 +255,48 @@ t = x as Array<String>
 | *expr* `^^=` *expr* | Xor (bitwise or logical) |
 | *expr* `<<=` *expr* |        Shift left        |
 | *expr* `>>=` *expr* |       Shift right        |
-| *expr* `?=` *expr*  |     Non existential      |
+| *expr* `?=` *expr*  |       Existential        |
+| *expr* `!?=` *expr* |     Non existential      |
 | *expr* `??=` *expr* |     Null coalescing      |
+| *expr* `#=` *expr*  |        Non empty         |
+| *expr* `!#=` *expr* |          Empty           |
+| *expr* `##=` *expr* |     Empty coalescing     |
 
-### non-existential and destructuring
+Unlike the assignment operator in Javascript, the assignment operators don't return a value, except:
+- `?=` and `#=` will return `true` when the assignment is **successful**. If not, `false`.
+- `!?=` and `!#=` will return `true` when the assignment is **unsuccessful**. If not, `false`.
+- `<-` is the same as `=` but returns the assigned value.
 
-Both codes are equivalent:
+### Distribution
 
-```kaoscript
-let method, type
+|    `x`    |    `y`    | `x ?= y` | `x ??= y` | `x #= y` | `x ##= y` |
+| :-------: | :-------: | :------: | :-------: | :------: | :-------: |
+|  `null`   |  `null`   |    ❌    |    ✅     |    ❌    |    ✅     |
+|  `null`   |    `0`    |    ✅    |    ✅     |    ❌    |    ✅     |
+|  `null`   | `[1,2,3]` |    ✅    |    ✅     |    ✅    |    ✅     |
+|    `8`    |  `null`   |    ❌    |    ❌     |    ❌    |    ✅     |
+|    `8`    |    `0`    |    ✅    |    ❌     |    ❌    |    ✅     |
+|    `8`    |  `'abc'`  |    ✅    |    ❌     |    ✅    |    ✅     |
+|    `8`    | `[1,2,3]` |    ✅    |    ❌     |    ✅    |    ✅     |
+|   `''`    |  `null`   |    ❌    |    ❌     |    ❌    |    ✅     |
+|   `''`    |    `0`    |    ✅    |    ❌     |    ❌    |    ✅     |
+|   `''`    |  `'abc'`  |    ✅    |    ❌     |    ✅    |    ✅     |
+|   `''`    | `[1,2,3]` |    ✅    |    ❌     |    ✅    |    ✅     |
+|  `'xyz'`  |  `null`   |    ❌    |    ❌     |    ❌    |    ❌     |
+|  `'xyz'`  |    `0`    |    ✅    |    ❌     |    ❌    |    ❌     |
+|  `'xyz'`  |  `'abc'`  |    ✅    |    ❌     |    ✅    |    ❌     |
+|  `'xyz'`  | `[1,2,3]` |    ✅    |    ❌     |    ✅    |    ❌     |
+|   `[]`    |  `null`   |    ❌    |    ❌     |    ❌    |    ✅     |
+|   `[]`    |    `0`    |    ✅    |    ❌     |    ❌    |    ✅     |
+|   `[]`    |  `'abc'`  |    ✅    |    ❌     |    ✅    |    ✅     |
+|   `[]`    | `[1,2,3]` |    ✅    |    ❌     |    ✅    |    ✅     |
+| `[4,5,6]` |  `null`   |    ❌    |    ❌     |    ❌    |    ❌     |
+| `[4,5,6]` |    `0`    |    ✅    |    ❌     |    ❌    |    ❌     |
+| `[4,5,6]` |  `'abc'`  |    ✅    |    ❌     |    ✅    |    ❌     |
+| `[4,5,6]` | `[1,2,3]` |    ✅    |    ❌     |    ✅    |    ❌     |
 
-if const data = getData() {
-    { method, type } = data
-}
-```
-
-```kaoscript
-let method, type
-
-{ method, type } ?= getData()
-```
+- ✅ indicates that the assignment is **successful**
+- ❌ indicates that the assignment is **unsuccessful**
 
 ## junction
 
