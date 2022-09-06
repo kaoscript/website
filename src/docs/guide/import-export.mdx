@@ -13,18 +13,35 @@ route: /guide/import-export
 ### syntax
 
 ```syntax
- import "*module-name*"['(' *parameter1*, ..., *parameterN* ')' | '(...)'] [=> *varname*[: *type*]]
- import "*module-name*"['(' *parameter1*, ..., *parameterN* ')' | '(...)'] for (*varname1*[: *type*] | *type1*), ..., (*varnameN*[: *type*] | *typeN*) [=> *varname*[: *type*]]
- import "*module-name*"['(' *parameter1*, ..., *parameterN* ')' | '(...)'] {
-	(*varname1*[: *type*] | *type1*)[,]
-	...[,]
-	(*varnameN*[: *type*] | *typeN*)[,]
+ import "*path*" (
+	{
+		declarator+
+	}
+	|
+	declarator
+)
 
-	\* => *varname*
- }
- import "*module-name*" but *varname1*, ..., *varnameN*
+declarator = ['(' *parameter1*, ..., *parameterN* ')' | '(...)'] (
+	for (*varname1*[: *type*] | *type*) [=> *varname1*], ..., (*varnameN*[: *type*] | *type*) [=> *varnameN*]
+	|
+	but *varname1*, ..., *varnameN*
+	|
+	=> *varname* [{
+		(
+			(*varname*[: *type*] | *type*) [=> *varname*] [,]
+		)+
+	}]
+	|
+	{
+		(
+			(*varname*[: *type*] | *type*) [=> *varname*] [,]
+			|
+			\* => *varname* [,]
+		)+
+	}
+)
 
- parameter = ([*module-varname*:] *expression* | require [*module-varname*:] *varname*)
+parameter = ([*module-varname*:] *expression* | require [*module-varname*:] *varname*)
 ```
 
 ### examples
@@ -141,17 +158,37 @@ import '@zokugun/lang.color'(...)
 ### syntax
 
 ```syntax
- export *statement*
- export *member1* [=> *alias*], ..., *memberN* [=> *alias*]
- export {
-	*statement*
-	*member* [=> *alias*]
- }
- export *namespace* for *varname1* [=> *alias*], ..., *varnameN* [=> *alias*]
- export \*
- export \* but *varname1*, ..., *varnameN*
+ export (
+	\* [but (*varname1*, ..., *varnameN* | {
+		(*varname*)+
+	})]
+	|
+	{
+		*declarator*+
+	}
+	|
+	*declarator*
+)
 
- member = (*varname* | *member*.*varname*)
+declarator = (
+	*statement*
+	|
+	*varname* [(
+		'.\*'
+		|
+		=> *varname*
+		|
+		for (
+			'\*'
+			|
+			{
+				(*varname* [=> *alias*][,])+
+			}
+			|
+			*varname1* [=> *alias1*], ..., *varnameN* [=> *aliasN*]
+		)
+	)]
+)
 ```
 
 ### examples

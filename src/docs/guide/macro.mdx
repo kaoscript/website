@@ -22,7 +22,7 @@ macro *varname*([[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]]) {
 macro *varname*([[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]]) => *macro-line*
 
 macro-line = *text* | macro-expression
-macro-expression = "#" (*varname* | [(b|e|i)] "(" *expression* ")")
+macro-expression = "#" [(a|e|j|s|w)] "(" *expression* ")")
 ```
 
 ## quick example
@@ -35,7 +35,7 @@ macro trace_build_age() {
 
 	macro {
 		var runTime = Math.floor(Date.now() / 1000)
-		var age = runTime - #buildTime
+		var age = runTime - #(buildTime)
 
 		console.log(`Right now it's \(runTime), and this build is \(age) seconds old`)
 	}
@@ -150,16 +150,16 @@ console.log(match_tokens!(1 + 1))
 ## examples
 
 ```kaoscript
-macro times_five(e) => 5 * #e
+macro times_five(e) => 5 * #(e)
 
 macro times_five_bb(e) {
 	macro {
-		5 * #e
+		5 * #(e)
 	}
 }
 
 macro times_five_bl(e) {
-	macro 5 * #e
+	macro 5 * #(e)
 }
 
 console.log(times_five!(42))
