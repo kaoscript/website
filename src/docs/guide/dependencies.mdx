@@ -133,7 +133,7 @@ method = [async] *varname*([[*parameter1*] [, [*parameter2*] ... [, [*parameterN
 ### examples
 
 ```kaoscript
-extern systemic class String
+extern system class String
 
 disclose String {
 	length: Number
@@ -145,7 +145,7 @@ disclose String {
 ```
 
 ```kaoscript
-extern systemic namespace Math
+extern system namespace Math
 
 disclose Math {
 	PI: Number
@@ -153,18 +153,18 @@ disclose Math {
 }
 ```
 
-## systemic
+## system
 
-`systemic` is a modifier for dependencies to indicate that the dependency isn't directly modifiable (`sealed`) and is from the system.
+`system` is a modifier for dependencies to indicate that the dependency isn't directly modifiable (`sealed`) and is from the system.
 
 So when importing, kaoscript won't try to overwrite that dependency.
 
 ### implements & native class
 
-`impl` doesn't directly modify classes that have been flagged as `sealed` (a `systemic` class is `sealed`).
+`impl` doesn't directly modify classes that have been flagged as `sealed` (a `system` class is `sealed`).
 
 ```kaoscript
-extern systemic class Number
+extern system class Number
 // import the external class 'Number' and flag it as `sealed` to avoid to directly modify it
 
 impl Number {
@@ -193,4 +193,93 @@ var i = 42
 console.log(i.mod(2))
 // 0
 // javascript code: console.log(__ks_Number._im_mod(i, 2))
+```
+
+## syntax
+
+```syntax
+extern = (
+	*expressive-type*
+	|
+	{
+		(*expressive-type*)+
+	}
+)
+
+require = (
+	*expressive-utm-type*
+	|
+	{
+		(*expressive-utm-type*)+
+	}
+)
+
+
+extern|import = (
+	*import-declarator*
+	|
+	{
+		(*import-declarator*)+
+	}
+)
+
+extern|require = (
+	*expressive-type*
+	|
+	{
+		(*expressive-type*)+
+	}
+)
+
+require|import = (
+	*import-declarator*
+	|
+	{
+		(*import-declarator*)+
+	}
+)
+
+require|extern = (
+	*expressive-type*
+	|
+	{
+		(*expressive-type*)+
+	}
+)
+
+expressive-type = (
+	([(final | sealed)] [abstract] | [system]) *class-type*
+	|
+	[async] [func] *func-type*
+	|
+	[sealed] *namespace-type*
+	|
+	[sealed] *identifier*[: *type*]
+)
+
+expressive-utm-type = (
+	*expressive-type*
+	|
+	[flagged] *enum*
+	|
+	*struct*
+	|
+	*tuple*
+)
+
+expressive-xtd-type = (
+	*expressive-type*
+	|
+	var *identifier*[: *type*]
+)
+
+class-type = class *identifier*["<" *generic-type* ">"] [extends *identifier*] [{
+	...
+}]
+
+func-type = *identifier* '(' [[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]] ')' [: *type*] [~ *class1* [, *class2* ... [, *classN*]]]
+
+namespace-type = namespace [{
+	(*expressive-xtd-type*)\+
+}]
 ```

@@ -29,9 +29,9 @@ In kaoscript, there is three types of functions:
 ### Syntax
 
 ```syntax
-[async] func *varname*([[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]])[: *type* | auto] [~ *class1* [, *class2* ... [, *classN*]]] [ => *expression* | {
+[async] func *varname* '(' [[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]] ')' [(: *type* | auto)] [~ *class1* [, *class2* ... [, *classN*]]] [( => *expression* | {
 	*...statements*
-}]
+})]
 ```
 
 ### Examples
@@ -53,9 +53,9 @@ func red() => '#FF0000'
 ### Syntax
 
 ```syntax
-[async] func([[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]])[: *type*] [~ *class1* [, *class2* ... [, *classN*]]] [ => *expression* | {
+[async] func '(' [[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]] ')' [: *type*] [~ *class1* [, *class2* ... [, *classN*]]] [( => *expression* | {
 	*...statements*
-}]
+})]
 ```
 
 ### Examples
@@ -73,9 +73,9 @@ foobar(func(a:Number, b:Number): Number => a - b)
 ### Syntax
 
 ```syntax
-[async] [([[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]])[: *type*] [~ *class1* [, *class2* ... [, *classN*]]] | *parameter* ] => [ *expression* | {
+[async] ( '(' [[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]] ')' [: *type*] [~ *class1* [, *class2* ... [, *classN*]]] | *parameter* ) => [( *expression* | {
 	*...statements*
-}]
+})]
 ```
 
 ### Examples

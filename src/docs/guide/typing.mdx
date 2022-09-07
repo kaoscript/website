@@ -158,14 +158,6 @@ var y: Number?
 // type: Number, nullable
 ```
 
-`Null` is also a type:
-
-```kaoscript
-func foobar(x: Number | String | Null): Null {
-	return null
-}
-```
-
 ## alias
 
 Type aliases create a new name for a type.
@@ -188,6 +180,17 @@ x = 'foobar'
 
 x = true
 // throw an error
+```
+
+### null
+
+The null can be expressed with:
+```kaoscript
+var mut x: String|Number|Null
+```
+or
+```kaoscript
+var mut x: String|Number|?
 ```
 
 ## fusion
@@ -231,6 +234,39 @@ var x = values[0]
 |     `Dictionary<String>`      |     `{ ...String }`      |   `String{}`   |
 |   `Array<Array<String?>>?`    | `[ ...[ ...String? ] ]?` | `String?[][]?` |
 | `Array<Dictionary<String?>>?` | `[ ...{ ...String? } ]?` | `String?{}[]?` |
+
+## syntax
+
+```syntax
+type = (
+	*limited-type*
+	|
+	[async] [func] *functype*
+	|
+	{
+		(
+			(
+				*varname*: *type*
+				|
+				[async] [func] *varname* *functype*
+				|
+				...*type*
+			) [,]
+		)+
+	}
+	|
+	'['
+		([[...] *type*] [,])+
+	']'
+) (('|' | & | ^) *type* | '|?')\*
+
+limited-type = (*varname* ('.' *varname*)\* | *functype*) ['<' *limited-type* ([,] *limited-type*)\* '>'] (? | '[]' | '{}')\*
+
+generic-type = *entity-type* (',' *entity-type*)\*
+entity-type = *varname* ('.' *varname*)\*
+
+functype = '(' [[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]] ')' [: *type*] [~ *class1* [, *class2* ... [, *classN*]]]
+```
 
 ## type checking
 
@@ -278,6 +314,12 @@ func foobar(p: Point) {
 ```
 
 You can avoid the type casting with `as!` or `:!`.
+
+```syntax
+*expression*:[(!|?)]*limited-type*
+
+*expression* as[(!|?)] *type*
+```
 
 ## type matching
 

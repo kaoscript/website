@@ -9,7 +9,7 @@ route: /guide/enums
 ## syntax
 
 ```syntax
-enum *varname*["<" *type* ">"] {
+enum *varname*["<" *entity-type* ">"] {
 	(
 		*varname* [= *value*]
 		|
@@ -93,7 +93,7 @@ enum CardSuit<String> {
 ## flags
 
 ```kaoscript
-bitflag AnimalFlags {
+bit enum AnimalFlags {
 	None
 	HasClaws
 	CanFly

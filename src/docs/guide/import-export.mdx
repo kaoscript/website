@@ -13,35 +13,33 @@ route: /guide/import-export
 ### syntax
 
 ```syntax
- import "*path*" (
+ import (
 	{
-		declarator+
+		*import-declarator*+
 	}
 	|
-	declarator
+	*import-declarator*
 )
 
-declarator = ['(' *parameter1*, ..., *parameterN* ')' | '(...)'] (
-	for (*varname1*[: *type*] | *type*) [=> *varname1*], ..., (*varnameN*[: *type*] | *type*) [=> *varnameN*]
+import-declarator = "*path*" ['(' *parameter1*, ..., *parameterN* ')' | '(...)'] (
+	for *expressive-type1* [=> *varname1*], ..., *expressive-typeN* [=> *varnameN*]
 	|
 	but *varname1*, ..., *varnameN*
 	|
 	=> *varname* [{
 		(
-			(*varname*[: *type*] | *type*) [=> *varname*] [,]
+			*expressive-xtd-type* [=> *varname*] [,]
 		)+
 	}]
 	|
 	{
 		(
-			(*varname*[: *type*] | *type*) [=> *varname*] [,]
+			*expressive-xtd-type* [=> *varname*] [,]
 			|
 			\* => *varname* [,]
 		)+
 	}
 )
-
-parameter = ([*module-varname*:] *expression* | require [*module-varname*:] *varname*)
 ```
 
 ### examples
@@ -58,7 +56,7 @@ import 'quxbaz'(foo)
 import 'color' for Color => C, Space => S
 // variables: C, S
 
-import 'color.srgb'(Color: C, Space: S) {
+import 'color.srgb'(Color: C, Space: S) for {
 	* => T
 
 	Color => C
@@ -70,7 +68,17 @@ import 'color.srgb'(Color: C, Space: S) {
 ```
 
 ```kaoscript
-import 'parser' {
+import 'parser' as {
+	func createToken
+	sealed class Lexer
+	sealed class Parser
+	sealed class Token
+}
+// namespace: parser
+// functions: parser.createToken
+// classes: parser.Lexer, parser.Parser, parser.Token
+
+import 'parser' for {
 	func createToken
 	sealed class Lexer
 	sealed class Parser
@@ -79,7 +87,7 @@ import 'parser' {
 // functions: createToken
 // classes: Lexer, Parser, Token
 
-import 'parser' => CT {
+import 'parser' => CT as {
 	func createToken
 	sealed class Lexer
 	sealed class Parser
