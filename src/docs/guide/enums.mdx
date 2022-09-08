@@ -11,15 +11,15 @@ route: /guide/enums
 ```syntax
 enum *varname*["<" *entity-type* ">"] {
 	(
-		*varname* [= *value*]
+		*varname* [= *expression*]
 		|
 		*method*
 	)*
 }
 
-bitflag *varname* {
+bitmask *varname*["<" [(u8 | u16 | u32 | u48 | u64 | u128 | u256)]  ">"] {
 	(
-		*varname* [= *value*]
+		*varname* [= *expression*]
 		|
 		*method*
 	)*
@@ -90,10 +90,16 @@ enum CardSuit<String> {
 }
 ```
 
-## flags
+## bitmask
+
+The default, the bitmask's properties are:
+- length: `u16`
+- initial value: `0`
+
+The lengths `u64`, `u128` and `u256` aren't implemented yet.
 
 ```kaoscript
-bit enum AnimalFlags {
+bitmask AnimalFlags {
 	None
 	HasClaws
 	CanFly
