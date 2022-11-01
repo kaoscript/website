@@ -107,6 +107,12 @@ func foobar(x: [Number, Number, ...String]) {}
 // x[1]: Number
 // x[2]: String
 // x[*]: String
+
+func foobar(x: [Number, Number, ...]) {}
+// x[0]: Number
+// x[1]: Number
+// x[2]: Any?
+// x[*]: Any?
 ```
 
 ## dictionary
@@ -144,6 +150,16 @@ func foobar(x: {
 // x.bar: Number
 // x.qux: String
 // x.*: String
+
+func foobar(x: {
+	foo: Number
+	bar: Number
+	...
+}) {}
+// x.foo: Number
+// x.bar: Number
+// x.qux: Any?
+// x.*: Any?
 ```
 
 ## nullable
@@ -234,39 +250,6 @@ var x = values[0]
 |     `Dictionary<String>`      |     `{ ...String }`      |   `String{}`   |
 |   `Array<Array<String?>>?`    | `[ ...[ ...String? ] ]?` | `String?[][]?` |
 | `Array<Dictionary<String?>>?` | `[ ...{ ...String? } ]?` | `String?{}[]?` |
-
-## syntax
-
-```syntax
-type = (
-	*limited-type*
-	|
-	[async] [func] *functype*
-	|
-	{
-		(
-			(
-				*varname*: *type*
-				|
-				[async] [func] *varname* *functype*
-				|
-				...*type*
-			) [,]
-		)+
-	}
-	|
-	'['
-		([[...] *type*] [,])+
-	']'
-) (('|' | & | ^) *type* | '|?')\*
-
-limited-type = (*varname* ('.' *varname*)\* | *functype*) ['<' *limited-type* ([,] *limited-type*)\* '>'] (? | '[]' | '{}')\*
-
-generic-type = *entity-type* (',' *entity-type*)\*
-entity-type = *varname* ('.' *varname*)\*
-
-functype = '(' [[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]] ')' [: *type*] [~ *class1* [, *class2* ... [, *classN*]]]
-```
 
 ## type checking
 
@@ -368,4 +351,83 @@ func foobar() {
 
 name = foobar()
 // no type
+```
+
+## subset/superset
+
+Due to the complex nature of overloading functions with the features like named or rest argument, kaoscript uses the concept of *subset* / *superset*. ([wikipedia](https://en.wikipedia.org/wiki/Subset))
+
+It isn't new since it's already exists: a superclass is a subset of a subclass *(superclass ⊂ subclass)*, meaning, a subclass contains all the features (variables, methods) of the superclass.
+
+A function `funcB` is subset of the function `funcA` *(funcB ⊂ funcA)* only and only if the function `funcB`:
+- **accepts <ins>at least</ins>** all the arguments of `funcA` <small>(A ⊂ B)</small>
+- **returns <ins>at most</ins>** the return of `funcA` <small>(B ⊂ A)</small>
+- **throws <ins>at most</ins>** all the exceptions of `funcA` <small>(B ⊂ A)</small>
+
+The function `(a: Any)` is subset of the function `(a: Any? = ?, b: Any? = ?)`.
+The function `()` is subset of the function `(done: Function? = ?): Void`.
+
+The type of argument must be a superset of the type of the parameter *(parameter ⊂ argument)*. *(What can do more, can do less)*
+
+## syntax
+
+```syntax
+type = (
+	*limited-type*
+	|
+	[async] [func] *func-type*
+	|
+	{
+		(
+			(
+				*varname*: *type*
+				|
+				[async] [func] *varname* *func-type*
+				|
+				...[*type*]
+			) [,]
+		)+
+	}
+	|
+	'['
+		((*type* | ...[*type*]) [,])+
+	']'
+) (('|' | & | ^) *type* | '|?')\*
+
+descriptive-type = (
+	([(final | sealed)] [abstract] | [system]) class *class-type*
+	|
+	[async] [func] *varname* *func-type*
+	|
+	[sealed] namespace *namespace-type*
+	|
+	bitmask *bitmask-type*
+	|
+	enum *enum-type*
+	|
+	struct *struct-type*
+	|
+	tuple *tuple-type*
+	|
+	type *varname* = *type*
+	|
+	[sealed] [var] *varname*[: *type*]
+)
+
+limited-type = (*varname* ('.' *varname*)\* | *func-type*) ['<' *limited-type* ([,] *limited-type*)\* '>'] (? | '[]' | '{}')\*
+
+generic-type = *entity-type* (',' *entity-type*)\*
+entity-type = *varname* ('.' *varname*)\*
+
+class-type = *varname*['<' *generic-type* '>'] [extends *varname*] [{
+	...
+}]
+
+func-type = '(' [[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]] ')' [: *type*] [~ *class1* [, *class2* ... [, *classN*]]]
+
+param-type = *type* [( "||" *type* | "&&" *type* )+]
+
+namespace-type = *varname* [{
+	(*descriptive-type*)\+
+}]
 ```

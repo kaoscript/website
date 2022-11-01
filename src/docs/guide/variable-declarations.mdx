@@ -6,44 +6,9 @@ route: /guide/variable-declarations
 
 # Variable Declarations
 
-
-```syntax
-var (*varname* | *destructuring*)[: *type*] = *expression*
-var mut (*varname* | *destructuring*)[(: *type* | ?)] = *expression*
-var mut *varname1*: *type*1[, *varname2*: *type*2 ... [, *varnameN*: *type*N]]
-var dyn (*varname* | *destructuring*) = *expression*
-var dyn *varname1*[, *varname2* ... [, *varnameN*]]
-var late *varname1*[: *type*1][, *varname2*[: *type*2] ... [, *varnameN*[: *type*N]]]
-```
-
-|            | immutable | typed | lateinit |
-| :--------: | :-------: | :---: | :------: |
-|   `var`    |    ✅     |  ✅   |    ❌    |
-| `var mut`  |    ❌     |  ✅   |    ❌    |
-| `var dyn`  |    ❌     |  ❌   |    ❌    |
-| `var late` |    ✅     |  ✅   |    ✅    |
-
-
-|                          | immutable | typed | inferred | assignment |                    |
-| :----------------------: | :-------: | :---: | :------: | :--------: | :----------------: |
-|         `let x`          |    ❌     |  ❌   |    ❌    |     ❌     |    `var dyn x`     |
-|      `let x: Type`       |    ❌     |  ✅   |    ❌    |     ❌     | `var mut x: Type`  |
-|         `auto x`         |    ❌     |  ✅   |    ✅    |     ✅     |    `var mut x`     |
-|        `const x`         |    ✅     |  ✅   |    ✅    |     ✅     |      `var x`       |
-|     `const x: Type`      |    ✅     |  ✅   |    ❌    |     ✅     |   `var x: Type`    |
-|    `lateinit const x`    |    ✅     |  ✅   |    ✅    |     ❌     |    `var late x`    |
-| `lateinit const x: Type` |    ✅     |  ✅   |    ❌    |     ❌     | `var late x: Type` |
-
-
 ## var
 
 By default, a variable is **immutable**.
-
-### Syntax
-
-```syntax
-var (*varname* | *destructuring*)[: *type*] = *expression*
-```
 
 ### Description
 
@@ -82,13 +47,6 @@ The type of a variable declared with `var` can't be changed.
 
 With `var mut`, the variable is **mutable** but still **typed**
 
-### Syntax
-
-```syntax
-var mut (*varname* | *destructuring*)[: *type*] = *expression*
-var mut *varname1*: *type*1[, *varname2*: *type*2 ... [, *varnameN*: *type*N]]
-```
-
 ### Typing
 
 If a type is provided at the declaration of a variable, its type can't be changed.
@@ -114,13 +72,6 @@ name = 42
 
 With `var dyn`, the variable is `dynamic` (mutable, no type).
 
-### Syntax
-
-```syntax
-var dyn (*varname* | *destructuring*) = *expression*
-var dyn *varname1*[, *varname2* ... [, *varnameN*]]
-```
-
 ### Description
 
 ```kaoscript
@@ -137,12 +88,6 @@ name = 42
 ```
 
 ## var late
-
-### Syntax
-
-```syntax
-var late *varname1*[: *type*1][, *varname2*[: *type*2] ... [, *varnameN*[: *type*N]]]
-```
 
 ### Description
 
@@ -212,3 +157,54 @@ Unlike JavaScript, an identifier is limited to ascii characters and `_` and `$` 
 ### Syntax
 
 ![naming](@images/guide/variable-declarations/naming.svg)
+
+## syntax
+
+```syntax
+var (*varname* | *destructuring*)[: *type*] = *expression*
+var {
+	(
+		(*varname* | *destructuring*)[: *type*] = *expression*
+	)+
+}
+var *varname1*[: *type1*], *varname2*[: *type2*] = await *expression*
+
+var mut (*varname* | *destructuring*)[*vartype*] = *expression*
+var mut *varname1*: *type1*, ..., *varnameN*: *typeN*
+var mut {
+	(
+		(*varname* | *destructuring*)[*vartype*] = *expression*
+		|
+		*varname*: *type*
+	)+
+}
+var mut *varname1*[*vartype1*], *varname2*[*vartype2*] = await *expression*
+
+var dyn (*varname* | *destructuring*) = *expression*
+var dyn *varname1*, ..., *varnameN*
+var dyn {
+	(
+		(*varname* | *destructuring*) = *expression*
+		|
+		*varname*
+	)+
+}
+var dyn *varname1*, *varname2* = await *expression*
+
+var late *varname1*[*vartype1*], ..., *varnameN*[*vartypeN*]
+var late {
+	(
+		*varname*[*vartype*]
+	)+
+}
+
+
+vartype = (: *type* | ?)
+```
+
+|            | immutable | typed | lateinit |
+| :--------: | :-------: | :---: | :------: |
+|   `var`    |    ✅     |  ✅   |    ❌    |
+| `var mut`  |    ❌     |  ✅   |    ❌    |
+| `var dyn`  |    ❌     |  ❌   |    ❌    |
+| `var late` |    ✅     |  ✅   |    ✅    |

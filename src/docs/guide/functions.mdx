@@ -91,26 +91,26 @@ var four = (a => a / 10)(42)
 ### Syntax
 
 ```syntax
-[mut] (
-	[(# | \* | ([\*] *varname* | \_) %)] *varname* (
-		! [: *type*] [?] (= | ??= | ##=) *expression*
+parameter = [mut] (
+	[(# | \* | ([\*] *varname*) %)] *varname* (
+		! [: *param-type*] [?] (= | ??= | ##=) *expression*
 		|
-		[: *type*] [?] [(= | ??= | ##=) *expression*]
+		[: *param-type*] [?] [(= | ??= | ##=) *expression*]
 	)
 	|
-	[[\*] *varname* | \_) %] _ (
-		! [: *type*] [?] (= | ??= | ##=) *expression*
+	[[\*] *varname* %] _ (
+		! [: *param-type*] [?] (= | ??= | ##=) *expression*
 		|
-		[: *type*] [?] [(= | ??= | ##=) *expression*]
+		[: *param-type*] [?] [(= | ??= | ##=) *expression*]
 	)
 	|
-	[[\*] *varname* | \_) %] *destructuring* (
-		! [: *type*] [?] (= | ??= | ##=) *expression*
+	[[\*] *varname* %] *destructuring* (
+		! [: *param-type*] [?] (= | ??= | ##=) *expression*
 		|
-		[: *type*] [?] [(= | ??= | ##=) *expression*]
+		[: *param-type*] [?] [(= | ??= | ##=) *expression*]
 	)
 	|
-	[(*varname* | \_) %] ...[{( [*min*], [*max*] | *quantity* )}][*varname*] [: *type*] [?] [(= | ##=) *expression*]
+	[*varname* %] ...[{( [*min*], [*max*] | *quantity* )}][*varname*] [: *param-type*] [?] [(= | ##=) *expression*]
 )
 ```
 
@@ -142,6 +142,8 @@ expect(foo(1, 2, 3, 4, 5)).to.eql([1, 2, 3, 4, 5])
 | ----------------------------- | :------: | :------: | :---: | :-----------: |
 | `foo(x)`                      |    ✅    |    ❌    |  ❌   |      ❌       |
 | `foo(x?)`                     |    ✅    |    ✅    |  ❌   |      ❌       |
+| `foo(x!)`                     |   ☠️   |   ☠️   | ☠️  |     ☠️      |
+| `foo(x!?)`                    |   ☠️   |   ☠️   | ☠️  |     ☠️      |
 | `foo(x = null)`               |   ☠️   |   ☠️   | ☠️  |     ☠️      |
 | `foo(x = 'foobar')`           |    ❌    |    ❌    |  ❌   |      ✅       |
 | `foo(x? = null)`              |    ❌    |    ✅    |  ❌   |      ✅       |
@@ -213,11 +215,11 @@ In `foo(#x) {}`, `#` forces the argument to be passed as a indexed argument. `fo
 | `foo(x % val) {}`  |       ✅        |       ✅       |      `x`      |     `val`     |
 | `foo(*x % val) {}` |       ❌        |       ✅       |      `x`      |     `val`     |
 | `foo(#x % val) {}` |      ☠️       |      ☠️      |     ☠️      |     ☠️      |
-| `foo(_ % val) {}`  |       ✅        |       ❌       |      ❌       |     `val`     |
-| `foo(_ % _) {}`    |       ✅        |       ❌       |      ❌       |      ❌       |
 | `foo(x % _) {}`    |       ✅        |       ✅       |      `x`      |      ❌       |
 | `foo(*x % _) {}`   |       ❌        |       ✅       |      `x`      |      ❌       |
 | `foo(#x % _) {}`   |      ☠️       |      ☠️      |     ☠️      |     ☠️      |
+| `foo(_ % val) {}`  |      ☠️       |      ☠️      |     ☠️      |     ☠️      |
+| `foo(_ % _) {}`    |      ☠️       |      ☠️      |     ☠️      |     ☠️      |
 
 | `foo(x) {}` | Use Index | Use Name |
 | ----------- | :-------: | :------: |
@@ -226,6 +228,7 @@ In `foo(#x) {}`, `#` forces the argument to be passed as a indexed argument. `fo
 | `foo(y)`    |    ✅     |    ❌    |
 | `foo(x: y)` |    ❌     |    ✅    |
 | `foo(:x)`   |    ❌     |    ✅    |
+| `foo(\x)`   |    ✅     |    ❌    |
 
 ### Examples
 
@@ -247,6 +250,7 @@ func foobar(mut #x!: Number = 0) {}
 func placeOrder(*item, *price, *quantity) {}
 
 func powerMod(#x, #y, *mod) {}
+func powerMod(\x, \y, *mod) {}
 
 func combine(a, b, *validator = () => {}) {}
 
@@ -540,21 +544,40 @@ func log(...args) {
 log**('hello')
 ```
 
-## preserved parameters
+## retained parameters
 
 By default, kaoscript generates functions without the list of parameters.
 But, if you need, you can use either:
 
 ```kaoscript
-describe('', () => {
-	it('', (#[preserve] done) => {
-		done()
+describe('#save()', () => {
+	it('should save without error', (#[retain] done) => {
+		var user = new User('Luna')
+		var res, err = await user.save()
+
+		done(err)
 	})
 })
 ```
 or
 ```kaoscript
-#![preserve-parameters]
+#![retain-parameters]
+
+describe('#save()', () => {
+	it('should save without error', (done) => {
+		var user = new User('Luna')
+		var res, err = await user.save()
+
+		done(err)
+	})
+})
+```
+or
+```kaoscript
+extern {
+	func describe(title: String, fn: (): Void): Void
+	func it(title: string, fn: (#[retain] done: Function): Void): Void;
+}
 
 describe('#save()', () => {
 	it('should save without error', (done) => {

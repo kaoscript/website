@@ -10,65 +10,38 @@ route: /guide/import-export
 
 `import` is used to import bindings which are exported by another module.
 
-### syntax
-
-```syntax
- import (
-	{
-		*import-declarator*+
-	}
-	|
-	*import-declarator*
-)
-
-import-declarator = "*path*" ['(' *parameter1*, ..., *parameterN* ')' | '(...)'] (
-	for *expressive-type1* [=> *varname1*], ..., *expressive-typeN* [=> *varnameN*]
-	|
-	but *varname1*, ..., *varnameN*
-	|
-	=> *varname* [{
-		(
-			*expressive-xtd-type* [=> *varname*] [,]
-		)+
-	}]
-	|
-	{
-		(
-			*expressive-xtd-type* [=> *varname*] [,]
-			|
-			\* => *varname* [,]
-		)+
-	}
-)
-```
-
 ### examples
 
 ```kaoscript
 import 'chai' for expect
+// functions: expect
 
 import 'foobar.ks' for name => foo
+// variables: foo
 
-import 'quxbaz'(foo)
+import 'quxbaz.ks'(foo)
+// all properties
 ```
 
 ```kaoscript
-import 'color' for Color => C, Space => S
+import 'color.ks' for Color => C, Space => S
 // variables: C, S
 
-import 'color.srgb'(Color: C, Space: S) for {
-	* => T
-
+import 'color.srgb.ks'(Color: C, Space: S) for {
 	Color => C
 	Space => S
 }
-// variables: C, S, T
-// C == T.Color
-// S == T.Space
+// variables: C, S
+
+import 'color.ks'
+// variables: Color, Space, ...
+
+import 'color.js'
+// variable: color (type is unknown)
 ```
 
 ```kaoscript
-import 'parser' as {
+import 'parser.js' {
 	func createToken
 	sealed class Lexer
 	sealed class Parser
@@ -78,7 +51,7 @@ import 'parser' as {
 // functions: parser.createToken
 // classes: parser.Lexer, parser.Parser, parser.Token
 
-import 'parser' for {
+import 'parser.js' for {
 	func createToken
 	sealed class Lexer
 	sealed class Parser
@@ -87,15 +60,41 @@ import 'parser' for {
 // functions: createToken
 // classes: Lexer, Parser, Token
 
-import 'parser' => CT as {
+import 'parser.js' {
 	func createToken
 	sealed class Lexer
 	sealed class Parser
 	sealed class Token
-}
+} => CT
 // namespace: CT
 // functions: CT.createToken
 // classes: CT.Lexer, CT.Parser, CT.Token
+```
+
+```kaoscript
+import 'chai' {
+	type ChaiUtils = Any
+	type ChaiPlugin = (chai: ChaiStatic, utils: ChaiUtils): Void
+	type Config = {
+		includeStack: Boolean
+		showDiff: Boolean
+		truncateThreshold: Number
+		useProxy: Boolean
+		proxyExcludedKeys: String[]
+	}
+
+	type ChaiStatic {
+		var util: ChaiUtils
+		var config: Config
+
+		func expect(value: Any?, message: String = ''): Any
+		func use(fn: ChaiPlugin): ChaiStatic
+	}
+
+	var chai: ChaiStatic
+
+	export = chai
+} => chai, { expect }
 ```
 
 ### unnamed JavaScript module
@@ -159,45 +158,71 @@ import '@zokugun/lang.color'(...)
 
 `(...)` indicates to kaoscript that it needs to find the matching parameters from availables variables.
 
-## export
-
-`export` is used when creating modules to export functions, objects, or primitive values from the module so they can be used by other programs with the `import` statement.
-
 ### syntax
 
 ```syntax
- export (
-	\* [but (*varname1*, ..., *varnameN* | {
-		(*varname*)+
-	})]
-	|
+ import (
 	{
-		*declarator*+
+		*import-declarator*+
 	}
 	|
-	*declarator*
+	*import-declarator*
 )
 
-declarator = (
-	*statement*
-	|
-	*varname* [(
-		'.\*'
+import-declarator = "*path*" ['(' *parameter1*, ..., *parameterN* ')' | '(...)'] [(
+	for (
+		*varname1* [=> *newname1*], ..., *varnameN* [=> *newnameN*]
 		|
-		=> *varname*
+		*descriptive-type* [=> *newname1*, ..., *newnameN*]
+		|
+		{
+			(*descriptive-type* [=> *newname1*, ..., *newnameN*)+
+		}
+	)
+	|
+	but (
+		*varname1*, ..., *varnameN*
+		|
+		{
+			(*varname*)+
+		}
+	)
+	|
+	{
+		(*descriptive-type*)+
+
+		[export (
+			*varname1*, ..., *varnameN*
+			|
+			{
+				(*varname*)+
+			}
+			|
+			= *varname*
+		)]
+	} [
+		=> *newname1*, ..., *newnameN*
 		|
 		for (
 			'\*'
 			|
-			{
-				(*varname* [=> *alias*][,])+
-			}
+			*varname1* [=> *newname1*], ..., *varnameN* [=> *newnameN*]
 			|
-			*varname1* [=> *alias1*], ..., *varnameN* [=> *aliasN*]
+			{
+				(*varname* [=> *newname*])+
+			}
 		)
-	)]
-)
+	]
+	|
+	=> *newname1*, ..., *newnameN*
+)]
+
+newname = *varname* | *destructuring*
 ```
+
+## export
+
+`export` is used when creating modules to export functions, objects, or primitive values from the module so they can be used by other programs with the `import` statement.
 
 ### examples
 
@@ -228,4 +253,46 @@ namespace NS {
 	}
 }
 export NS for foo, bar, qux
+```
+
+### syntax
+
+```syntax
+ export (
+	\* [but (
+		*varname1*, ..., *varnameN*
+		|
+		{
+			(*varname*)+
+		}
+	)]
+	|
+	{
+		*export-declarator*+
+	}
+	|
+	*export-declarator*
+)
+
+export-declarator = (
+	*statement*
+	|
+	*varname* [(
+		'.\*'
+		|
+		=> *varname*
+		|
+		for (
+			'\*'
+			|
+			{
+				(*varname* [=> *alias*][,])+
+			}
+			|
+			*varname1* [=> *alias1*], ..., *varnameN* [=> *aliasN*]
+		)
+	)]
+	|
+	*import-declarator*
+)
 ```

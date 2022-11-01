@@ -395,3 +395,78 @@ The `break` statement ends execution of an entire control flow statement immedia
 ### continue
 
 The `continue` statement tells a loop to stop what it is doing and start again at the beginning of the next iteration through the loop.
+
+## with
+
+### Syntax
+
+```syntax
+with *var-init* {
+	...statements
+}
+[finally {
+	...statements
+}]
+
+with {
+	(*var-init*)+
+}
+then {
+	...statements
+}
+[finally {
+	...statements
+}]
+
+var-init = (
+	var [mut] *varname* = *expression*
+	|
+	*variable* (=|+=|-=|\*=|/=|/.=|%=|&&=|"||="|^^=|<<=|>>=) *expression*
+)
+
+variable = [@]*varname*(\.*varname* | "[" *expression* "]")\*
+```
+
+### Examples
+
+```kaoscript
+with var file = open() {
+	var text = async file.readText()
+}
+finally {
+	file.close()
+}
+
+with {
+	var file = open()
+	var file2 = open2()
+}
+then {
+	var text = async file.readText()
+}
+finally {
+	file.close()
+}
+```
+
+```kaoscript
+var mut mode = 2
+
+with mode += 12 {
+	// mode = 14
+}
+
+// mode = 2
+```
+
+## pass
+
+The `pass` statement indicates that the block should be empty. No others statements should be around that statement.
+
+It can be useful to split complicated condition into more readable `if/else` statements and a branch needs to be empty.
+
+### Syntax
+
+```syntax
+pass
+```

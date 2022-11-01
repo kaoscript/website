@@ -6,6 +6,430 @@ route: /guide/classes
 
 # Classes
 
+## example
+
+```kaoscript
+class Shape {
+	private {
+		_color: String
+	}
+
+	draw(): String {
+		return `I'm drawing with a \(this._color) pen.`
+	}
+}
+```
+
+## class variable
+
+```kaoscript
+class Foobar {
+	@a = 0
+	// type: Number
+	@b? = 0
+	// type: Number?
+	@c
+	// type: Any?
+	dyn @d = 0
+	// type: Any?
+	dyn @e
+	// type: Any?
+}
+```
+
+A non-nullable variable must be initialized by a constructor (if the variable isn't `late`)
+
+## this aliasing
+
+`@x` is an alias for:
+- `this.x`
+- `this._x`, if it's a field
+
+```kaoscript
+class Shape {
+	private {
+		@color: String
+		// same as: _color: String
+	}
+
+	draw(): String {
+		return `I'm drawing with a \(@color) pen.`
+	}
+}
+```
+
+## method's parameter
+
+The this aliasing can also be used in parameters:
+
+```kaoscript
+class Shape {
+	private {
+		@color: String
+	}
+
+	constructor(@color)
+	// automatically set the instance variable '_color' as the parameter 'color'
+}
+```
+
+### Non-null
+
+```kaoscript
+class Shape {
+	private {
+		@color: String?
+	}
+
+	constructor(@color!?)
+	// constructor only accepted non-null String
+}
+```
+
+## method's return type
+
+In addition to the standard return type, a method allows 2 new return types:
+
+- a field with an alias (`@field`): return the field and the return type is the same as the field's type.
+- the `this` expression: return the current instance `this` and the return type is of the current class.
+
+```kaoscript
+class Shape {
+	private {
+		@color: String
+	}
+
+	color1(): @color
+	color1(@color): this
+
+	color2(): String => @color
+	color2(@color): Shape => this
+}
+```
+
+`color1` and `color2` methods are identicals.
+
+## constructor
+
+The constructor is called when creating a new object like `new Shape()`
+
+```kaoscript
+class Shape {
+	private @color: String
+
+	constructor() {
+		@color = 'red'
+	}
+}
+```
+
+## destructor
+
+The destructor is called by the statement `delete`.
+
+```kaoscript
+extern console
+
+class Shape {
+	private {
+		@color: String
+	}
+
+	constructor(@color)
+
+	destructor() {
+		@color = null
+	}
+}
+
+var s = new Shape('red')
+
+delete s
+// the destructor is called and the variable `s` is unreferenced
+```
+
+## static
+
+The modifier `static` declares members that are not bound to class instances.
+
+```kaoscript
+class Shape {
+	private {
+		@color: String
+		@type: String
+	}
+	static {
+		final RED_CIRCLE = new Shape('circle', 'red')
+
+		makeCircle(color: String): Shape => new Shape('circle', color)
+		makeRectangle(color: String): Shape => new Shape('rectangle', color)
+	}
+	constructor(@type, @color)
+}
+
+var rb = Shape.makeRectangle('black')
+var cr = Shape.RED_CIRCLE
+```
+
+## late
+
+The modifier `late` allows an immutable variable (`final`) to be initialized in a constructor. To be precise, it needs to be initialized in a constructor.
+
+Mutable variables won't require any initialization.
+It's up to the developer to make sure that the variable is correctly initialized when needed.
+
+```kaoscript
+class Shape {
+	public {
+		final late color: String
+		final late type: String
+	}
+	constructor(@type, @color)
+}
+
+var r = new Shape('rectangle', 'black')
+console.log(r.color)
+// black
+
+r.color = 'yellow'
+// throw a SyntaxException (immutable)
+```
+
+## proxy
+
+```kaoscript
+class Hello {
+	hello(name: String): String => `Hello \(name).`
+}
+
+class Proxy1 {
+	private @component: Hello
+
+	constructor(@component)
+
+	proxy hello = @component.hello
+}
+
+class Proxy2 {
+	private @component: Hello?
+
+	constructor(@component)
+
+	proxy hello = @component.hello
+	// throw an error since `@component` can not be null
+}
+```
+
+## superclass & subclass
+
+```kaoscript
+extern console
+
+class Shape {
+	private {
+		_color: String
+	}
+	constructor(@color)
+	destructor() {
+		@color = null
+	}
+	color() => @color
+	color(@color) => this
+	draw(): String {
+		return `I'm drawing with a \(@color) pen.`
+	}
+}
+
+class Rectangle extends Shape {
+	draw() {
+		return `\(super()) I'm drawing a \(@color) rectangle.`
+	}
+}
+
+var r = new Rectangle('black')
+
+console.log(r.draw())
+// I'm drawing with a black pen. I'm drawing a black rectangle.
+```
+
+## override
+
+### Methods
+
+The `override` keyword indicates that the method must inherit a method from the superclass. If not, it will generate an error.
+
+```kaoscript
+class Shape {
+	draw(): String {
+		return `I'm drawing a shape.`
+	}
+}
+
+class Rectangle extends Shape {
+	override draw(): String {
+		return `I'm drawing a rectangle.`
+	}
+}
+```
+
+The method `methodB` overrides/implements the method `methodA` only and only if *methodB ⊂ methodA*. ([subset](./typing#subsetsuperset))
+
+```kaoscript
+class Greetings {
+	greet(name: String): String => `It's nice to meet you, \(name).`
+}
+
+class MyGreetings extends Greetings {
+	override greet(name: Number | String) => `Hi \(name.toString())!`
+}
+```
+
+### Fields
+
+```kaoscript
+class AbstractNode {
+	private {
+		@parent: AbstractNode?
+	}
+}
+
+class Root extends AbstractNode {
+	private {
+		override @parent: Null
+	}
+}
+
+class Node extends AbstractNode {
+	private {
+		override @parent: AbstractNode
+	}
+}
+```
+
+The overridden field needs to be subset of the original field.
+
+<!-- ## final
+
+The `final` keyword indicates that the class or the method is final. It can't be extended or augmented.
+
+```kaoscript
+final class Shape {
+	draw(): String {
+		return `I'm drawing a shape.`
+	}
+}
+
+class Rectangle extends Shape {
+}
+// will throw an error
+``` -->
+
+## abstract
+
+```kaoscript
+abstract class AbstractGreetings {
+	private {
+		@message: String: ''
+	}
+
+	constructor() {
+		this('Hello!')
+	}
+
+	constructor(@message)
+
+	abstract greet(name): String
+}
+
+class Greetings extends AbstractGreetings {
+	greet(name): String => `\(@message)\nIt's nice to meet you, \(name).`
+}
+```
+
+## deduced types
+
+When overriding (with `override` keyword) or implementing an abstract method, the type of an argument or the return can be deduced from the base method.
+
+```kaoscript
+class Greetings {
+	greet(name: String): String => `It's nice to meet you, \(name).`
+}
+
+class MyGreetings extends Greetings {
+	override greet(name) => `Hi \(name)!`
+	// is the same as
+	override greet(name: String): String => `Hi \(name)!`
+}
+```
+
+
+```kaoscript
+abstract class Greetings {
+	abstract greet(name: String): String
+}
+
+class MyGreetings extends Greetings {
+	greet(name) => `Hi \(name)!`
+	// is the same as
+	greet(name: String): String => `Hi \(name)!`
+}
+```
+
+## this
+
+```kaoscript
+class Foobar {
+    constructor() {
+        this('John')
+    }
+    constructor(name: String) {
+        console.log(`Hello \(name).`)
+    }
+    foobar() {
+        this('John')
+    }
+    foobar(name: String) => `Hello \(name).`
+}
+
+class Quxbaz extends Foobar {
+    constructor() {
+        this('John')
+    }
+    constructor(name: String) {
+        console.log(`Hi \(name)!`)
+    }
+    foobar(name: String) => `Hi \(name)!`
+}
+```
+
+|             |         `this()`          |
+| :---------: | :-----------------------: |
+| constructor |   always current class    |
+|   method    | current class or subclass |
+
+## versioning
+
+kaoscript classes can be signed with a version which could be used for serialization.
+
+```kaoscript
+class Rectangle@1.0.0 {
+    private {
+        @color: String
+    }
+
+    constructor(@color = 'black')
+
+    draw(canvas) {
+        return `I'm drawing a \(@color) rectangle.`
+    }
+}
+
+console.log(Rectangle.name)
+// Rectangle
+console.log(Rectangle.version)
+// 1.0.0
+```
+
 ## syntax
 
 ```syntax
@@ -126,13 +550,15 @@ route: /guide/classes
 }
 
 variable = (
-	[@]*varname*([: *type*] [= *value*] | ? = *value*)
+	[@]*varname*([(: *type* | ?)] [= *value*])
 	|
 	final [@]*varname*[: *type*] = *value*
 	|
 	[final] late [@]*varname*[: *type*]
 	|
 	dyn [@]*varname* [= *value*]
+	|
+	override [@]*varname*: *type*
 )
 
 property = (
@@ -150,384 +576,28 @@ proxy = (proxy *varname* = @*expression*)
 method = [async] *varname*([[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]])[: *type* | auto | this | @*varname*] [~ *class1* [, *class2* ... [, *classN*]]] [ => *expression* | {
 	*...statements*
 }]
-```
 
-## example
-
-```kaoscript
-class Shape {
-	private {
-		_color: String
-	}
-
-	draw(): String {
-		return `I'm drawing with a \(this._color) pen.`
-	}
-}
-```
-
-## class variable
-
-```kaoscript
-class Foobar {
-	@a = 0
-	// type: Number
-	@b? = 0
-	// type: Number?
-	@c
-	// type: Any?
-	dyn @d = 0
-	// type: Any?
-	dyn @e
-	// type: Any?
-}
-```
-
-A non-nullable variable must be initialized by a constructor (if the variable isn't `late`)
-
-## this aliasing
-
-`@x` is an alias for:
-- `this.x`
-- `this._x`, if it's a field
-
-```kaoscript
-class Shape {
-	private {
-		@color: String
-		// same as: _color: String
-	}
-
-	constructor(@color)
-	// automatically set the instance variable '_color' as the parameter 'color'
-
-	draw(): String {
-		return `I'm drawing with a \(@color) pen.`
-	}
-}
-```
-
-## constructor
-
-The constructor is called when creating a new object like `new Shape()`
-
-```kaoscript
-class Shape {
-	private @color: String
-
-	constructor() {
-		@color = 'red'
-	}
-}
-```
-
-## destructor
-
-The destructor is called by the statement `delete`.
-
-```kaoscript
-extern console
-
-class Shape {
-	private {
-		@color: String
-	}
-
-	constructor(@color)
-
-	destructor() {
-		@color = null
-	}
-}
-
-var s = new Shape('red')
-
-delete s
-// the destructor is called and the variable `s` is unreferenced
-```
-
-## static
-
-The modifier `static` declares members that are not bound to class instances.
-
-```kaoscript
-class Shape {
-	private {
-		@color: String
-		@type: String
-	}
-	static {
-		final RED_CIRCLE = new Shape('circle', 'red')
-
-		makeCircle(color: String): Shape => new Shape('circle', color)
-		makeRectangle(color: String): Shape => new Shape('rectangle', color)
-	}
-	constructor(@type, @color)
-}
-
-var rb = Shape.makeRectangle('black')
-var cr = Shape.RED_CIRCLE
-```
-
-## late
-
-The modifier `late` allows an immutable variable (`final`) to be initialized in a constructor. To be precise, it needs to be initialized in a constructor.
-
-Mutable variables won't require any initialization.
-It's up to the developer to make sure that the variable is correctly initialized when needed.
-
-```kaoscript
-class Shape {
-	public {
-		final late color: String
-		final late type: String
-	}
-	constructor(@type, @color)
-}
-
-var r = new Shape('rectangle', 'black')
-console.log(r.color)
-// black
-
-r.color = 'yellow'
-// throw a SyntaxException (immutable)
-```
-
-## proxy
-
-```kaoscript
-class Hello {
-	hello(name: String): String => `Hello \(name).`
-}
-
-class Proxy1 {
-	private @component: Hello
-
-	constructor(@component)
-
-	proxy hello = @component.hello
-}
-
-class Proxy2 {
-	private @component: Hello?
-
-	constructor(@component)
-
-	proxy hello = @component.hello
-	// throw an error since `@component` can not be null
-}
-```
-
-## method's return type
-
-In addition to the standard return type, a method allows 2 new return types:
-
-- a field with an alias (`@field`): return the field and the return type is the same as the field's type.
-- the `this` expression: return the current instance `this` and the return type is of the current class.
-
-```kaoscript
-class Shape {
-	private {
-		@color: String
-	}
-
-	color1(): @color
-	color1(@color): this
-
-	color2(): String => @color
-	color2(@color): Shape => this
-}
-```
-
-`color1` and `color2` methods are identicals.
-
-## superclass & subclass
-
-```kaoscript
-extern console
-
-class Shape {
-	private {
-		_color: String
-	}
-	constructor(@color)
-	destructor() {
-		@color = null
-	}
-	color() => @color
-	color(@color) => this
-	draw(): String {
-		return `I'm drawing with a \(@color) pen.`
-	}
-}
-
-class Rectangle extends Shape {
-	draw() {
-		return `\(super()) I'm drawing a \(@color) rectangle.`
-	}
-}
-
-var r = new Rectangle('black')
-
-console.log(r.draw())
-// I'm drawing with a black pen. I'm drawing a black rectangle.
-```
-
-## override
-
-The `override` keyword indicates that the method must inherit a method from the superclass. If not, it will generate an error.
-
-```kaoscript
-class Shape {
-	draw(): String {
-		return `I'm drawing a shape.`
-	}
-}
-
-class Rectangle extends Shape {
-	override draw(): String {
-		return `I'm drawing a rectangle.`
-	}
-}
-```
-
-<!-- ## final
-
-The `final` keyword indicates that the class or the method is final. It can't be extended or augmented.
-
-```kaoscript
-final class Shape {
-	draw(): String {
-		return `I'm drawing a shape.`
-	}
-}
-
-class Rectangle extends Shape {
-}
-// will throw an error
-``` -->
-
-## abstract
-
-```kaoscript
-abstract class AbstractGreetings {
-	private {
-		@message: String: ''
-	}
-
-	constructor() {
-		this('Hello!')
-	}
-
-	constructor(@message)
-
-	abstract greet(name): String
-}
-
-class Greetings extends AbstractGreetings {
-	greet(name): String => `\(@message)\nIt's nice to meet you, \(name).`
-}
-```
-
-## deduced types
-
-When overriding (with `override` keyword) or implementing an abstract method, the type of an argument or the return can be deduced from the base method.
-
-```kaoscript
-class Greetings {
-	greet(name: String): String => `It's nice to meet you, \(name).`
-}
-
-class MyGreetings extends Greetings {
-	override greet(name) => `Hi \(name)!`
-	// is the same as
-	override greet(name: String): String => `Hi \(name)!`
-}
-```
-
-
-```kaoscript
-abstract class Greetings {
-	abstract greet(name: String): String
-}
-
-class MyGreetings extends Greetings {
-	greet(name) => `Hi \(name)!`
-	// is the same as
-	greet(name: String): String => `Hi \(name)!`
-}
-```
-
-## extended types
-
-When overriding (with `override` keyword) or implementing an abstract method, the type of an argument or the return can be extended to cover a larger base.
-
-```kaoscript
-class Greetings {
-	greet(name: String): String => `It's nice to meet you, \(name).`
-}
-
-class MyGreetings extends Greetings {
-	override greet(name: Number | String) => `Hi \(name.toString())!`
-}
-```
-
-`methodB` overrides/implements `methodA` only and only if:
-- **argument's type** of `methodB` is a <ins>**subset**</ins> of **argument's type** `methodA`
-- **return's type** of `methodB` is a <ins>**subset**</ins> of **return's type** `methodA`
-- **exception's type** of `methodB` is a <ins>**subset**</ins> of **exception's type** `methodA`
-
-## this
-
-```kaoscript
-class Foobar {
-    constructor() {
-        this('John')
-    }
-    constructor(name: String) {
-        console.log(`Hello \(name).`)
-    }
-    foobar() {
-        this('John')
-    }
-    foobar(name: String) => `Hello \(name).`
-}
-
-class Quxbaz extends Foobar {
-    constructor() {
-        this('John')
-    }
-    constructor(name: String) {
-        console.log(`Hi \(name)!`)
-    }
-    foobar(name: String) => `Hi \(name)!`
-}
-```
-
-|             |         `this()`          |
-| :---------: | :-----------------------: |
-| constructor |   always current class    |
-|   method    | current class or subclass |
-
-## versioning
-
-kaoscript classes can be signed with a version which could be used for serialization.
-
-```kaoscript
-class Rectangle@1.0.0 {
-    private {
-        @color: String
-    }
-
-    constructor(@color = 'black')
-
-    draw(canvas) {
-        return `I'm drawing a \(@color) rectangle.`
-    }
-}
-
-console.log(Rectangle.name)
-// Rectangle
-console.log(Rectangle.version)
-// 1.0.0
+parameter = [mut] (
+	[(# | \* | ([\*] *varname* | \_) %)] [@]*varname* (
+		! [: *param-type*] [?] (= | ??= | ##=) *expression*
+		|
+		[: *param-type*] [?] [(= | ??= | ##=) *expression*]
+		|
+		!?
+	)
+	|
+	[[\*] *varname* | \_) %] _ (
+		! [: *param-type*] [?] (= | ??= | ##=) *expression*
+		|
+		[: *param-type*] [?] [(= | ??= | ##=) *expression*]
+	)
+	|
+	[[\*] *varname* | \_) %] *destructuring* (
+		! [: *param-type*] [?] (= | ??= | ##=) *expression*
+		|
+		[: *param-type*] [?] [(= | ??= | ##=) *expression*]
+	)
+	|
+	[(*varname* | \_) %] ...[{( [*min*], [*max*] | *quantity* )}][[@]*varname*] [: *param-type*] [?] [(= | ##=) *expression*]
+)
 ```

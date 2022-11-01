@@ -199,18 +199,22 @@ console.log(i.mod(2))
 
 ```syntax
 extern = (
-	*expressive-type*
+	*varname1*[: *entity-type1*], ..., *varnameN*[: *entity-typeN*]
+	|
+	*descriptive-type*
 	|
 	{
-		(*expressive-type*)+
+		(*descriptive-type*)+
 	}
 )
 
 require = (
-	*expressive-utm-type*
+	*varname1*[: *entity-type1*], ..., *varnameN*[: *entity-typeN*]
+	|
+	*descriptive-type*
 	|
 	{
-		(*expressive-utm-type*)+
+		(*descriptive-type*)+
 	}
 )
 
@@ -224,10 +228,12 @@ extern|import = (
 )
 
 extern|require = (
-	*expressive-type*
+	*varname1*[: *entity-type1*], ..., *varnameN*[: *entity-typeN*]
+	|
+	*descriptive-type*
 	|
 	{
-		(*expressive-type*)+
+		(*descriptive-type*)+
 	}
 )
 
@@ -240,46 +246,12 @@ require|import = (
 )
 
 require|extern = (
-	*expressive-type*
+	*varname1*[: *entity-type1*], ..., *varnameN*[: *entity-typeN*]
+	|
+	*descriptive-type*
 	|
 	{
-		(*expressive-type*)+
+		(*descriptive-type*)+
 	}
 )
-
-expressive-type = (
-	([(final | sealed)] [abstract] | [system]) *class-type*
-	|
-	[async] [func] *func-type*
-	|
-	[sealed] *namespace-type*
-	|
-	[sealed] *identifier*[: *type*]
-)
-
-expressive-utm-type = (
-	*expressive-type*
-	|
-	[flagged] *enum*
-	|
-	*struct*
-	|
-	*tuple*
-)
-
-expressive-xtd-type = (
-	*expressive-type*
-	|
-	var *identifier*[: *type*]
-)
-
-class-type = class *identifier*["<" *generic-type* ">"] [extends *identifier*] [{
-	...
-}]
-
-func-type = *identifier* '(' [[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]] ')' [: *type*] [~ *class1* [, *class2* ... [, *classN*]]]
-
-namespace-type = namespace [{
-	(*expressive-xtd-type*)\+
-}]
 ```

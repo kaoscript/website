@@ -90,6 +90,30 @@ enum CardSuit<String> {
 }
 ```
 
+## methods
+
+```kaoscript
+enum Weekday {
+    MONDAY
+    TUESDAY
+    WEDNESDAY
+    THURSDAY
+    FRIDAY
+    SATURDAY
+    SUNDAY
+
+    static fromString(value: String): Weekday? {
+        switch value {
+            'monday' => return MONDAY
+        }
+
+        return null
+    }
+
+    isWeekend(): Boolean => this == SATURDAY | SUNDAY
+}
+```
+
 ## bitmask
 
 The default, the bitmask's properties are:
