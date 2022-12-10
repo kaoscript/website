@@ -153,7 +153,7 @@ export default function({include, exclude} = {}) {
 		registry.setTheme(name2theme[lang] || defaultTheme)
 
 		const grammar = registry.grammarForScopeName(scope)
-		const lines = node.value.split(/\n/g)
+		const lines = node.value.replace(/\t/g, '    ').split(/\n/g)
 
 		const hLines = []
 

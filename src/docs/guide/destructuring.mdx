@@ -16,13 +16,13 @@ A destructuring expression in the variable declaration can be:
 ### Syntax
 
 ```syntax
-destructuring = *array* | *dictionary*
+destructuring = *array* | *object*
 
 array = '[' [*arrayItem1*] [, *arrayItem2*] ... [, *arrayItemN*] ']' [: *type*] [= *expression*]
-arrayItem = (('_' | '...') [: *type*] | ['...'] *varname* [: *type*] [= *expression*] | *array* | *dictionary*)
+arrayItem = (('_' | '...') [: *type*] | ['...'] *varname* [: *type*] [= *expression*] | *array* | *object*)
 
-dictionary = '{' [*dictionaryItem1*] [, *dictionaryItem2*] ... [, *dictionaryItemN*] '}' [: *type*] [= *expression*]
-dictionaryItem = ('...' *varname* | ('[' *varname* ']' | *varname*) [: *array* | *dictionary* | *varname* [= *expression*]])
+object = '{' [*objectItem1*] [, *objectItem2*] ... [, *objectItemN*] '}' [: *type*] [= *expression*]
+objectItem = ('...' *varname* | ('[' *varname* ']' | *varname*) [: *array* | *object* | *varname* [= *expression*]])
 ```
 
 ### Examples
@@ -70,13 +70,13 @@ A destructuring expression as a function parameter can be:
 ### Syntax
 
 ```syntax
-destructuring = *array* | *dictionary*
+destructuring = *array* | *object*
 
 array = '[' [*arrayItem1*] [, *arrayItem2*] ... [, *arrayItemN*] ']' [: *type*] [= *expression*]
-arrayItem = (('_' | '...') [: *type*] | ['...'] *varname* [: *type*] [= *expression*] | *array* | *dictionary*)
+arrayItem = (('_' | '...') [: *type*] | ['...'] *varname* [: *type*] [= *expression*] | *array* | *object*)
 
-dictionary = '{' [*dictionaryItem1*] [, *dictionaryItem2*] ... [, *dictionaryItemN*] '}' [: *type*] [= *expression*]
-dictionaryItem = ['...'] *varname* [: *array* | *dictionary* | *varname* [= *expression*]]
+object = '{' [*objectItem1*] [, *objectItem2*] ... [, *objectItemN*] '}' [: *type*] [= *expression*]
+objectItem = ['...'] *varname* [: *array* | *object* | *varname* [= *expression*]]
 ```
 
 ### Examples
@@ -133,13 +133,13 @@ A destructuring expression as a method parameter can be:
 ### Syntax
 
 ```syntax
-destructuring = *array* | *dictionary*
+destructuring = *array* | *object*
 
 array = '[' [*arrayItem1*] [, *arrayItem2*] ... [, *arrayItemN*] ']' [: *type*] [= *expression*]
-arrayItem = (('_' | '...') [: *type*] | ['...'] [@] *varname* [: *type*] [= *expression*] | *array* | *dictionary*)
+arrayItem = (('_' | '...') [: *type*] | ['...'] [@] *varname* [: *type*] [= *expression*] | *array* | *object*)
 
-dictionary = '{' [*dictionaryItem1*] [, *dictionaryItem2*] ... [, *dictionaryItemN*] '}' [: *type*] [= *expression*]
-dictionaryItem = (['...'] *varname* [: *array* | *dictionary* | [@] *varname* [= *expression*]] | ['...'] @ *varname* [= *expression*])
+object = '{' [*objectItem1*] [, *objectItem2*] ... [, *objectItemN*] '}' [: *type*] [= *expression*]
+objectItem = (['...'] *varname* [: *array* | *object* | [@] *varname* [= *expression*]] | ['...'] @ *varname* [= *expression*])
 ```
 
 ### Examples
@@ -178,13 +178,13 @@ A destructuring expression in an expression can be:
 ### Syntax
 
 ```syntax
-destructuring = *array* | *dictionary*
+destructuring = *array* | *object*
 
 array = '[' [*arrayItem1*] [, *arrayItem2*] ... [, *arrayItemN*] ']' [= *expression*])
-arrayItem = ('_' | '...' | ['...'] *varname* [= *expression*] | *array* | *dictionary*)
+arrayItem = ('_' | '...' | ['...'] *varname* [= *expression*] | *array* | *object*)
 
-dictionary = '{' [*dictionaryItem1*] [, *dictionaryItem2*] ... [, *dictionaryItemN*] '}' [= *expression*])
-dictionaryItem = ('...' *varname* | ('[' *varname* ']' | *varname*) [: *array* | *dictionary* | *varname* [= *expression*]])
+object = '{' [*objectItem1*] [, *objectItem2*] ... [, *objectItemN*] '}' [= *expression*])
+objectItem = ('...' *varname* | ('[' *varname* ']' | *varname*) [: *array* | *object* | *varname* [= *expression*]])
 ```
 
 ### Examples

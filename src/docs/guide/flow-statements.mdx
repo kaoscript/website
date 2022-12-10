@@ -281,8 +281,9 @@ switch *expression* {
 	[with (*varname* [as *type*] | *destructuring*) ]
 	[when *expression:Boolean*]
 	=> (
-		*statement*
-		| {
+		*expression*
+		|
+		{
 			*...statements*
 		}
 	)
@@ -296,7 +297,7 @@ switch number {
 	1               => console.log("One!")
 	2, 3, 5, 7, 11  => console.log("This is a prime")
 	13..19          => console.log("A teen")
-	_               => console.log("Ain't special")
+	                => console.log("Ain't special")
 }
 ```
 
@@ -317,7 +318,7 @@ switch somePoint {
 	[_, 0]			=> console.log(`(\(somePoint[0]), 0) is on the x-axis`)
 	[0, _]			=> console.log(`(0, \(somePoint[1])) is on the y-axis`)
 	[-2..2, -2..2]	=> console.log(`(\(somePoint[0]), \(somePoint[1])) is inside the box`)
-	_				=> console.log(`(\(somePoint[0]), \(somePoint[1])) is outside of the box`)
+					=> console.log(`(\(somePoint[0]), \(somePoint[1])) is outside of the box`)
 }
 ```
 
@@ -330,7 +331,7 @@ switch somePoint {
 	with [x, y] when x == 0							=> console.log(`(0, \(y)) is on the y-axis`)
 	with [x, y] when -2 <= x <= 2 && -2 <= y <= 2	=> console.log(`(\(x), \(y)) is inside the box`)
 	with [x, y]										=> console.log(`(\(x), \(y)) is outside of the box`)
-	_												=> console.log(`Not a point`)
+													=> console.log(`Not a point`)
 }
 ```
 
@@ -345,8 +346,8 @@ switch value {
 	{foo: 1} 							=> console.log('foo: 1')
 	{foo}								=> console.log('has foo')
 	{qux}								=> console.log('has qux')
-	_			when value.bar() == 0	=> console.log('bar() == 0')
-	_									=> console.log('oops!')
+				when value.bar() == 0	=> console.log('bar() == 0')
+										=> console.log('oops!')
 }
 ```
 
@@ -358,7 +359,7 @@ switch view {
 						var sectionCount = tblv.numberOfSections()
 						console.log(`It's a table view with \(sectionCount) sections`)
 					}
-	_											=> console.log("It's some other UIView or subclass")
+												=> console.log("It's some other UIView or subclass")
 }
 ```
 

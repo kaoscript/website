@@ -15,7 +15,6 @@ route: /guide/typing
 |  Boolean   |  bool  |
 |   Class    | class  |
 |    Date    |  date  |
-| Dictionary |  dict  |
 |    Enum    |  enum  |
 |   Error    |        |
 |  Function  |  func  |
@@ -77,29 +76,11 @@ func throwError(message: String): never {
 - `Number`
 - `String`
 
-## object
-
-`Object` is a type that represents an exclusion of the following types from type `Any`:
-
-- `Array`
-- `Boolean`
-- `Dictionary`
-- `Enum`
-- `Function`
-- `Namespace`
-- `Number`
-- `String`
-
 ## array
 
 ```kaoscript
-func foobar(x: [Number, Number]) {}
-// x[0]: Number
-// x[1]: Number
-// x[2] throws an error
+var x = [1, 2, 3, 4]
 ```
-
-### rest
 
 ```kaoscript
 func foobar(x: [Number, Number, ...String]) {}
@@ -115,7 +96,23 @@ func foobar(x: [Number, Number, ...]) {}
 // x[*]: Any?
 ```
 
-## dictionary
+## object
+
+An object is any data structure which can contain a named property.
+It can be any of the following type:
+- a plain `Object`
+- an instance of a `Class` or `Struct`
+
+In kaoscript, the object in `x = {}` doesn't contain any default properties (no `toString()`, ...).
+
+### finite
+
+```kaoscript
+var x: {foo: Number, bar: String} = {
+	foo: 0
+	var: ''
+}
+```
 
 ```kaoscript
 func foobar(x: {foo: Number, bar: String}) {}
@@ -130,7 +127,18 @@ func foobar(x: {
 // same definition as previous
 ```
 
-### rest
+An instance of a `Class` or `Struct` can only be represented by a finite object.
+
+### infinite
+
+```kaoscript
+var x = {}
+
+var x = {
+	foo: 0
+	bar: ''
+}
+```
 
 ```kaoscript
 func foobar(x: {
@@ -224,16 +232,11 @@ type RegExpExecArray = Array<String?> & {
 
 An exclusion type represents an union type without one or more types.
 
-```kaoscript
-type Instance = Object ^ Array ^ Enum ^ Function ^ Namespace
-// Instance is the type Object without the types: Array, Enum, Function, Namespace
-```
-
 ## generic type
 
 kaoscript has a very basic support for generics.
 
-In array or dictionary, it's used to inference the type of the elements.
+In array or object, it's used to inference the type of the elements.
 
 ```kaoscript
 var mut values: Array<String> = ['foo', 'bar', 'qux']
@@ -244,12 +247,12 @@ var x = values[0]
 
 ### aliases
 
-|             full              |           rest           |     short      |
-| :---------------------------: | :----------------------: | :------------: |
-|        `Array<String>`        |     `[ ...String ]`      |   `String[]`   |
-|     `Dictionary<String>`      |     `{ ...String }`      |   `String{}`   |
-|   `Array<Array<String?>>?`    | `[ ...[ ...String? ] ]?` | `String?[][]?` |
-| `Array<Dictionary<String?>>?` | `[ ...{ ...String? } ]?` | `String?{}[]?` |
+|           full            |           rest           |     short      |
+| :-----------------------: | :----------------------: | :------------: |
+|      `Array<String>`      |     `[ ...String ]`      |   `String[]`   |
+|     `Object<String>`      |     `{ ...String }`      |   `String{}`   |
+| `Array<Array<String?>>?`  | `[ ...[ ...String? ] ]?` | `String?[][]?` |
+| `Array<Object<String?>>?` | `[ ...{ ...String? } ]?` | `String?{}[]?` |
 
 ## type checking
 
@@ -372,26 +375,16 @@ The type of argument must be a superset of the type of the parameter *(parameter
 ## syntax
 
 ```syntax
+type-statement = "type" *varname* = *type*
+
 type = (
 	*limited-type*
 	|
 	[async] [func] *func-type*
 	|
-	{
-		(
-			(
-				*varname*: *type*
-				|
-				[async] [func] *varname* *func-type*
-				|
-				...[*type*]
-			) [,]
-		)+
-	}
+	*object-type*
 	|
-	'['
-		((*type* | ...[*type*]) [,])+
-	']'
+	*array-type*
 ) (('|' | & | ^) *type* | '|?')\*
 
 descriptive-type = (
@@ -419,11 +412,33 @@ limited-type = (*varname* ('.' *varname*)\* | *func-type*) ['<' *limited-type* (
 generic-type = *entity-type* (',' *entity-type*)\*
 entity-type = *varname* ('.' *varname*)\*
 
+array-type = '['
+	(
+		(
+			*type*
+			|
+			...[*type*]
+		) [,]
+	)+
+']'
+
 class-type = *varname*['<' *generic-type* '>'] [extends *varname*] [{
 	...
 }]
 
 func-type = '(' [[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]] ')' [: *type*] [~ *class1* [, *class2* ... [, *classN*]]]
+
+object-type = '{'
+	(
+		(
+			*varname*: *type*
+			|
+			[async] [func] *varname* *func-type*
+			|
+			...[*type*]
+		) [,]
+	)+
+'}'
 
 param-type = *type* [( "||" *type* | "&&" *type* )+]
 
