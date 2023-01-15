@@ -3,6 +3,7 @@ const path = require('path')
 const jsonc = require('jsonc-parser')
 const { Registry } = require('vscode-textmate')
 const visit = require('unist-util-visit')
+const retabber = require('retabber')
 
 const registry = new Registry()
 
@@ -153,13 +154,15 @@ export default function({include, exclude} = {}) {
 		registry.setTheme(name2theme[lang] || defaultTheme)
 
 		const grammar = registry.grammarForScopeName(scope)
-		const lines = node.value.replace(/\t/g, '    ').split(/\n/g)
+		const lines = node.value.split(/\n/g)
 
 		const hLines = []
 
 		let ruleStack = null
 
-		for(const line of lines) {
+		for(let line of lines) {
+			line = retabber.smart(line, 4)
+
 			const hLine = {
 				type: 'element',
 				tagName: 'div',

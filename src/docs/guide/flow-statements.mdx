@@ -19,14 +19,14 @@ If the type is unknow, the test's value must be equal to `true`.
 if
 	*expression:Boolean*
 	|
-	var [mut] (*varname* | *destructuring*) [: *type*] (?= | #=) *expression*
+	var [mut] (*varname* | *destructuring*) [: *type*] (?= | #=) *expression* [; *expression:Boolean*]
 {
 	*...statements*
 }
 [else if
 	*expression:Boolean*
 	|
-	var [mut] (*varname* | *destructuring*) [: *type*] (?= | #=) *expression*
+	var [mut] (*varname* | *destructuring*) [: *type*] (?= | #=) *expression* [; *expression:Boolean*]
 {
 	*...statements*
 }]
@@ -75,29 +75,47 @@ unless x == 0 {
 ```syntax
 for
 	[var [mut]] *varname*
-	from *expression:Number*
-	(til | to) *expression:Number*
-	[by *expression:Number*]
+	from[~] *expression:Number*
+	[(down | up)]
+	[to[~] *expression:Number*]
+	[step *expression:Number*]
 	[(while | until) *expression:Boolean*]
 	[when *expression:Boolean*]
 {
 	*...statements*
 }
+[else {
+	...*statements*
+}]
 ```
 
 ### Examples
 
 ```kaoscript
-for x from 0 to 10 {
+for var x from 0 to 10 {
 	console.log(x)
 }
 // 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10
 
-for var x from 0 til 10 {
+for var x from 0 to~ 10 {
 	console.log(x)
 }
 // 0, 1, 2, 3, 4, 5, 6, 7, 8, 9
+
+for var x from~ 0 to~ 10 {
+	console.log(x)
+}
+// 1, 2, 3, 4, 5, 6, 7, 8, 9
 ```
+
+### Down/Up
+
+If `down` or `up`, the expressions for `from`, `to` and `step` are asserted.
+If `step` is provider, it must be positive for either `up` or `down`.
+
+### Else
+
+The `else` branch is called when the body of the loop has never been called.
 
 ## for...in
 
@@ -107,23 +125,27 @@ Unlike JavaScript, in kaoscript, `for...in` loops an array.
 
 ```syntax
 for
-	[var [mut]] (*varname* | *destructuring* | '_') [: *type*] [, *index*]
+	[var [ mut | dyn ]] (*varname* | *destructuring* | '_') [: *type*] [, *index*]
 	in *expression:Array*
-	[desc]
-	[from *expression:Number*]
-	[(til | to) *expression:Number*]
-	[by *expression:Number*]
+	[from[~] *expression:Number*]
+	[(down | up)]
+	[to[~] *expression:Number*]
+	[step *expression:Number*]
+	[split *expression:Number*]
 	[(while | until) *expression:Boolean*]
 	[when *expression:Boolean*]
 {
 	*...statements*
 }
+[else {
+	...*statements*
+}]
 ```
 
 ### Examples
 
 ```kaoscript
-heroes = ['leto', 'duncan', 'goku']
+var heroes = ['leto', 'duncan', 'goku']
 
 for var hero, index in heroes when index % 2 == 0 {
 	console.log(hero)
@@ -132,13 +154,60 @@ for var hero, index in heroes when index % 2 == 0 {
 ```
 
 ```kaoscript
-heroes = ['leto', 'duncan', 'goku']
+var heroes = ['leto', 'duncan', 'goku']
 
-for hero in heroes until hero == 'duncan' {
+for var hero in heroes until hero == 'duncan' {
 	console.log(hero)
 }
 // leto
 ```
+
+### From/To
+
+- `from x to y` <=> `from x to y step 1` <=> `from x up to y` :=> from left ot right
+- `from x to y step -1` <=> `from x down to y` :=> from right to left
+
+```kaoscript
+var heroes = ['leto', 'duncan', 'goku', 'batman', 'asterix', 'naruto', 'totoro']
+
+for var hero in heroes {
+	console.log(hero)
+}
+// leto, duncan, goku, batman, asterix, naruto, totoro
+```
+
+| from      | to      | step      | result                                                |
+| --------- | ------- | --------- | ----------------------------------------------------- |
+| `from 0`  | `to 6`  | `step 1`  | *leto, duncan, goku, batman, asterix, naruto, totoro* |
+| `from 6`  | `to 0`  | `step 1`  |                                                       |
+| `from 0`  | `to -1` | `step 1`  | *leto, duncan, goku, batman, asterix, naruto, totoro* |
+| `from -1` | `to 0`  | `step 1`  |                                                       |
+| `from -3` | `to -1` | `step 1`  | *asterix, naruto, totoro*                             |
+| `from -1` | `to -3` | `step 1`  |                                                       |
+| `from -3` | `to 6`  | `step 1`  | *asterix, naruto, totoro*                             |
+| `from 6`  | `to -3` | `step 1`  |                                                       |
+| `from 0`  | `to 6`  | `step -1` |                                                       |
+| `from 6`  | `to 0`  | `step -1` | *totoro, naruto, asterix, batman, goku, duncan, leto* |
+| `from 0`  | `to -1` | `step -1` |                                                       |
+| `from -1` | `to 0`  | `step -1` | *totoro, naruto, asterix, batman, goku, duncan, leto* |
+| `from -3` | `to -1` | `step -1` |                                                       |
+| `from -1` | `to -3` | `step -1` | *totoro, naruto, asterix*                             |
+| `from -3` | `to 6`  | `step -1` |                                                       |
+| `from 6`  | `to -3` | `step -1` | *totoro, naruto, asterix*                             |
+
+### Split
+
+```kaoscript
+var heroes = [0, 'leto', 1, 'duncan', 2, 'goku']
+
+for var [index, name], i in heroes split 2 {
+	console.log(name, index)
+}
+```
+
+### Else
+
+The `else` branch is called when the given array is **empty** or no value passes the `when` filter.
 
 ## for...of
 
@@ -155,6 +224,9 @@ for
 {
 	*...statements*
 }
+[else {
+	...*statements*
+}]
 ```
 
 ### Examples
@@ -173,6 +245,10 @@ for value, key of likes {
 // paul likes chani
 // duncan likes murbella
 ```
+
+### Else
+
+The `else` branch is called when the given object is **empty** or no value passes the `when` filter.
 
 ## for...range
 
@@ -213,7 +289,7 @@ while
 ```
 
 ```syntax
-do  {
+do {
 
 }
 while *expression:Boolean*
@@ -268,20 +344,55 @@ do {
 until supply > demand
 ```
 
-## switch
+## repeat
 
-Unlike JavaScript, in kaoscript, `switch` won't automatically cascade.
+### Syntax
+
+```syntax
+repeat [*expression* times] {
+	*...statements*
+}
+```
+
+### Examples
+
+```kaoscript
+repeat 10 times {
+	console.log('Hello world!')
+}
+
+repeat {
+	// infinity loop
+}
+```
+
+## match
+
+Unlike JavaScript's `switch`, in kaoscript, `match` won't automatically cascade.
 It executes only and only one branch. (No `break` needed)
 
 ### Syntax
 
 ```syntax
-switch *expression* {
-	[*expression1*[, *expression2* ... [*expressionN*]] | is *class* | '_']
-	[with (*varname* [as *type*] | *destructuring*) ]
-	[when *expression:Boolean*]
-	=> (
-		*expression*
+match *expression* {
+	(
+		(
+			(*expression1*[, *expression2* ... [*expressionN*]] | is *class*)
+			[with (*varname* [as *type*] | *destructuring*) ]
+			[when *expression:Boolean*]
+		)
+		|
+		(
+			with (*varname* [as *type*] | *destructuring*)
+			[when *expression:Boolean*]
+		)
+		|
+		(when *expression:Boolean*)
+		|
+		else
+	)
+	(
+		=> *expression*
 		|
 		{
 			*...statements*
@@ -293,45 +404,45 @@ switch *expression* {
 ### Examples
 
 ```kaoscript
-switch number {
-	1               => console.log("One!")
-	2, 3, 5, 7, 11  => console.log("This is a prime")
-	13..19          => console.log("A teen")
-	                => console.log("Ain't special")
+match number {
+	1				=> console.log("One!")
+	2, 3, 5, 7, 11	=> console.log("This is a prime")
+	13..19			=> console.log("A teen")
+	else			=> console.log("Ain't special")
 }
 ```
 
 ```kaoscript
-switch age() {
+match age() {
 	0					=> console.log(`I'm not born yet I guess`)
 	1  .. 12 	with n	=> console.log(`I'm a child of age \(n)`)
 	13 .. 19 	with n	=> console.log(`I'm a teen of age \(n)`)
-				with n	=> console.log(`I'm an old person of age \(n)`)
+	else		with n	=> console.log(`I'm an old person of age \(n)`)
 }
 ```
 
 ```kaoscript
 var somePoint = [1, 1]
 
-switch somePoint {
+match somePoint {
 	[0, 0]			=> console.log(`(0, 0) is at the origin`)
 	[_, 0]			=> console.log(`(\(somePoint[0]), 0) is on the x-axis`)
 	[0, _]			=> console.log(`(0, \(somePoint[1])) is on the y-axis`)
 	[-2..2, -2..2]	=> console.log(`(\(somePoint[0]), \(somePoint[1])) is inside the box`)
-					=> console.log(`(\(somePoint[0]), \(somePoint[1])) is outside of the box`)
+	else			=> console.log(`(\(somePoint[0]), \(somePoint[1])) is outside of the box`)
 }
 ```
 
 ```kaoscript
 var somePoint = [1, 1]
 
-switch somePoint {
+match somePoint {
 	with [x, y] when x == 0 && y == 0				=> console.log(`(0, 0) is at the origin`)
 	with [x, y] when y == 0							=> console.log(`(\(x), 0) is on the x-axis`)
 	with [x, y] when x == 0							=> console.log(`(0, \(y)) is on the y-axis`)
 	with [x, y] when -2 <= x <= 2 && -2 <= y <= 2	=> console.log(`(\(x), \(y)) is inside the box`)
 	with [x, y]										=> console.log(`(\(x), \(y)) is outside of the box`)
-													=> console.log(`Not a point`)
+	else											=> console.log(`Not a point`)
 }
 ```
 
@@ -341,25 +452,25 @@ var value = {
 	bar() => 2
 }
 
-switch value {
+match value {
 	{foo: 1}	with {qux: n} 			=> console.log(`qux: \(n)`)
 	{foo: 1} 							=> console.log('foo: 1')
 	{foo}								=> console.log('has foo')
 	{qux}								=> console.log('has qux')
 				when value.bar() == 0	=> console.log('bar() == 0')
-										=> console.log('oops!')
+	else								=> console.log('oops!')
 }
 ```
 
 ```kaoscript
-switch view {
+match view {
 	is UIImageView								=> console.log("It's an image view")
 	is UILabel		with label as UILabel		=> console.log("It's a label")
-	is UITableView	with tblv as UITableView	=> {
-						var sectionCount = tblv.numberOfSections()
-						console.log(`It's a table view with \(sectionCount) sections`)
-					}
-												=> console.log("It's some other UIView or subclass")
+	is UITableView	with tblv as UITableView	{
+		var sectionCount = tblv.numberOfSections()
+		console.log(`It's a table view with \(sectionCount) sections`)
+	}
+	else										=> console.log("It's some other UIView or subclass")
 }
 ```
 
@@ -369,33 +480,52 @@ For cascading, the `fallthrough` statement is required
 
 ```kaoscript
 func foobar(d) {
-	switch d {
-		'hour' => {
+	match d {
+		'hour' {
 			console.log('hour')
 
 			fallthrough
 		}
-		'minute' => {
+		'minute' {
 			console.log('minute')
 
 			fallthrough
 		}
-		'second' => {
+		'second' {
 			console.log('second')
 		}
 	}
 }
 ```
 
-## break & continue
-
-### break
+## break
 
 The `break` statement ends execution of an entire control flow statement immediately.
 
-### continue
+
+### Syntax
+
+```syntax
+break [
+	if *expression:Boolean*
+	|
+	unless *expression:Boolean*
+]
+```
+
+## continue
 
 The `continue` statement tells a loop to stop what it is doing and start again at the beginning of the next iteration through the loop.
+
+### Syntax
+
+```syntax
+continue [
+	if *expression:Boolean*
+	|
+	unless *expression:Boolean*
+]
+```
 
 ## with
 

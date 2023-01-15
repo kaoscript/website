@@ -13,33 +13,38 @@ route: /guide/flow-expressions
 ```syntax
 "["
 	*expression*
-	for
 	(
-		[var] *varname*
-			from *expression:Number*
-			(til | to) *expression:Number*
-			[by *expression:Number*]
-			[(while | until) *expression:Boolean*]
-			[when *expression:Boolean*]
+		for
+		(
+			[var] *varname*
+				from *expression:Number*
+				(til | to) *expression:Number*
+				[step *expression:Number*]
+				[(while | until) *expression:Boolean*]
+				[when *expression:Boolean*]
+			|
+			[var] (*varname* | *destructuring* | '\_') [: *type*] [, *index*]
+				in *expression:Array*
+				[from *expression:Number*]
+				[down]
+				[(to | to~) *expression:Number*]
+				[step *expression:Number*]
+				[split *expression:Number*]
+				[(while | until) *expression:Boolean*]
+				[when *expression:Boolean*]
+			|
+			[var] (*varname* | *destructuring* | '\_') [: *type*] [, *index*]
+				of *expression:Object*
+				[(while | until) *expression:Boolean*]
+				[when *expression:Boolean*]
+			|
+			[var] *varname*[, *index*] | :*index*
+				in *operand:Number*[<]..[<]*operand:Number*[..*operand:Number*]
+				[(while | until) *expression:Boolean*]
+				[when *expression:Boolean*]
+		)
 		|
-		[var] (*varname* | *destructuring* | '\_') [: *type*] [, *index*]
-			in *expression:Array*
-			[desc]
-			[from *expression:Number*]
-			[(til | to) *expression:Number*]
-			[by *expression:Number*]
-			[(while | until) *expression:Boolean*]
-			[when *expression:Boolean*]
-		|
-		[var] (*varname* | *destructuring* | '\_') [: *type*] [, *index*]
-			of *expression:Object*
-			[(while | until) *expression:Boolean*]
-			[when *expression:Boolean*]
-		|
-		[var] *varname*[, *index*] | :*index*
-			in *operand:Number*[<]..[<]*operand:Number*[..*operand:Number*]
-			[(while | until) *expression:Boolean*]
-			[when *expression:Boolean*]
+		repeat *expression* times
 	)
 "]"
 ```
@@ -88,18 +93,19 @@ y = 10 if x == 5 else 15
 	for
 		(
 			[var] *varname*
-				from *expression:Number*
-				(til | to) *expression:Number*
-				[by *expression:Number*]
+				from[~] *expression:Number*
+				[(down | up)]
+				to[~] *expression:Number*
+				[step *expression:Number*]
 				[(while | until) *expression:Boolean*]
 				[when *expression:Boolean*]
 			|
 			[var] (*varname* | *destructuring* | '\_') [: *type*] [, *index*]
 				in *expression:Array*
-				[desc]
-				[from *expression:Number*]
-				[(til | to) *expression:Number*]
-				[by *expression:Number*]
+				[from[~] *expression:Number*]
+				[(down | up)]
+				[to[~] *expression:Number*]
+				[step *expression:Number*]
 				[(while | until) *expression:Boolean*]
 				[when *expression:Boolean*]
 			|
@@ -113,6 +119,8 @@ y = 10 if x == 5 else 15
 				[(while | until) *expression:Boolean*]
 				[when *expression:Boolean*]
 		)
+	|
+	repeat *expression* times
 	|
 	if *expression:Boolean*
 	|
