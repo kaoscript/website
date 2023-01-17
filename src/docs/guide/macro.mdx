@@ -41,7 +41,7 @@ macro trace_build_age() {
 	}
 }
 
-trace_build_age!()
+trace_build_age()
 ```
 
 ## parameters
@@ -68,15 +68,18 @@ macro foobar(@x: Array) {
 
 ## expression reification
 
-AST values aren't ignoring any reification.
+| reification |  reification   |                      description                      | ast | auto |
+| :---------: | :------------: | :---------------------------------------------------: | :-: | :--: |
+|  argument   |   `#a(...)`    |             generates a list of arguments             | ❌  |  ✅  |
+| expression  |   `#e(...)`    |     generates an expression from the given value      | ❌  |  ✅  |
+|    join     | `#j(..., sep)` | generates a list separated by the specified separator | ❌  |  ✅  |
+|  statement  |   `#s(...)`    |            generates a list of statements             | ❌  |  ✅  |
+|    write    |   `#w(...)`    |                  write out the value                  | ❌  |  ✅  |
 
-| reification |   reification    |                      description                      |
-|:-----------:|:----------------:|:-----------------------------------------------------:|
-|  argument   |    `#a(...)`     |             generates a list of arguments             |
-| expression  | `#e(...)` `#...` |     generates an expression from the given value      |
-|    join     |  `#j(..., sep)`  | generates a list separated by the specified separator |
-|  statement  |    `#s(...)`     |            generates a list of statements             |
-|    write    |    `#w(...)`     |                  write out the value                  |
+### `#(...)`
+
+- For AST parameters, `#(...)` prints out the AST tree of the parameters.
+- For auto-evaluated parameters, `#(...)` is the same as `#e(...)`.
 
 ### examples
 
@@ -134,16 +137,16 @@ macro match_tokens(a) => 'any'
 macro match_tokens(a: Identifier) => 'identifier'
 macro match_tokens(a: Number) => 'number'
 
-console.log(match_tokens!(a))
+console.log(match_tokens(a))
 // console.log("identifier")
 
-console.log(match_tokens!(42))
+console.log(match_tokens(42))
 // console.log("number")
 
-console.log(match_tokens!('foobar'))
+console.log(match_tokens('foobar'))
 // console.log("any")
 
-console.log(match_tokens!(1 + 1))
+console.log(match_tokens(1 + 1))
 // console.log("any")
 ```
 
@@ -162,10 +165,10 @@ macro times_five_bl(e) {
 	macro 5 * #(e)
 }
 
-console.log(times_five!(42))
+console.log(times_five(42))
 // console.log(5 * 42)
 
-console.log(times_five!(x * y))
+console.log(times_five(x * y))
 // console.log(5 * x * y)
 ```
 
@@ -193,7 +196,7 @@ export class Color {
 			}
 
 			macro {
-				Color.registerSpace(#(space))
+				Color.addSpace(#(space))
 
 				impl Color {
 					#s(fields)
@@ -202,12 +205,14 @@ export class Color {
 			}
 		}
 		else {
-			macro Color.registerSpace(#(space))
+			macro Color.addSpace(#(space))
 		}
+	}
+	static addSpace(space: Object) {
 	}
 }
 
-Color.registerSpace!({
+Color.registerSpace({
 	name: Space::SRGB
 	alias: [Space::RGB]
 	formatters: {

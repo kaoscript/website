@@ -59,6 +59,7 @@ export default {
 				'Import & Export',
 				'File Inclusion',
 				'Macro',
+				'Utils',
 				'Keywords',
 			]
 		},
