@@ -15,14 +15,6 @@ The boolean literals are `true` and `false`.
 var isDone = true
 ```
 
-## string
-
-```kaoscript
-var singleQuote = 'John'
-var doubleQuote = "Jane"
-```
-> :construction: kaoscript will support multilines strings.
-
 ## number
 
 Numbers are floating point values like in JavaScript but with more possible literals.
@@ -101,6 +93,79 @@ if x == NaN {
 if y == Infinity {
 
 }
+```
+
+## string
+
+```kaoscript
+var singleQuote = 'John'
+var doubleQuote = "Jane"
+```
+
+### escape sequences
+
+| Escape sequence          | Character represented                              |
+| :----------------------- | :------------------------------------------------- |
+| `\0`                     | null character (U+0000)                            |
+| `\'`                     | single quote (U+0027)                              |
+| `\"`                     | double quote (U+0022)                              |
+| `\\`                     | backslash (U+005C)                                 |
+| `\n`                     | newline (U+000A)                                   |
+| `\r`                     | carriage return (U+000D)                           |
+| `\v`                     | vertical tab (U+000B)                              |
+| `\t`                     | tab (U+0009)                                       |
+| `\b`                     | backspace (U+0008)                                 |
+| `\f`                     | form feed (U+000C)                                 |
+| `\uXXXX`                 | Unicode code point between `U+0000` and `U+FFFF`   |
+| `\u{X}` ... `\u{XXXXXX}` | Unicode code point between `U+0000` and `U+10FFFF` |
+| `\xXX`                   | Unicode code point between `U+0000` and `U+00FF`   |
+
+
+### multi-lines strings
+
+#### non-interpolated
+
+```kaoscript
+var value = '''
+The jury all wrote down on their slates, "SHE doesn't
+believe there's an atom of meaning in it," but none of them
+attempted to explain the paper.
+'''
+```
+
+```kaoscript
+var value = """
+
+	This string :
+	- starts with a line break;
+	- ends with a line break;
+	- contains no leading withspaces.
+
+	"""
+```
+
+#### interpolated
+
+~~~kaoscript
+var xml = ```
+	<book id="bk\(id)">
+		<author>\(author)</author>
+		<title>\(title)</title>
+		<genre>\(genre)</genre>
+		<price>\(price)</price>
+	</book>
+	```
+~~~
+
+```kaoscript
+var xml = ~~~
+	<book id="bk\(id)">
+		<author>\(author)</author>
+		<title>\(title)</title>
+		<genre>\(genre)</genre>
+		<price>\(price)</price>
+	</book>
+	~~~
 ```
 
 ## array
