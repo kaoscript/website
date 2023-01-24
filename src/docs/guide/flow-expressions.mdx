@@ -204,3 +204,49 @@ throw *expression* [
 ```kaoscript
 throw new Error('Not Defined') if !?x
 ```
+
+## in object expression
+
+### Syntax
+
+```syntax
+{
+	*varname*[: *expression*]
+	if *expression:Boolean* [else *expression*]
+	|
+	unless *expression:Boolean*
+}
+```
+
+### Examples
+
+```kaoscript
+var point = {
+	x: 1
+	y: 1
+	z: 1 if _3d
+}
+```
+
+## in named argument expression
+
+### Syntax
+
+```syntax
+'('
+	(*varname*: *expression* | :*varname*)
+	if *expression:Boolean* [else *expression*]
+	|
+	unless *expression:Boolean*
+')'
+```
+
+### Examples
+
+```kaoscript
+foobar(
+	x: 1
+	y: 1
+	z: 1 if _3d
+)
+```
