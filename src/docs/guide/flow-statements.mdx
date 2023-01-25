@@ -506,7 +506,7 @@ The `break` statement ends execution of an entire control flow statement immedia
 ### Syntax
 
 ```syntax
-break [
+break [*label*] [
 	if *expression:Boolean*
 	|
 	unless *expression:Boolean*
@@ -520,43 +520,51 @@ The `continue` statement tells a loop to stop what it is doing and start again a
 ### Syntax
 
 ```syntax
-continue [
+continue [*label*] [
 	if *expression:Boolean*
 	|
 	unless *expression:Boolean*
 ]
 ```
 
-## with
+## block
+
+The `block` statement can be used with `break` or `continue` statements to prematurely leave or restart any loops.
+
+### Examples
+
+```kaoscript
+block top {
+	echo('entering block')
+
+	for var i from 1 to 10 {
+		for var j from 1 to 10 {
+			echo(`looping \(i).\(j)`)
+
+			if i == 5 {
+				// let's leave the block (and the loops)
+				break top
+			}
+		}
+	}
+
+	echo('still in block') // never printed
+}
+
+echo('outside the block')
+```
 
 ### Syntax
 
 ```syntax
-with *var-init* {
+block *label* {
 	...statements
 }
-[finally {
-	...statements
-}]
 
-with {
-	(*var-init*)+
-}
-then {
-	...statements
-}
-[finally {
-	...statements
-}]
-
-var-init = (
-	var [mut] *varname* = *expression*
-	|
-	*variable* (=|+=|-=|\*=|/=|/.=|%=|&&=|"||="|^^=|<<=|>>=) *expression*
-)
-
-variable = [@]*varname*(\.*varname* | "[" *expression* "]")\*
+*label* = *varname*
 ```
+
+## with
 
 ### Examples
 
@@ -588,6 +596,35 @@ with mode += 12 {
 }
 
 // mode = 2
+```
+
+### Syntax
+
+```syntax
+with *var-init* {
+	...statements
+}
+[finally {
+	...statements
+}]
+
+with {
+	(*var-init*)+
+}
+then {
+	...statements
+}
+[finally {
+	...statements
+}]
+
+var-init = (
+	var [mut] *varname* = *expression*
+	|
+	*variable* (=|+=|-=|\*=|/=|/.=|%=|&&=|"||="|^^=|<<=|>>=) *expression*
+)
+
+variable = [@]*varname*(\.*varname* | "[" *expression* "]")\*
 ```
 
 ## pass
