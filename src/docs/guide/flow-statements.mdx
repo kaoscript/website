@@ -374,16 +374,20 @@ It executes only and only one branch. (No `break` needed)
 ### Syntax
 
 ```syntax
-match *expression* {
+match
+	*expression*
+	|
+	var [mut] *varname* [: *type*] = *expression*
+{
 	(
 		(
-			(*expression1*[, *expression2* ... [*expressionN*]] | is *class*)
-			[with (*varname* [as *type*] | *destructuring*) ]
+			*match-condition*
+			[with ([mut] *varname* [: *type*] | *destructuring*) ]
 			[when *expression:Boolean*]
 		)
 		|
 		(
-			with (*varname* [as *type*] | *destructuring*)
+			with ([mut] *varname* [: *type*] | *destructuring*)
 			[when *expression:Boolean*]
 		)
 		|
@@ -399,16 +403,22 @@ match *expression* {
 		}
 	)
 }
+
+match-condition = (
+	(*expression1* [| ... *expressionN*]\*)
+	|
+	is (*class1* [| ... *classN*]\*
+) [, ...*match-condition*]*
 ```
 
 ### Examples
 
 ```kaoscript
 match number {
-	1				=> console.log("One!")
-	2, 3, 5, 7, 11	=> console.log("This is a prime")
-	13..19			=> console.log("A teen")
-	else			=> console.log("Ain't special")
+	1					=> console.log("One!")
+	2 | 3 | 5 | 7 | 11	=> console.log("This is a prime")
+	13..19				=> console.log("A teen")
+	else				=> console.log("Ain't special")
 }
 ```
 
@@ -448,7 +458,7 @@ match somePoint {
 
 ```kaoscript
 var value = {
-	foo: 1,
+	foo: 1
 	bar() => 2
 }
 
@@ -465,8 +475,8 @@ match value {
 ```kaoscript
 match view {
 	is UIImageView								=> console.log("It's an image view")
-	is UILabel		with label as UILabel		=> console.log("It's a label")
-	is UITableView	with tblv as UITableView	{
+	is UILabel		with label					=> console.log("It's a label")
+	is UITableView	with tblv					{
 		var sectionCount = tblv.numberOfSections()
 		console.log(`It's a table view with \(sectionCount) sections`)
 	}
