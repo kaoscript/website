@@ -66,13 +66,86 @@ spicyHeroes = [hero for like, hero of likes when like == 'spice']
 a = [i for var i from 0 to 10 by 2 until foo(i)]
 ```
 
+## if...else
+
+### Examples
+
+```kaoscript
+var x = if foo() {
+	pick qux()
+}
+else {
+	pick bar()
+}
+
+var v1 = v2.substring(
+	v2.lastIndexOf(
+		c1
+		if v2.contains(c2) {
+			pick v2.indexOf(c2)
+		}
+		else {
+			pick v2.length
+		}
+	) + 1
+	if v2.contains(c2) {
+		pick v2.indexOf(c2, v2.lastIndexOf(c1, v2.indexOf(c2)))
+	}
+	else {
+		pick v2.length
+	}
+)
+
+// same as
+var v1 = v2.substring(
+    v2.lastIndexOf(c1, v2.contains(c2) ? v2.indexOf(c2) : v2.length) + 1
+    v2.contains(c2) ? v2.indexOf(c2, v2.lastIndexOf(c1, v2.indexOf(c2))) : v2.length
+)
+```
+
+### Syntax
+
+The inline `if` expression is using the same syntax as an `if` statement but has 2 caveats:
+- all cases must be covered
+- use `pick` statement to "return" a value to the root expression
+
+## match
+
+### Examples
+
+```kaoscript
+func color(fg: ANSIColor, bg: ANSIColor): String {
+	var fgCode = match fg {
+		.black		=> 30
+		.red		=> 31
+		.green		=> 32
+		.yellow		=> 33
+		.blue		=> 34
+		.magenta	=> 35
+		.cyan		=> 36
+		.white		=> 37
+		else		=> 39
+	}
+
+	...
+
+	return `\(fgCode);\(bgCode)m`
+}
+```
+
+### Syntax
+
+The inline `match` expression is using the same syntax as an `match` statement but has 2 caveats:
+- all cases must be covered
+- use `pick` statement to "return" a value to the root expression
+
 ## in assignment statement
 
 ### Syntax
 
 ```syntax
 ... = *expression* [
-	if *expression:Boolean* [else *expression*]
+	if *expression:Boolean*
 	|
 	unless *expression:Boolean*
 ]
@@ -81,7 +154,7 @@ a = [i for var i from 0 to 10 by 2 until foo(i)]
 ### Examples
 
 ```kaoscript
-y = 10 if x == 5 else 15
+y = 10 if x == 5
 ```
 
 ## in expression statement
@@ -141,24 +214,6 @@ heroes = ['leto', 'duncan', 'goku']
 console.log(hero) for hero in heroes
 ```
 
-## in var statement
-
-### Syntax
-
-```syntax
-var ... = *expression* [
-	if *expression:Boolean* [else *expression*]
-	|
-	unless *expression:Boolean*
-]
-```
-
-### Examples
-
-```kaoscript
-var y = 10 if x == 5 else 15
-```
-
 ## in return statement
 
 ### Syntax
@@ -170,7 +225,7 @@ return [
 	unless *expression:Boolean*
 	|
 	*expression* [
-		if *expression:Boolean* [else *expression*]
+		if *expression:Boolean*
 		|
 		unless *expression:Boolean*
 	]
@@ -183,17 +238,13 @@ return [
 return if lang == 'en'
 ```
 
-```kaoscript
-return 'hello' if lang == 'en' else 'bonjour'
-```
-
 ## in throw statement
 
 ### Syntax
 
 ```syntax
 throw *expression* [
-	if *expression:Boolean* [else *expression*]
+	if *expression:Boolean*
 	|
 	unless *expression:Boolean*
 ]
@@ -212,7 +263,7 @@ throw new Error('Not Defined') if !?x
 ```syntax
 {
 	*varname*[: *expression*]
-	if *expression:Boolean* [else *expression*]
+	if *expression:Boolean*
 	|
 	unless *expression:Boolean*
 }
@@ -235,7 +286,7 @@ var point = {
 ```syntax
 '('
 	(*varname*: *expression* | :*varname*)
-	if *expression:Boolean* [else *expression*]
+	if *expression:Boolean*
 	|
 	unless *expression:Boolean*
 ')'
@@ -249,4 +300,22 @@ foobar(
 	y: 1
 	z: 1 if _3d
 )
+```
+
+## in cascade expression
+
+### Syntax
+
+```syntax
+*expression* (if|unless) *expression:Boolean*$
+```
+
+### Examples
+
+```kaoscript
+writer
+	.newLine()
+	.code('break')
+	.code(' ').expression(data.label) if ?data.label
+	.done()
 ```
