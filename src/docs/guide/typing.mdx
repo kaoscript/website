@@ -302,7 +302,7 @@ func foobar(p: Point) {
 You can avoid the type casting with `as!` or `:!`.
 
 ```syntax
-*expression*:[(!|?)]*limited-type*
+*expression*:[(!|?)]*limited-type*(?|'[]'|'{}')\*
 
 *expression* as[(!|?)] *type*
 ```
@@ -385,7 +385,7 @@ type = (
 	*object-type*
 	|
 	*array-type*
-) (('|' | & | ^) *type* | '|?')\*
+) (? | '[]' | '{}')\* (('|' | & | ^) *type* | '|?')\*
 
 descriptive-type = (
 	([(final | sealed)] [abstract] | [system]) class *class-type*
@@ -407,7 +407,7 @@ descriptive-type = (
 	[sealed] [var] *varname*[: *type*]
 )
 
-limited-type = (*varname* ('.' *varname*)\* | *func-type*) ['<' *limited-type* ([,] *limited-type*)\* '>'] (? | '[]' | '{}')\*
+limited-type = (*varname* ('.' *varname*)\* | *func-type*) ['<' *limited-type* ([,] *limited-type*)\* '>']
 
 generic-type = *entity-type* (',' *entity-type*)\*
 entity-type = *varname* ('.' *varname*)\*
