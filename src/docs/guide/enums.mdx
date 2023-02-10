@@ -39,7 +39,7 @@ enum Color {
 	Blue
 }
 
-var color = Color::Red
+var color = Color.Red
 
 console.log(color)
 // 0
@@ -73,7 +73,7 @@ enum CardSuit<String> {
 	Spades
 }
 
-var card = CardSuit::Clubs
+var card = CardSuit.Clubs
 
 console.log(card)
 // clubs
@@ -137,35 +137,35 @@ bitmask AnimalFlags {
 func printAnimalAbilities(animal) {
 	var animalFlags = animal.flags
 
-	if animalFlags ~~ AnimalFlags::HasClaws {
+	if animalFlags ~~ AnimalFlags.HasClaws {
 		console.log('animal has claws')
 	}
 
-	if animalFlags ~~ AnimalFlags::CanFly {
+	if animalFlags ~~ AnimalFlags.CanFly {
 		console.log('animal can fly')
 	}
 
-	if animalFlags == AnimalFlags::None {
+	if animalFlags == AnimalFlags.None {
 		console.log('nothing')
 	}
 }
 
 var animal = {
-	flags: AnimalFlags::None
+	flags: AnimalFlags.None
 }
 
 printAnimalAbilities(animal)
 // nothing
 
-animal.flags += AnimalFlags::HasClaws
+animal.flags += AnimalFlags.HasClaws
 printAnimalAbilities(animal)
 // animal has claws
 
-animal.flags -= AnimalFlags::HasClaws
+animal.flags -= AnimalFlags.HasClaws
 printAnimalAbilities(animal)
 // nothing
 
-animal.flags += AnimalFlags::HasClaws + AnimalFlags::CanFly
+animal.flags += AnimalFlags.HasClaws + AnimalFlags.CanFly
 printAnimalAbilities(animal)
 // animal has claws, animal can fly
 ```
