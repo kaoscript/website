@@ -11,11 +11,11 @@ route: /guide/classes
 ```kaoscript
 class Shape {
 	private {
-		_color: String
+		@color: String
 	}
 
 	draw(): String {
-		return `I'm drawing with a \(this._color) pen.`
+		return `I'm drawing with a \(@color) pen.`
 	}
 }
 ```
@@ -125,7 +125,7 @@ class Shape {
 
 ## destructor
 
-The destructor is called by the statement `delete`.
+The destructor is called by the statement `drop`.
 
 ```kaoscript
 extern console
@@ -144,7 +144,7 @@ class Shape {
 
 var s = new Shape('red')
 
-delete s
+drop s
 // the destructor is called and the variable `s` is unreferenced
 ```
 

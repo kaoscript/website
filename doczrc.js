@@ -66,8 +66,9 @@ export default {
 		{
 			name: 'Technical',
 			menu: [
-				'Compilation',
+				'FAQ',
 				'Cache',
+				'Compilation',
 				'Known Issues',
 			]
 		},
