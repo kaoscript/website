@@ -6,25 +6,17 @@ route: /guide/functions
 
 # Functions
 
-In kaoscript, there is three types of functions:
-- named functions
-- anonymous functions
-- arrow functions
+|                            | function | anonymous | lambda |
+| :------------------------: | :------: | :-------: | :----: |
+|       overload-able        |    ✅    |    ❌     |   ❌   |
+|         async-able         |    ✅    |    ✅     |   ✅   |
+|        return type         |    ✅    |    ✅     |   ✅   |
+|        error types         |    ✅    |    ✅     |   ✅   |
+|         statement          |    ✅    |    ❌     |   ❌   |
+|         expression         |    ❌    |    ✅     |   ✅   |
+| accessible parent's `this` |    ❌    |    ❌     |   ✅   |
 
-|                                 | named function | anonymous function | arrow function |
-| :-----------------------------: | :------------: | :----------------: | :------------: |
-|        new local `this`         |       ✅       |         ✅         |       ❌       |
-| local `this` is parent's `this` |       ❌       |         ❌         |       ✅       |
-|    access module's variables    |       ✅       |         ✅         |       ✅       |
-|    access parent's variables    |       ❌       |         ❌         |       ✅       |
-|          overload-able          |       ✅       |         ❌         |       ❌       |
-|           async-able            |       ✅       |         ✅         |       ✅       |
-|           return type           |       ✅       |         ✅         |       ✅       |
-|           error types           |       ✅       |         ✅         |       ✅       |
-|            statement            |       ✅       |         ❌         |       ❌       |
-|           expression            |       ❌       |         ✅         |       ✅       |
-
-## named function
+## function
 
 ### Syntax
 
@@ -48,7 +40,7 @@ func alpha(n: Number, percentage = false): Number {
 func red() => '#FF0000'
 ```
 
-## anonymous function
+## anonymous
 
 ### Syntax
 
@@ -68,7 +60,7 @@ foobar(func(a:Number, b:Number) {
 foobar(func(a:Number, b:Number): Number => a - b)
 ```
 
-## arrow function
+## lambda
 
 ### Syntax
 
@@ -81,9 +73,11 @@ foobar(func(a:Number, b:Number): Number => a - b)
 ### Examples
 
 ```kaoscript
-var foo = (a:Number, b:Number) => a - b
+foobar((a:Number, b:Number) => {
+	return a - b
+})
 
-var four = (a => a / 10)(42)
+foobar((a:Number, b:Number): Number => a - b)
 ```
 
 ## parameters
@@ -334,6 +328,74 @@ func bar(_, x, y) {
 }
 ```
 
+## this parameter
+
+|                                 | function/anonymous() | function/anonymous(this: Type) | lambda() | lambda(this: Type) |
+|:-------------------------------:|:--------------------:|:------------------------------:|:--------:|:------------------:|
+|        new local `this`         |          ❌          |               ❌               |    ❌    |         ❌         |
+| local `this` is parent's `this` |          ❌          |               ❌               |    ✅    |         ❌         |
+|        accessible `this`        |          ❌          |               ✅               |    ✅    |         ✅         |
+|        accessible parent        |          ❌          |               ❌               |    ✅    |         ❌         |
+|        accessible module        |          ✅          |               ✅               |    ✅    |         ✅         |
+
+In a function, the `this` variable is reserved and can only be used if declared like:
+
+```kaoscript
+func isCat(this) {
+	return this.kind == 'cat'
+}
+
+func isDog() {
+	return this.kind == 'dog'
+	// an error will be thrown at compilation time
+}
+```
+
+### type
+
+```kaoscript
+func isCat(this: Pet) {
+	return this.kind == PetKind.Cat
+}
+```
+
+### lambda
+
+By default, the local `this` of a lambda is an alias of its parent's `this`.
+If a `this` parameter is declared, the local `this` will be of that type and so, the parent's `this` won't be accessible.
+
+### callback
+
+```kaoscript
+type DB = {
+  filterPets(filter: (this: Pet): Boolean): Pet[]
+}
+
+func findCats(db: DB): Pet[] {
+	return db.filterPets((this) => this.kind == PetKind.Cat)
+}
+```
+
+### void
+
+A lambda can indicates that it doesn't support `this` by typing it as `Void`.
+
+```kaoscript
+type DB = {
+  filterPets(filter: (value: Pet): Boolean): Pet[]
+}
+
+func findDogs(db: DB): Pet[] {
+	var filter = (this: Void, value) => value.kind == PetKind.Dog
+
+	return db.filterPets(filter)
+}
+```
+
+### rebindable
+
+The `this` scope is rebindable only if it's defined as a parameter and different from `Void`
+
 ## asynchronous
 
 `async/await` use the traditional `callback(error, ...values)` where the `error` can be catched with `try/catch`.
@@ -385,7 +447,7 @@ func foobar(): Number => 42
 
 ### auto
 
-With `auto`, kasocript will automatically determine the return type
+With `auto`, kaoscript will automatically determine the return type
 
 ```kaoscript
 func foobar(): auto => 42
@@ -478,70 +540,83 @@ reverse([1, 2, 3, 4])
 // [4, 3, 2, 1]
 ```
 
-## currying
-
-|      |     `this` is     |
-|:----:|:-----------------:|
-| `^$` |  first argument   |
-| `^^` |      `null`       |
-| `^@` | function's `this` |
-
-### argument
+## curry (partial, bind)
 
 ```kaoscript
-var log = console.log^$(console, 'hello:')
+func add(x, y) => x + y
+func identity(x) => x
 
-log('foo')
-// hello: foo
-```
+// apply from the left:
+var addOne = add^^(1, ^)
+addOne(2) // 3
 
-### null
+// apply from the right:
+var addTen = add^^(^, 10)
+addTen(2) // 12
 
-```kaoscript
-func log(...args) {
-	console.log(...args)
+// accept a fixed argument list:
+var numbers = ['1', '2', '3'].map(parseInt^^(^, 10)) // [1, 2, 3]
+
+// specify ordinal placeholder arguments:
+var indices = [1, 2, 3].map(identity^^(^1)) // [0, 1, 2]
+
+// bind `console` as receiver and accepts exactly one argument:
+[1, 2, 3].forEach(echo^^(^))
+// prints:
+// 1
+// 2
+// 3
+
+func printABC(a = 'arg0', b = 'arg1', c = 'arg2') {
+	echo(`\(a), \(b), \(c)`)
 }
 
-var logHello = log^^('hello:')
+var printCAA = printABC^^(^2, ^, ^0)
+printCAA(1, 2, 3)
+// prints:
+// 3, 1, 1
+printCAA(1, 2)
+// prints
+// arg0, 1, 1
 
-logHello('foo')
-// hello: foo
+var printCAA2 = printABC^^(a: ^2, b: ^, c: ^0)
+
+func writeLog(header, ...args) => echo(header, ...args)
+
+var writeAppLog = writeLog^^('[app]', ...)
+writeAppLog('Hello', 'World!')
+// prints:
+// [app] Hello World!
+
+var writeAppLogWithBreak = writeAppLog^^(..., '\n---')
+writeAppLogWithBreak('End of section')
+// prints:
+// [app] End of section
+// ---
 ```
 
-### self
+### binding
+
+|      | description  |
+| :--: | :----------: |
+| `^^` |    curry     |
+| `^$` | bind & curry |
+| `*$` | bind & call  |
 
 ```kaoscript
-var log = console.log^@('hello:')
-
-log('foo')
-// hello: foo
-```
-
-## calling
-
-|      |     `this` is     |
-|:----:|:-----------------:|
-| `*$` |  first argument   |
-| `**` |      `null`       |
-
-### argument
-
-```kaoscript
-func log(...args) {
-	this.log(...args)
+func sum(this: Number[], ...args: Number): Number {
+	return this.reduce((a, b) => a + b, 0) + args.reduce((a, b) => a + b, 0)
 }
 
-log*$(console, 'hello')
-```
+echo(sum*$([1, 2, 3], 4, 5, 6))
+// prints:
+// 21
 
-### null
+var sum123 = sum^$([1, 2, 3], ...)
 
-```kaoscript
-func log(...args) {
-	console.log(...args)
-}
-
-log**('hello')
+echo(sum123(4, 5, 6))
+// prints:
+// 21
 ```
 
 ## retained parameters

@@ -58,7 +58,7 @@ class Shape {
 }
 ```
 
-## method's parameter
+## aliasing parameter
 
 The this aliasing can also be used in parameters:
 
@@ -406,6 +406,22 @@ class Quxbaz extends Foobar {
 | :---------: | :-----------------------: |
 | constructor |   always current class    |
 |   method    | current class or subclass |
+
+## this parameter
+
+Unlike functions, defining a `this` parameter will throw an error at compile time.
+It's due that the `this` variable is always defined due to been a method. It will always refer to the current instance of the class.
+
+```kaoscript
+class Pet {
+	private {
+		@kind: PetKind
+	}
+	constructor(@kind)
+	isCat(this: Pet) => @kind == PetKind.Cat
+	// an error will be thrown
+}
+```
 
 ## versioning
 
