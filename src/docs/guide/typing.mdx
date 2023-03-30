@@ -378,7 +378,7 @@ The type of argument must be a superset of the type of the parameter *(parameter
 type-statement = "type" *varname* = *type*
 
 type = (
-	*limited-type*
+	*varname* ('.' *varname*)\* ['<' *type* ([,] *type*)\* '>']
 	|
 	[async] [func] *func-type*
 	|

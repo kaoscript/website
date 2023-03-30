@@ -13,22 +13,11 @@ A destructuring expression in the variable declaration can be:
 - computed
 - typed
 
-### Syntax
-
-```syntax
-destructuring = *array* | *object*
-
-array = '[' [*arrayItem1*] [, *arrayItem2*] ... [, *arrayItemN*] ']' [: *type*] [= *expression*]
-arrayItem = (('_' | '...') [: *type*] | ['...'] *varname* [: *type*] [= *expression*] | *array* | *object*)
-
-object = '{' [*objectItem1*] [, *objectItem2*] ... [, *objectItemN*] '}' [: *type*] [= *expression*]
-objectItem = ('...' *varname* | ('[' *varname* ']' | *varname*) [: *array* | *object* | *varname* [= *expression*]])
-```
-
 ### Examples
 
 ```kaoscript
 var [x1, y1]: [Number, Number] = foobar()
+var [x1: Number, y1: Number] = foobar()
 console.log(x1, y1)
 
 var [x2, y2]: Array<Number> = foobar()
@@ -40,25 +29,72 @@ console.log(x3, y3)
 var {x4, y4}: Object<Number> = foobar()
 console.log(x4, y4)
 
+var {x5: Number, y5: Number} = foobar()
+console.log(x5, y5)
+
 var foo = { bar: { n1: 'hello', n2: 'world' } }
 console.log(foo)
 
-var {bar: { n1, n2: qux }} = foo
-console.log(bar, n1, qux)
+var {bar % { n1, n2 % qux }} = foo
+var {bar % { n1: String, n2 % qux: String }} = foo
+console.log(n1, qux)
 
 var key = 'qux'
 console.log(key)
 
-var { [key]: baz } = { qux: 'bar' }
+var { [key] % baz } = { qux: 'bar' }
 console.log(baz)
 
-
-
-var {x3, mut y3} = foobar()
-var {x3: x, mut y3: y} = foobar()
+var {x3 % x, y3 % mut y} = foobar()
 
 for var {x, mut y} in coords {
 }
+```
+
+### Syntax
+
+```syntax
+destructuring = *array* | *object*
+
+array = '[' [*arrayItem1*] [, *arrayItem2*] ... [, *arrayItemN*] ']'
+arrayItem = (
+	([mut] *varname* | *array* | *object*) (
+		! [: limited-type] [?] (= | ??= | ##=) *expression*
+		|
+		[: limited-type] [?] [(= | ??= | ##=) *expression*]
+	)
+	|
+	'_' [: limited-type] [?]
+	|
+	'...' [mut] *varname* [: *limited-type*)] [(= | ??= | ##=) *expression*]
+	|
+	'...' [: *limited-type*)]
+)
+
+object = '{' [*objectItem1*] [, *objectItem2*] ... [, *objectItemN*] '}'
+objectItem = (
+	[mut] *varname* (
+		! [: limited-type] [?] (= | ??= | ##=) *expression*
+		|
+		[: limited-type] [?] [(= | ??= | ##=) *expression*]
+	)
+	|
+	*varname* % ([mut] *varname* | *array* | *object*) (
+		! [: limited-type] [?] (= | ??= | ##=) *expression*
+		|
+		[: limited-type] [?] [(= | ??= | ##=) *expression*]
+	)
+	|
+	'[' *varname* ']' % ([mut] *varname* | *array* | *object*) (
+		! [: limited-type] [?] (= | ??= | ##=) *expression*
+		|
+		[: limited-type] [?] [(= | ??= | ##=) *expression*]
+	)
+	|
+	'...' [mut] *varname* [: *limited-type*] [(= | ??= | ##=) *expression*]
+	|
+	'...' [: *limited-type*)]
+)
 ```
 
 ## function parameter
@@ -66,18 +102,6 @@ for var {x, mut y} in coords {
 A destructuring expression as a function parameter can be:
 
 - typed
-
-### Syntax
-
-```syntax
-destructuring = *array* | *object*
-
-array = '[' [*arrayItem1*] [, *arrayItem2*] ... [, *arrayItemN*] ']' [: *type*] [= *expression*]
-arrayItem = (('_' | '...') [: *type*] | ['...'] *varname* [: *type*] [= *expression*] | *array* | *object*)
-
-object = '{' [*objectItem1*] [, *objectItem2*] ... [, *objectItemN*] '}' [: *type*] [= *expression*]
-objectItem = ['...'] *varname* [: *array* | *object* | *varname* [= *expression*]]
-```
 
 ### Examples
 
@@ -102,11 +126,19 @@ func fn5([_ , y, ...z]) {
 	console.log(y, z)
 }
 
-func fn6({x = 1, y = 2, z = 3}: {x: Number, y: Number, z: Number} = {}) {
+func fn6a({x = 1, y = 2, z = 3}: {x: Number, y: Number, z: Number} = {}) {
 	console.log(x, y, z)
 }
 
-func fn7({x: a = 1, y: b = 2, z: c = 3}: Object<Number> = {}) {
+func fn6b({x: Number = 1, y: Number = 2, z: Number = 3} = {}) {
+	console.log(x, y, z)
+}
+
+func fn7a({x % a = 1, y % b = 2, z % c = 3}: Object<Number> = {}) {
+	console.log(a, b, c)
+}
+
+func fn7b({x % a: Number = 1, y % b: Number = 2, z % c: Number = 3} = {}) {
 	console.log(a, b, c)
 }
 
@@ -114,14 +146,61 @@ func fn8({x, y, ...z}) {
 	console.log(x, y, z)
 }
 
-func fn9({name, scores: {x = 0, y = 0, z = 0} = {}} = {}) {
+func fn9({name, scores % {x = 0, y = 0, z = 0} = {}} = {}) {
 	console.log(name, x, y, z)
 }
 
-func drawCircle({center: [x, y], radius: r}) {
+func drawCircle({center % [x, y], radius % r}) {
+	console.log(x, y, r)
+}
+
+func drawCircle(circle % {center % [x, y]: Number[], radius % r: Number}) {
+	console.log(x, y, r)
+}
+
+func drawCircle(circle % {center % [x, y], radius % r}: Circle) {
+	console.log(x, y, r)
+}
+
+func drawCircle([[x, y]: Number[], radius: Number]) {
 	console.log(x, y, r)
 }
 ```
+
+### Syntax
+
+```syntax
+destructuring = *array* | *object*
+
+array = '[' [*arrayItem1*] [, *arrayItem2*] ... [, *arrayItemN*] ']'
+arrayItem = (
+	(*varname* | *array* | *object*) (
+		! [: limited-type] [?] (= | ??= | ##=) *expression*
+		|
+		[: limited-type] [?] [(= | ??= | ##=) *expression*]
+	)
+	|
+	'_' [: limited-type] [?]
+	|
+	'...' *varname* [: *limited-type*)] [(= | ??= | ##=) *expression*]
+	|
+	'...' [: *limited-type*)]
+)
+
+object = '{' [*objectItem1*] [, *objectItem2*] ... [, *objectItemN*] '}'
+objectItem = (
+	*varname* [% (*varname* | *array* | *object*)] (
+		! [: limited-type] [?] (= | ??= | ##=) *expression*
+		|
+		[: limited-type] [?] [(= | ??= | ##=) *expression*]
+	)
+	|
+	'...' *varname* [: *limited-type*] [(= | ??= | ##=) *expression*]
+	|
+	'...' [: *limited-type*)]
+)
+```
+
 
 ## method parameter
 
@@ -129,18 +208,6 @@ A destructuring expression as a method parameter can be:
 
 - typed
 - this aliased
-
-### Syntax
-
-```syntax
-destructuring = *array* | *object*
-
-array = '[' [*arrayItem1*] [, *arrayItem2*] ... [, *arrayItemN*] ']' [: *type*] [= *expression*]
-arrayItem = (('_' | '...') [: *type*] | ['...'] [@] *varname* [: *type*] [= *expression*] | *array* | *object*)
-
-object = '{' [*objectItem1*] [, *objectItem2*] ... [, *objectItemN*] '}' [: *type*] [= *expression*]
-objectItem = (['...'] *varname* [: *array* | *object* | [@] *varname* [= *expression*]] | ['...'] @ *varname* [= *expression*])
-```
 
 ### Examples
 
@@ -154,10 +221,10 @@ class Foobar {
 	fn1([@x, [@y, [@z]]]) {
 		console.log(@x, @y, @z)
 	}
-	fn2({@x, y: {@y, z: {@z}}}) {
+	fn2({@x, y % {@y, z % {@z}}}) {
 		console.log(@x, @y, @z)
 	}
-	fn3({x: a = 1, y: b = 2, z: c = 3}: Object<Number> = {}) {
+	fn3({x % a = 1, y % b = 2, z % c = 3}: Object<Number> = {}) {
 		console.log(a, b, c)
 	}
 	fn4([x = 1, y = 2, z = 3]: Array<Number> = []) {
@@ -169,28 +236,82 @@ class Foobar {
 }
 ```
 
+### Syntax
+
+```syntax
+destructuring = *array* | *object*
+
+array = '[' [*arrayItem1*] [, *arrayItem2*] ... [, *arrayItemN*] ']'
+arrayItem = (
+	(*varname* | *array* | *object*) (
+		! [: limited-type] [?] (= | ??= | ##=) *expression*
+		|
+		[: limited-type] [?] [(= | ??= | ##=) *expression*]
+	)
+	|
+	'@' *varname* [!?] (= | ??= | ##=) *expression*
+	|
+	'_' [: limited-type] [?]
+	|
+	'...' *varname* [: *limited-type*)] [(= | ??= | ##=) *expression*]
+	|
+	'...' '@' *varname* [!?] [(= | ??= | ##=) *expression*]
+	|
+	'...' [: *limited-type*)]
+)
+
+object = '{' [*objectItem1*] [, *objectItem2*] ... [, *objectItemN*] '}'
+objectItem = (
+	*varname* [% (*varname* | *array* | *object*)] (
+		! [: limited-type] [?] (= | ??= | ##=) *expression*
+		|
+		[: limited-type] [?] [(= | ??= | ##=) *expression*]
+	)
+	|
+	[*varname* %] '@' *varname* [!?] [(= | ??= | ##=) *expression*]
+	|
+	'...' *varname* [: *limited-type*] [(= | ??= | ##=) *expression*]
+	|
+	'...' '@' *varname* [!?] [(= | ??= | ##=) *expression*]
+	|
+	'...' [: *limited-type*)]
+)
+```
+
 ## expression
 
 A destructuring expression in an expression can be:
 
 - computed
 
+### Examples
+
+```kaoscript
+{foo = 3, bar, qux = 7} = foobar
+```
+
 ### Syntax
 
 ```syntax
 destructuring = *array* | *object*
 
-array = '[' [*arrayItem1*] [, *arrayItem2*] ... [, *arrayItemN*] ']' [= *expression*])
-arrayItem = ('_' | '...' | ['...'] *varname* [= *expression*] | *array* | *object*)
+array = '[' [*arrayItem1*] [, *arrayItem2*] ... [, *arrayItemN*] ']'
+arrayItem = (
+	(*varname* | *array* | *object*) [(? | (= | ??= | ##=) *expression*)]
+	|
+	'_' [?]
+	|
+	'...' *varname* [(? | (= | ??= | ##=) *expression*)]
+	|
+	'...'
+)
 
-object = '{' [*objectItem1*] [, *objectItem2*] ... [, *objectItemN*] '}' [= *expression*])
-objectItem = ('...' *varname* | ('[' *varname* ']' | *varname*) [: *array* | *object* | *varname* [= *expression*]])
-```
-
-### Examples
-
-```kaoscript
-if {bar = 1, baz = 2} ?= foo {
-	console.log(bar, baz)
-}
+object = '{' [*objectItem1*] [, *objectItem2*] ... [, *objectItemN*] '}'
+objectItem = (
+	*varname* [% (*varname* | *array* | *object*)] [(? | (= | ??= | ##=) *expression*)]
+	|
+	'[' *varname* ']' % (*varname* | *array* | *object*) [(? | (= | ??= | ##=) *expression*)]
+	|
+	'...' *varname* [(= | ??= | ##=) *expression*]
+)
 ```

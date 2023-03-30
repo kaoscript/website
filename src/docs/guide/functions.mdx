@@ -236,7 +236,6 @@ func foobar(mut *x!: Number = 0) {}
 func foobar(mut *x: Number = 0) {}
 func foobar(mut #x: Number = 0) {}
 
-func foobar(mut &x!: Number = 0) {}
 func foobar(mut #x!: Number = 0) {}
 ```
 
@@ -244,7 +243,6 @@ func foobar(mut #x!: Number = 0) {}
 func placeOrder(*item, *price, *quantity) {}
 
 func powerMod(#x, #y, *mod) {}
-func powerMod(\x, \y, *mod) {}
 
 func combine(a, b, *validator = () => {}) {}
 
