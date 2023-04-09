@@ -66,9 +66,9 @@ arrayItem = (
 	|
 	'_' [: limited-type] [?]
 	|
-	'...' [mut] *varname* [: *limited-type*)] [(= | ??= | ##=) *expression*]
+	'...' [mut] *varname* [: *limited-type*)] [?] [(= | ??= | ##=) *expression*]
 	|
-	'...' [: *limited-type*)]
+	'...' [: *limited-type*)] [?]
 )
 
 object = '{' [*objectItem1*] [, *objectItem2*] ... [, *objectItemN*] '}'
@@ -91,9 +91,9 @@ objectItem = (
 		[: limited-type] [?] [(= | ??= | ##=) *expression*]
 	)
 	|
-	'...' [mut] *varname* [: *limited-type*] [(= | ??= | ##=) *expression*]
+	'...' [mut] *varname* [: *limited-type*] [?] [(= | ??= | ##=) *expression*]
 	|
-	'...' [: *limited-type*)]
+	'...' [: *limited-type*)] [?]
 )
 ```
 
@@ -182,9 +182,9 @@ arrayItem = (
 	|
 	'_' [: limited-type] [?]
 	|
-	'...' *varname* [: *limited-type*)] [(= | ??= | ##=) *expression*]
+	'...' *varname* [: *limited-type*)] [?] [(= | ??= | ##=) *expression*]
 	|
-	'...' [: *limited-type*)]
+	'...' [: *limited-type*)] [?]
 )
 
 object = '{' [*objectItem1*] [, *objectItem2*] ... [, *objectItemN*] '}'
@@ -195,9 +195,9 @@ objectItem = (
 		[: limited-type] [?] [(= | ??= | ##=) *expression*]
 	)
 	|
-	'...' *varname* [: *limited-type*] [(= | ??= | ##=) *expression*]
+	'...' *varname* [: *limited-type*] [?] [(= | ??= | ##=) *expression*]
 	|
-	'...' [: *limited-type*)]
+	'...' [: *limited-type*)] [?]
 )
 ```
 
@@ -253,11 +253,11 @@ arrayItem = (
 	|
 	'_' [: limited-type] [?]
 	|
-	'...' *varname* [: *limited-type*)] [(= | ??= | ##=) *expression*]
+	'...' *varname* [: *limited-type*)] [?] [(= | ??= | ##=) *expression*]
 	|
 	'...' '@' *varname* [!?] [(= | ??= | ##=) *expression*]
 	|
-	'...' [: *limited-type*)]
+	'...' [: *limited-type*)] [?]
 )
 
 object = '{' [*objectItem1*] [, *objectItem2*] ... [, *objectItemN*] '}'
@@ -270,11 +270,11 @@ objectItem = (
 	|
 	[*varname* %] '@' *varname* [!?] [(= | ??= | ##=) *expression*]
 	|
-	'...' *varname* [: *limited-type*] [(= | ??= | ##=) *expression*]
+	'...' *varname* [: *limited-type*] [?] [(= | ??= | ##=) *expression*]
 	|
 	'...' '@' *varname* [!?] [(= | ??= | ##=) *expression*]
 	|
-	'...' [: *limited-type*)]
+	'...' [: *limited-type*)] [?]
 )
 ```
 
@@ -297,21 +297,35 @@ destructuring = *array* | *object*
 
 array = '[' [*arrayItem1*] [, *arrayItem2*] ... [, *arrayItemN*] ']'
 arrayItem = (
-	(*varname* | *array* | *object*) [(? | (= | ??= | ##=) *expression*)]
+	(*varname* | *array* | *object*) (
+		! [?] (= | ??= | ##=) *expression*
+		|
+		[?] [(= | ??= | ##=) *expression*]
+	)
 	|
 	'_' [?]
 	|
 	'...' *varname* [(? | (= | ??= | ##=) *expression*)]
 	|
-	'...'
+	'...' [?]
 )
 
 object = '{' [*objectItem1*] [, *objectItem2*] ... [, *objectItemN*] '}'
 objectItem = (
-	*varname* [% (*varname* | *array* | *object*)] [(? | (= | ??= | ##=) *expression*)]
+	*varname* [% (*varname* | *array* | *object*)] (
+		! [?] (= | ??= | ##=) *expression*
+		|
+		[?] [(= | ??= | ##=) *expression*]
+	)
 	|
-	'[' *varname* ']' % (*varname* | *array* | *object*) [(? | (= | ??= | ##=) *expression*)]
+	'[' *varname* ']' % (*varname* | *array* | *object*) (
+		! [?] (= | ??= | ##=) *expression*
+		|
+		[?] [(= | ??= | ##=) *expression*]
+	)
 	|
-	'...' *varname* [(= | ??= | ##=) *expression*]
+	'...' *varname* [(? | (= | ??= | ##=) *expression*)]
+	|
+	'...' [?]
 )
 ```
