@@ -67,8 +67,9 @@ export default {
 			name: 'Technical',
 			menu: [
 				'FAQ',
-				'Cache',
+				'Object Creation',
 				'Compilation',
+				'Cache',
 				'Known Issues',
 			]
 		},

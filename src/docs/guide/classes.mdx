@@ -20,6 +20,12 @@ class Shape {
 }
 ```
 
+## instantiating
+
+```kaoscript
+var shape = Shape.new('red')
+```
+
 ## class variable
 
 ```kaoscript
@@ -111,8 +117,6 @@ class Shape {
 
 ## constructor
 
-The constructor is called when creating a new object like `new Shape()`
-
 ```kaoscript
 class Shape {
 	private @color: String
@@ -121,11 +125,11 @@ class Shape {
 		@color = 'red'
 	}
 }
+
+var s = Shape.new()
 ```
 
 ## destructor
-
-The destructor is called by the statement `drop`.
 
 ```kaoscript
 extern console
@@ -142,9 +146,9 @@ class Shape {
 	}
 }
 
-var s = new Shape('red')
+var s = Shape.new('red')
 
-drop s
+s.destroy()
 // the destructor is called and the variable `s` is unreferenced
 ```
 
@@ -159,10 +163,10 @@ class Shape {
 		@type: String
 	}
 	static {
-		final RED_CIRCLE = new Shape('circle', 'red')
+		final RED_CIRCLE = Shape.new('circle', 'red')
 
-		makeCircle(color: String): Shape => new Shape('circle', color)
-		makeRectangle(color: String): Shape => new Shape('rectangle', color)
+		makeCircle(color: String): Shape => { 'circle', color } // deducing object type from expected return type
+		makeRectangle(color: String): Shape => { 'rectangle', color }
 	}
 	constructor(@type, @color)
 }
@@ -187,7 +191,7 @@ class Shape {
 	constructor(@type, @color)
 }
 
-var r = new Shape('rectangle', 'black')
+var r = Shape.new('rectangle', 'black')
 console.log(r.color)
 // black
 
@@ -246,7 +250,7 @@ class Rectangle extends Shape {
 	}
 }
 
-var r = new Rectangle('black')
+var r = Rectangle.new('black')
 
 console.log(r.draw())
 // I'm drawing with a black pen. I'm drawing a black rectangle.

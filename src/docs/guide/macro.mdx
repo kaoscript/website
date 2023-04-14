@@ -29,7 +29,7 @@ macro-expression = "#" [(a|e|j|s|w)] "(" *expression* ")")
 
 ```kaoscript
 macro trace_build_age() {
-	var d = new Date(2013, 2, 15)
+	var d = Date.new(2013, 2, 15)
 
 	var buildTime = Math.floor(d.getTime() / 1000)
 

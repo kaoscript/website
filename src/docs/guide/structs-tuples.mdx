@@ -6,30 +6,31 @@ route: /guide/structs-tuples
 
 # Structs & Tuples
 
-In kaoscript, there is 3 kinds of data types:
-
-- tuple: a tuple is a finite ordered list (sequence) of values,
-- named tuple: a named tuple is a tuple but its values can also be accessed by their names,
-- struct: a struct is a group of variables, only accessible by their names.
-
-The tuples and named tupled are stored as array, whereas the structs are stored as object.
-
 ## tuple
+
+A tuple is a finite ordered list (sequence) of values (stored as an array).
+The tuple's values can also be accessed by their names (if they aren't anonymous) or by their indexes.
 
 ### syntax
 
 ```syntax
-[abstract] tuple *varname*(*...element*) [extends *varname*]
+[abstract] tuple *varname* [extends *varname*] "["
+	*...element*
+"]"
 
-element = *type* [= *expression*]
+element = (
+	:*type* [= *expression*]
+	|
+	*varname* (: *type* | ?) [= *expression*]
+)
 ```
 
 ### example
 
 ```kaoscript
-tuple Pair(String, Number)
+tuple Pair [ :String, :Number ]
 
-var pair = new Pair('x', 0.1)
+var pair = Pair.new('x', 0.1)
 
 console.log(`\(pair[0])`, pair[1] + 1)
 
@@ -45,75 +46,16 @@ console.log(`\(pair.0)`, pair.1 + 1)
 ### inheritance
 
 ```kaoscript
-tuple Pair(String, Number)
-
-tuple Triple(Boolean) extends Pair
-
-var triple = new Triple('x', 0.1, true)
-
-console.log(`\(triple.0)`, triple.1 + 1, !triple.2)
-```
-
-### default values
-
-```kaoscript
-tuple Pair(
-	String	= ''
-	Number	= 0
-)
-
-var pair1 = new Pair()
-
-var pair2 = new Pair(null, 3.14)
-
-var pair3 = new Pair('foobar')
-
-var pair4 = new Pair('foobar', null)
-
-var pair5 = new Pair(null, null)
-```
-
-## named tuple
-
-### syntax
-
-```syntax
-[abstract] tuple *varname* [extends *varname*] {
-	*...element*
-}
-
-element = *varname*[: *type*] [= *expression*]
-```
-
-### example
-
-```kaoscript
-tuple Pair {
+tuple Pair [
 	x: String	= ''
 	y: Number	= 0
-}
+]
 
-var mut pair = new Pair('x', 0.1)
-
-console.log(`\(pair.x)`, pair.y + 1)
-
-pair = new Pair()
-pair = new Pair(x: 'x', y: 0.1)
-```
-
-### inheritance
-
-```kaoscript
-tuple Pair {
-	x: String	= ''
-	y: Number	= 0
-}
-
-tuple Triple extends Pair {
+tuple Triple extends Pair [
 	z: Boolean	= false
-}
+]
 
-var mut triple = new Triple('x', 0.1, true)
+var mut triple = Triple.new('x', 0.1, true)
 
 console.log(`\(triple[0])`, triple[1] + 1, !triple[2])
 
@@ -121,11 +63,13 @@ console.log(`\(triple.0)`, triple.1 + 1, !triple.2)
 
 console.log(`\(triple.x)`, triple.y + 1, !triple.z)
 
-triple = new Triple()
-triple = new Triple(z: true)
+triple = Triple.new()
+triple = Triple.new(z: true)
 ```
 
 ## struct
+
+A struct is a group of variables (stored as object), only accessible by their names.
 
 ### syntax
 
@@ -134,7 +78,7 @@ triple = new Triple(z: true)
 	*...element*
 }
 
-element = *varname*[: *type*] [= *expression*]
+element = *varname*[(: *type* | ?)] [= *expression*]
 ```
 
 ### example
@@ -145,7 +89,7 @@ struct Point {
     y: Number
 }
 
-var mut point = new Point(0.3, 0.4)
+var mut point = Point.new(0.3, 0.4)
 
 console.log(point.x + 1, point.x + point.y)
 
@@ -153,7 +97,7 @@ point.x = 3.14
 
 console.log(point.x + 1, point.x + point.y)
 
-point = new Point(x: 0.3, y: 0.4)
+point = Point.new(x: 0.3, y: 0.4)
 ```
 
 ### inheritance
@@ -168,11 +112,11 @@ struct Point3D extends Point {
 	z: Number	= 0
 }
 
-var mut point = new Point3D(x: 0.3, y: 0.4)
+var mut point = Point3D.new(x: 0.3, y: 0.4)
 
 console.log(point.x + 1, point.y + 2, point.z + 3)
 
-point = new Point3D(0.3, 0.4)
-point = new Point3D(0.3, 0.4, 1)
-point = new Point3D(x: 0.3, y: 0.4, z: 1)
+point = Point3D.new(0.3, 0.4)
+point = Point3D.new(0.3, 0.4, 1)
+point = Point3D.new(x: 0.3, y: 0.4, z: 1)
 ```

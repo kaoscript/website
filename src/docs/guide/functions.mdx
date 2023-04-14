@@ -466,7 +466,7 @@ The `void` type can only be used as a return type, it doesn't have any meaning i
 
 ```kaoscript
 func foobar(): never {
-	throw new Error()
+	throw Error.new()
 }
 ```
 
@@ -477,7 +477,7 @@ The previous code is equivalent to:
 
 ```kaoscript
 func foobar(): never ~ Error {
-	throw new Error()
+	throw Error.new()
 }
 ```
 
@@ -625,7 +625,7 @@ But, if you need, you can use either:
 ```kaoscript
 describe('#save()', () => {
 	it('should save without error', (#[retain] done) => {
-		var user = new User('Luna')
+		var user = User.new('Luna')
 		var res, err = await user.save()
 
 		done(err)
@@ -638,7 +638,7 @@ or
 
 describe('#save()', () => {
 	it('should save without error', (done) => {
-		var user = new User('Luna')
+		var user = User.new('Luna')
 		var res, err = await user.save()
 
 		done(err)
@@ -654,7 +654,7 @@ extern {
 
 describe('#save()', () => {
 	it('should save without error', (done) => {
-		var user = new User('Luna')
+		var user = User.new('Luna')
 		var res, err = await user.save()
 
 		done(err)
