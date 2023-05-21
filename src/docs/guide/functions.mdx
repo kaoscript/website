@@ -195,6 +195,16 @@ expect(foo(1, 2, 3, 4, 5)).to.eql([1, 2, 3, 4, 5])
 | `foo(x: String? ##= null)`       |    `null`    |    `null`    |    `null`    |   `'xyz'`    | `String?` |
 | `foo(x: String? ##= 'abc')`      |   `'abc'`    |   `'abc'`    |   `'abc'`    |   `'xyz'`    | `String?` |
 | `foo(x: String? ##= 'abc'|null)` | `'abc'|null` | `'abc'|null` | `'abc'|null` |   `'xyz'`    | `String?` |
+
+### Runtime vs Compile time
+
+The type validation can happen at different times depending on the type of the passed argument.
+
+|                               | `foo(x)`  | `foo(x: String)` |
+| :---------------------------- | :-------: | :--------------: |
+| `foo(null)`                   | `compile` |    `compile`     |
+| `foo(x)` where `x` is untyped | `runtime` |    `runtime`     |
+
 ## named/positional parameter
 
 In `foo(*x) {}`, `*` forces the argument to be passed as a named argument, for example: `foo(x: 42)`.
@@ -617,7 +627,44 @@ echo(sum123(4, 5, 6))
 // 21
 ```
 
-## retained parameters
+## pipeline
+
+```kaoscript
+var id = parseInt(enteredId)
+var id = parseInt <| enteredId
+var id = enteredId |> parseInt
+
+
+
+var id = #enteredId ? parseInt(enteredId) : null
+var id = parseInt #<| enteredId
+var id = enteredId |># parseInt
+
+
+
+var newScore = person
+	|>  getScoreOrNull
+	|>? double
+	|>  add(7, _)
+	|>  boundScore(0, 100, _)
+	??  0
+
+
+
+func fib(m, n) => [n, m + n]
+
+var f = [1, 1]
+	*|> fib
+	*|> fib
+	*|> fib
+	*|> fib
+// f = [5, 8]
+
+var f = { m: 1, n: 1 } *|> fib
+// f = [1, 2]
+```
+
+## retained parameter
 
 By default, kaoscript generates functions without the list of parameters.
 But, if you need, you can use either:
