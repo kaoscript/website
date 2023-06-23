@@ -72,27 +72,27 @@ a = [i for var i from 0 to 10 by 2 until foo(i)]
 
 ```kaoscript
 var x = if foo() {
-	pick qux()
+	set qux()
 }
 else {
-	pick bar()
+	set bar()
 }
 
 var v1 = v2.substring(
 	v2.lastIndexOf(
 		c1
 		if v2.contains(c2) {
-			pick v2.indexOf(c2)
+			set v2.indexOf(c2)
 		}
 		else {
-			pick v2.length
+			set v2.length
 		}
 	) + 1
 	if v2.contains(c2) {
-		pick v2.indexOf(c2, v2.lastIndexOf(c1, v2.indexOf(c2)))
+		set v2.indexOf(c2, v2.lastIndexOf(c1, v2.indexOf(c2)))
 	}
 	else {
-		pick v2.length
+		set v2.length
 	}
 )
 
@@ -107,7 +107,7 @@ var v1 = v2.substring(
 
 The inline `if` expression is using the same syntax as an `if` statement but has 2 caveats:
 - all cases must be covered
-- use `pick` statement to "return" a value to the root expression
+- use `set` statement to "return" a value to the root expression
 
 ## match
 
@@ -137,7 +137,7 @@ func color(fg: ANSIColor, bg: ANSIColor): String {
 
 The inline `match` expression is using the same syntax as an `match` statement but has 2 caveats:
 - all cases must be covered
-- use `pick` statement to "return" a value to the root expression
+- use `set` statement to "return" a value to the root expression
 
 ## in assignment statement
 
