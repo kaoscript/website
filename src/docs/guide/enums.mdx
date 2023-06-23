@@ -189,21 +189,17 @@ enum Weekday {
 	SATURDAY
 	SUNDAY
 
-	isWeekend(day: Weekday): Boolean => day == SATURDAY + SUNDAY
+	isWeekend(): Boolean => this == SATURDAY | SUNDAY
 
-	fromString(value: String): Weekday? {
-		switch value {
-			'monday' => return MONDAY
+	static fromString(value: String): Weekday? {
+		return match value {
+			'monday'	=> MONDAY
+			else		=> null
 		}
-
-		return null
 	}
 }
 
 func foobar(day: Weekday) {
-	if Weekday.isWeekend(day) {
-	}
-
 	if day.isWeekend() {
 	}
 }

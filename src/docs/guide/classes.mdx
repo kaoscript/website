@@ -427,6 +427,21 @@ class Pet {
 }
 ```
 
+## accessbility
+
+|                                | `Private` | `Internal` | `Protected` | `Public` |
+| ------------------------------ | :-------: | :--------: | :---------: | :------: |
+| Same class                     |    ✅     |     ✅     |     ✅      |    ✅    |
+| Same package subclass          |    ❌     |     ✅     |     ✅      |    ✅    |
+| Same package non-subclass      |    ❌     |     ✅     |     ❌      |    ✅    |
+| Different package subclass     |    ❌     |     ❌     |     ✅      |    ✅    |
+| Different package non-subclass |    ❌     |     ❌     |     ❌      |    ✅    |
+
+### Inheritance
+
+Unlike C++, kaoscript supports only public inheritance because:
+- restrictive (private or protected) inheritance won't allow a subclass to validate the contract of the superclass.
+
 ## versioning
 
 kaoscript classes can be signed with a version which could be used for serialization.
@@ -450,10 +465,29 @@ console.log(Rectangle.version)
 // 1.0.0
 ```
 
+## sealed
+
+`sealed` classes won't be modified by any `impl` statements.
+
+```kaoscript
+sealed class Shape {
+	private {
+		@color: String
+	}
+	constructor(@color)
+}
+
+impl Shape {
+	draw(shape): String {
+		return `I'm drawing a \(@color) \(shape).`
+	}
+}
+```
+
 ## syntax
 
 ```syntax
-[abstract] class *varname*["<" *generic-type* ">"][@ *version*] [extends *varname*] {
+[sealed] [abstract] class *varname*["<" *generic-type* ">"][@ *version*] [extends *varname*] [implements *varname1* ... [, *varnameN*]] {
 	(
 		[private | internal | protected | public] (
 			[static] final late (
@@ -593,7 +627,7 @@ property = (
 
 proxy = (proxy *varname* = @*expression*)
 
-method = [async] *varname*([[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]])[: *type* | auto | this | @*varname*] [~ *class1* [, *class2* ... [, *classN*]]] [ => *expression* | {
+method = [async] *varname*([*parameter1* [, *parameter2* ... [, *parameterN*]])[: *type* | auto | this | @*varname*] [~ *class1* [, *class2* ... [, *classN*]]] [ => *expression* | {
 	*...statements*
 }]
 

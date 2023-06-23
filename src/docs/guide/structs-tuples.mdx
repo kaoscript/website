@@ -14,7 +14,7 @@ The tuple's values can also be accessed by their names (if they aren't anonymous
 ### syntax
 
 ```syntax
-[abstract] tuple *varname* [extends *varname*] "["
+[abstract] tuple *varname* [extends *varname*] [implements *varname1* ... [, *varnameN*]] "["
 	*...element*
 "]"
 
@@ -74,7 +74,7 @@ A struct is a group of variables (stored as object), only accessible by their na
 ### syntax
 
 ```syntax
-[abstract] struct *varname* [extends *varname*] {
+[abstract] struct *varname* [extends *varname*] [implements *varname1* ... [, *varnameN*]] {
 	*...element*
 }
 

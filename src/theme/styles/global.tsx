@@ -28,7 +28,7 @@ const BaseStyle = createGlobalStyle`
 	}
 
 	.language-name {
-		font-family: Ubuntu;
+		font-family: Poppins;
 		color: #342780;
 		text-transform: lowercase;
     	padding: 0 0.2em;

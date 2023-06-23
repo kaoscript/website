@@ -664,6 +664,31 @@ var f = { m: 1, n: 1 } *|> fib
 // f = [1, 2]
 ```
 
+## in object
+
+### anonymous
+
+```kaoscript
+var point = {
+	x: func() => 0
+	y: func() {
+		return 0
+	}
+}
+```
+
+### lambda
+
+```kaoscript
+var point = {
+	x: () => 0
+	y() => 0
+	z() {
+		return 0
+	}
+}
+```
+
 ## retained parameter
 
 By default, kaoscript generates functions without the list of parameters.
