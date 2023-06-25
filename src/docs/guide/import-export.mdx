@@ -102,7 +102,7 @@ import 'chai' {
 Unnamed import will generate a *variable* whose name will based on the module name.
 
 ```kaoscript
-import 'fs'
+import 'node:fs'
 // variable: fs
 
 import 'klaw-sync'
@@ -157,6 +157,16 @@ import '@zokugun/lang.color'(...)
 ```
 
 `(...)` indicates to kaoscript that it needs to find the matching parameters from availables variables.
+
+### limitation on file resolution
+
+To avoid any possible dependency injection due to automatic file resolution, the following features are enabled:
+- **mandatory file extensions**: to resolve relative or absolute paths, the file extension must be provided (`import './type.ks'`)
+- **no directory discovery**: the directory index must also be provided (`import './utils/index.ks'`)
+
+### node modules
+
+Node modules need to use the scheme `node:` (`import 'node:fs'`).
 
 ### syntax
 
