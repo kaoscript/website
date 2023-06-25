@@ -83,6 +83,14 @@ var radix7 = 7r66.6
 
 ![radix-regex](@images/guide/basic-types/radix.svg)
 
+### character
+
+```kaoscript
+var ch = 0'a'		// 97
+```
+
+![character-regex](@images/guide/basic-types/character.svg)
+
 ### NaN & Infinity
 
 ```kaoscript
@@ -119,54 +127,6 @@ var doubleQuote = "Jane"
 | `\uXXXX`                 | Unicode code point between `U+0000` and `U+FFFF`   |
 | `\u{X}` ... `\u{XXXXXX}` | Unicode code point between `U+0000` and `U+10FFFF` |
 | `\xXX`                   | Unicode code point between `U+0000` and `U+00FF`   |
-
-
-### multi-lines strings
-
-#### non-interpolated
-
-```kaoscript
-var value = '''
-The jury all wrote down on their slates, "SHE doesn't
-believe there's an atom of meaning in it," but none of them
-attempted to explain the paper.
-'''
-```
-
-```kaoscript
-var value = """
-
-	This string :
-	- starts with a line break;
-	- ends with a line break;
-	- contains no leading withspaces.
-
-	"""
-```
-
-#### interpolated
-
-~~~kaoscript
-var xml = ```
-	<book id="bk\(id)">
-		<author>\(author)</author>
-		<title>\(title)</title>
-		<genre>\(genre)</genre>
-		<price>\(price)</price>
-	</book>
-	```
-~~~
-
-```kaoscript
-var xml = ~~~
-	<book id="bk\(id)">
-		<author>\(author)</author>
-		<title>\(title)</title>
-		<genre>\(genre)</genre>
-		<price>\(price)</price>
-	</book>
-	~~~
-```
 
 ## array
 
@@ -297,27 +257,49 @@ var template = `\(message)\nIt's nice to meet you, \(name).`
 // Hello! \nIt's nice to meet you, John.
 ```
 
-## tagged template
+## multi-lines strings
+
+### non-interpolated
 
 ```kaoscript
-var person = 'Mike'
-var age = 28
+var value = '''
+The jury all wrote down on their slates, "SHE doesn't
+believe there's an atom of meaning in it," but none of them
+attempted to explain the paper.
+'''
+```
 
-func myTag(strings, personExp, ageExp) {
-	var str0 = strings[0]
-	var str1 = strings[1]
+```kaoscript
+var value = """
 
-	var late ageStr
-	if ageExp > 99 {
-		ageStr = 'centenarian'
-	}
-	else {
-		ageStr = 'youngster'
-	}
+	This string :
+	- starts with a line break;
+	- ends with a line break;
+	- contains no leading withspaces.
 
-	return `\(str0)\(personExp)\(str1)\(ageStr)`
-}
+	"""
+```
 
-var text = myTag`That \( person ) is a \( age )`
-// text: That Mike is a youngster
+### interpolated
+
+~~~kaoscript
+var xml = ```
+	<book id="bk\(id)">
+		<author>\(author)</author>
+		<title>\(title)</title>
+		<genre>\(genre)</genre>
+		<price>\(price)</price>
+	</book>
+	```
+~~~
+
+```kaoscript
+var xml = ~~~
+	<book id="bk\(id)">
+		<author>\(author)</author>
+		<title>\(title)</title>
+		<genre>\(genre)</genre>
+		<price>\(price)</price>
+	</book>
+	~~~
 ```
