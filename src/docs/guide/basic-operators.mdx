@@ -268,17 +268,6 @@ Unlike the assignment operator in JavaScript, the assignment operators don't ret
 - ✅ indicates that the assignment is **successful**
 - ❌ indicates that the assignment is **unsuccessful**
 
-## junction
-
-|         Operator          |             Meaning              |
-| :-----------------------: | :------------------------------: |
-|      *expr*`.`*name*      |          member access           |
-|     *expr*`..`*expr*      |        cascade expression        |
-|     *expr*`?.`*name*      |    conditional member access     |
-|    *expr*`[`*expr*`]`     |           array access           |
-|    *expr*`?[`*expr*`]`    |     conditional array access     |
-|         `.`*name*         |         implicit member          |
-
 ## function
 
 |         Operator          |               Meaning                |
@@ -296,3 +285,109 @@ Unlike the assignment operator in JavaScript, the assignment operators don't ret
 |    *expr* `<|#` *expr*    | backward pipeline with empty testing |
 |    *expr* `*|>` *expr*    | forward pipeline with destructuring  |
 |    *expr* `<|*` *expr*    | backward pipeline with destructuring |
+
+## others
+
+|      Operator       |          Meaning          |
+| :-----------------: | :-----------------------: |
+|   *expr*`.`*name*   |       member access       |
+|  *expr*`?.`*name*   | conditional member access |
+| *expr*`[`*expr*`]`  |       array access        |
+| *expr*`?[`*expr*`]` | conditional array access  |
+|      `.`*name*      |      implicit member      |
+
+## rolling notation
+
+### summary
+
+- multi-lines only
+- conditional expression
+- operators:
+	- `..`: rolling
+	- `.`:  member access
+	- `?.`: conditional member access
+- a rolling notation must the the same class of operators (rolling operator or member access operators)
+
+### basic example
+
+```kaoscript
+getAddress()
+  ..setStreet('Elm', '13a')
+  ..city = 'Carthage'
+  ..state = 'Eurasia'
+  ..zip(66666, extended: 6666)
+
+// same as
+var address = getAddress()
+address.setStreet('Elm', '13a')
+address.city = 'Carthage'
+address.state = 'Eurasia'
+address.zip(66666, extended: 6666)
+```
+
+### example with conditional expression
+
+```kaoscript
+var shape = Ellipse.new(10, 20)
+	..rotation = 45 * Math.PI / 180 if filterRotate()
+	..color = 'rgb(0,129,198)'
+	..outlineWidth = 0
+
+// same as
+var shape = Ellipse.new(10, 20)
+
+if filterRotate() {
+	shape.rotation = 45 * Math.PI / 180
+}
+
+shape.color = 'rgb(0,129,198)'
+shape.outlineWidth = 0
+```
+
+### example with existential test
+
+```kaoscript
+address?
+	..setStreet('Elm', '13a')
+	..city = 'Carthage'
+	..state = 'Eurasia'
+	..zip(66666, extended: 6666)
+
+// same as
+if ?address {
+	address.setStreet('Elm', '13a')
+	address.city = 'Carthage'
+	address.state = 'Eurasia'
+	address.zip(66666, extended: 6666)
+}
+```
+
+### example with member access and conditional expression
+
+```kaoscript
+writer
+	.code(' ')
+	.code('*') if w
+	.code('|>')
+	.code('?') if q
+	.code('#') if h
+	.code(' ')
+
+// same as
+var mut writer2 = writer.code(' ')
+
+if w {
+	writer2 = writer2.code('*')
+}
+
+writer2 = writer2.code('|>')
+
+if q {
+	writer2 = writer2.code('?')
+}
+if h {
+	writer2 = writer2.code('#')
+}
+
+writer2.code(' ')
+```

@@ -13,7 +13,7 @@ route: /guide/import-export
 ### examples
 
 ```kaoscript
-import 'chai' for expect
+import 'npm:chai' for expect
 // functions: expect
 
 import 'foobar.ks' for name => foo
@@ -72,7 +72,7 @@ import 'parser.js' {
 ```
 
 ```kaoscript
-import 'chai' {
+import 'npm:chai' {
 	type ChaiUtils = Any
 	type ChaiPlugin = (chai: ChaiStatic, utils: ChaiUtils): Void
 	type Config = {
@@ -105,7 +105,7 @@ Unnamed import will generate a *variable* whose name will based on the module na
 import 'node:fs'
 // variable: fs
 
-import 'klaw-sync'
+import 'npm:klaw-sync'
 // variable: klawSync
 ```
 
@@ -152,8 +152,8 @@ kaoscript will *require* the class `ClassY` with the same type as expected by th
 ### autofill parameters
 
 ```kaoscript
-import '@zokugun/lang'
-import '@zokugun/lang.color'(...)
+import 'npm:@zokugun/lang'
+import 'npm:@zokugun/lang.color'(...)
 ```
 
 `(...)` indicates to kaoscript that it needs to find the matching parameters from availables variables.
@@ -164,9 +164,13 @@ To avoid any possible dependency injection due to automatic file resolution, the
 - **mandatory file extensions**: to resolve relative or absolute paths, the file extension must be provided (`import './type.ks'`)
 - **no directory discovery**: the directory index must also be provided (`import './utils/index.ks'`)
 
-### node modules
+### `node:` scheme
 
-Node modules need to use the scheme `node:` (`import 'node:fs'`).
+Node modules need to use the `node:` scheme  (`import 'node:fs'`).
+
+### `npm:` scheme
+
+Importing npm modules is done by using the `npm:` scheme (`import 'npm:@zokugun/lang'`)
 
 ### syntax
 
@@ -200,18 +204,8 @@ import-declarator = "*path*" ['(' *parameter1*, ..., *parameterN* ')' | '(...)']
 	|
 	{
 		(*descriptive-type*)+
-
-		[export (
-			*varname1*, ..., *varnameN*
-			|
-			{
-				(*varname*)+
-			}
-			|
-			= *varname*
-		)]
 	} [
-		=> *newname1*, ..., *newnameN*
+		=> *varname* [, *destructuring*]
 		|
 		for (
 			'\*'
@@ -224,7 +218,7 @@ import-declarator = "*path*" ['(' *parameter1*, ..., *parameterN* ')' | '(...)']
 		)
 	]
 	|
-	=> *newname1*, ..., *newnameN*
+	=> (*varname* [, *destructuring*] | *descriptive-type*)
 )]
 
 newname = *varname* | *destructuring*
