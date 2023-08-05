@@ -68,6 +68,31 @@ unless x == 0 {
 }
 ```
 
+## multi-lines if
+
+### Syntax
+
+```syntax
+if {
+	(var [mut] (*varname* | *destructuring*) [: *type*] (?= | #=) *expression* [; *expression:Boolean*])+
+}
+then {
+	*...statements*
+}
+```
+
+### Examples
+
+```kaoscript
+if {
+	var values ?= loadValues()
+	var value ?= values.getTop()
+}
+then {
+	echo(value)
+}
+```
+
 ## for...from
 
 ### Syntax
@@ -270,6 +295,63 @@ for
 ```kaoscript
 for x in 0..10..2 while test(x) {
 }
+```
+
+## multi-lines for
+
+### Examples
+
+```kaoscript
+for {
+  var suit in suits
+  var rank in ranks
+}
+then {
+  echo(suit, rank)
+}
+```
+
+### Syntax
+
+```syntax
+for {
+	(
+		var [mut] *varname*
+		from[~] *expression:Number*
+		[(down | up)]
+		[to[~] *expression:Number*]
+		[step *expression:Number*]
+		[(while | until) *expression:Boolean*]
+		[when *expression:Boolean*]
+		|
+		var [ mut | dyn ] (*varname* | *destructuring* | '\_') [: *type*] [, *index*]
+		in *expression:Array*
+		[from[~] *expression:Number*]
+		[(down | up)]
+		[to[~] *expression:Number*]
+		[step *expression:Number*]
+		[split *expression:Number*]
+		[(while | until) *expression:Boolean*]
+		[when *expression:Boolean*]
+		|
+		var [mut] (*varname* | *destructuring* | '\_') [: *type*] [, *key*]
+		of *expression:Object*
+		[(while | until) *expression:Boolean*]
+		[when *expression:Boolean*]
+		|
+		var [mut] (*varname* | '\_') [, *index*]
+		in *operand:Number*[<]..[<]*operand:Number*[..*operand:Number*]
+		[(while | until) *expression:Boolean*]
+		[when *expression:Boolean*]
+	)+
+}
+then
+{
+	*...statements*
+}
+[else {
+	...*statements*
+}]
 ```
 
 ## while & do...while
