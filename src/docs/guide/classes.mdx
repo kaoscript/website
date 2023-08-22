@@ -92,29 +92,6 @@ class Shape {
 }
 ```
 
-## method's return type
-
-In addition to the standard return type, a method allows 2 new return types:
-
-- a field with an alias (`@field`): return the field and the return type is the same as the field's type.
-- the `this` expression: return the current instance `this` and the return type is of the current class.
-
-```kaoscript
-class Shape {
-	private {
-		@color: String
-	}
-
-	color1(): @color
-	color1(@color): this
-
-	color2(): String => @color
-	color2(@color): Shape => this
-}
-```
-
-`color1` and `color2` methods are identicals.
-
 ## constructor
 
 ```kaoscript
@@ -151,6 +128,37 @@ var s = Shape.new('red')
 s.destroy()
 // the destructor is called and the variable `s` is unreferenced
 ```
+
+## method
+
+### return type
+
+`valueof this` indicates that a method always return the active instance `this`.
+
+
+```kaoscript
+class Shape {
+	private {
+		@color: String
+	}
+
+	color1(): valueof @color
+	color1(@color): valueof this
+
+	color2(): String => @color
+	color2(@color): typeof this => this
+	// color2 is almost identical to color1
+}
+```
+
+|                   | active instance' class | declared class | active instance | new instance |
+| :---------------: | :--------------------: | :------------: | :-------------: | :----------: |
+|  `valueof this`   |           ✅           |       ❌       |       ✅        |      ❌      |
+|   `typeof this`   |           ✅           |       ❌       |       ❓        |      ❓      |
+| `new typeof this` |           ✅           |       ❌       |       ❌        |      ✅      |
+|      `auto`       |           ❌           |       ✅       |       ❓        |      ❓      |
+|      `Class`      |           ❌           |       ✅       |       ❓        |      ❓      |
+|    `new Class`    |           ❌           |       ✅       |       ❌        |      ✅      |
 
 ## static
 

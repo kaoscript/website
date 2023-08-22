@@ -378,14 +378,18 @@ The type of argument must be a superset of the type of the parameter *(parameter
 type-statement = "type" *varname* = *type*
 
 type = (
-	*varname* ('.' *varname*)\* ['<' *type* ([,] *type*)\* '>']
+	(
+		*varname* ('.' *varname*)\* ['<' *type* ([,] *type*)\* '>']
+		|
+		[async] [func] *func-type*
+		|
+		*object-type*
+		|
+		*array-type*
+	) (? | '[]' | '{}')\* (('|' | & | ^) *type* | '|?')\*
 	|
-	[async] [func] *func-type*
-	|
-	*object-type*
-	|
-	*array-type*
-) (? | '[]' | '{}')\* (('|' | & | ^) *type* | '|?')\*
+	typeof *expression*
+)
 
 descriptive-type = (
 	([(final | sealed)] [abstract] | [system]) class *class-type*
@@ -426,7 +430,7 @@ class-type = *varname*['<' *generic-type* '>'] [extends *varname*] [{
 	...
 }]
 
-func-type = '(' [[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]] ')' [: *type*] [~ *class1* [, *class2* ... [, *classN*]]]
+func-type = '(' [[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]] ')' [: *return-type*] [~ *class1* [, *class2* ... [, *classN*]]]
 
 object-type = '{'
 	(
@@ -445,4 +449,10 @@ param-type = *type* [( "||" *type* | "&&" *type* )+]
 namespace-type = *varname* [{
 	(*descriptive-type*)\+
 }]
+
+return-type = (
+	[new] *type*
+	|
+	valueof *expression*
+)
 ```
