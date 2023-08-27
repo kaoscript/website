@@ -19,17 +19,17 @@ If the type is unknow, the test's value must be equal to `true`.
 if
 	*expression:Boolean*
 	|
-	var [mut] (*varname* | *destructuring*) [: *type*] (?= | #=) *expression* [; *expression:Boolean*]
+	var [mut] (*varname* | *destructuring*) [: *type*] (?= | #=) *expression* [;; *expression:Boolean*]
 {
 	*...statements*
 }
-[else if
+(else if
 	*expression:Boolean*
 	|
-	var [mut] (*varname* | *destructuring*) [: *type*] (?= | #=) *expression* [; *expression:Boolean*]
+	var [mut] (*varname* | *destructuring*) [: *type*] (?= | #=) *expression* [;; *expression:Boolean*]
 {
 	*...statements*
-}]
+})\*
 [else {
 	*...statements*
 }]
@@ -65,31 +65,6 @@ unless *expression:Boolean* {
 
 ```kaoscript
 unless x == 0 {
-}
-```
-
-## multi-lines if
-
-### Syntax
-
-```syntax
-if {
-	(var [mut] (*varname* | *destructuring*) [: *type*] (?= | #=) *expression* [; *expression:Boolean*])+
-}
-then {
-	*...statements*
-}
-```
-
-### Examples
-
-```kaoscript
-if {
-	var values ?= loadValues()
-	var value ?= values.getTop()
-}
-then {
-	echo(value)
 }
 ```
 
@@ -296,6 +271,41 @@ for
 for x in 0..10..2 while test(x) {
 }
 ```
+
+## multi-lines if
+
+### Examples
+
+```kaoscript
+if {
+	var values ?= loadValues() ;; value.hasValues()
+	var value ?= values.getTop()
+}
+then {
+	echo(value)
+}
+```
+
+### Syntax
+
+```syntax
+if {
+	(var [mut] (*varname* | *destructuring*) [: *type*] (?= | #=) *expression* [;; *expression:Boolean*])+
+}
+then {
+	*...statements*
+}
+(else if {
+	(var [mut] (*varname* | *destructuring*) [: *type*] (?= | #=) *expression* [;; *expression:Boolean*])+
+}
+then {
+	*...statements*
+})\*
+[else {
+	*...statements*
+}]
+```
+
 
 ## multi-lines for
 
