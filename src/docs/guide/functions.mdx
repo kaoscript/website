@@ -669,12 +669,18 @@ var f = { m: 1, n: 1 } *|> fib
 
 ## in object
 
+Unlike JavaScript, there is no shorthand for functions in object.
+
 ### anonymous
 
 ```kaoscript
 var point = {
-	x: func() => 0
-	y: func() {
+	a: func() => 0
+	b: func() {
+		return 0
+	}
+	c: async func() => 0
+	d: async func() {
 		return 0
 	}
 }
@@ -684,10 +690,11 @@ var point = {
 
 ```kaoscript
 var point = {
-	x: () => 0
-	y() => 0
-	z() {
-		return 0
+	a: () => 0
+	b: () => {
+	}
+	c: async () => 0
+	d: async () => {
 	}
 }
 ```
