@@ -338,14 +338,6 @@ func bar(_, x, y) {
 
 ## this parameter
 
-|                                 | function/anonymous() | function/anonymous(this: Type) | lambda() | lambda(this: Type) |
-|:-------------------------------:|:--------------------:|:------------------------------:|:--------:|:------------------:|
-|        new local `this`         |          ❌          |               ❌               |    ❌    |         ❌         |
-| local `this` is parent's `this` |          ❌          |               ❌               |    ✅    |         ❌         |
-|        accessible `this`        |          ❌          |               ✅               |    ✅    |         ✅         |
-|        accessible parent        |          ❌          |               ❌               |    ✅    |         ❌         |
-|        accessible module        |          ✅          |               ✅               |    ✅    |         ✅         |
-
 In a function, the `this` variable is reserved and can only be used if declared like:
 
 ```kaoscript
@@ -400,9 +392,15 @@ func findDogs(db: DB): Pet[] {
 }
 ```
 
-### rebindable
+## variable scopes
 
-The `this` scope is rebindable only if it's defined as a parameter and different from `Void`
+|                                 | function/anonymous() | function/anonymous(this: Type) | lambda() | lambda(this: Type) |
+| :-----------------------------: | :------------------: | :----------------------------: | :------: | :----------------: |
+|        new local `this`         |          ❌          |               ❌               |    ❌    |         ❌         |
+| local `this` is parent's `this` |          ❌          |               ❌               |    ✅    |         ❌         |
+|          access `this`          |          ❌          |               ✅               |    ✅    |         ✅         |
+|    access parent's variables    |          ❌          |               ❌               |    ✅    |         ❌         |
+|    access module's variables    |          ✅          |               ✅               |    ✅    |         ✅         |
 
 ## asynchronous
 

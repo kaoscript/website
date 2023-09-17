@@ -238,7 +238,7 @@ likes = {
 	duncan: 'murbella'
 }
 
-for value, key of likes {
+for var value, key of likes {
 	console.log(`\(key) likes \(value)`)
 }
 // leto likes spice
@@ -268,7 +268,7 @@ for
 ### Examples
 
 ```kaoscript
-for x in 0..10..2 while test(x) {
+for var x in 0..10..2 while test(x) {
 }
 ```
 
@@ -474,12 +474,12 @@ match
 	(
 		(
 			*match-condition*
-			[with ([mut] *varname* [: *type*] | *destructuring*) ]
+			[with (var [mut] (*varname* [: *type*] | *destructuring*) | *varname* | *destructuring*)]
 			[when *expression:Boolean*]
 		)
 		|
 		(
-			with ([mut] *varname* [: *type*] | *destructuring*)
+			with (var [mut] (*varname* [: *type*] | *destructuring*) | *varname* | *destructuring*)
 			[when *expression:Boolean*]
 		)
 		|
@@ -516,10 +516,10 @@ match number {
 
 ```kaoscript
 match age() {
-	0					=> console.log(`I'm not born yet I guess`)
-	1  .. 12 	with n	=> console.log(`I'm a child of age \(n)`)
-	13 .. 19 	with n	=> console.log(`I'm a teen of age \(n)`)
-	else		with n	=> console.log(`I'm an old person of age \(n)`)
+	0						=> console.log(`I'm not born yet I guess`)
+	1  .. 12 	with var n	=> console.log(`I'm a child of age \(n)`)
+	13 .. 19 	with var n	=> console.log(`I'm a teen of age \(n)`)
+	else		with var n	=> console.log(`I'm an old person of age \(n)`)
 }
 ```
 
@@ -555,7 +555,7 @@ var value = {
 }
 
 match value {
-	{foo: 1}	with {qux: n} 			=> console.log(`qux: \(n)`)
+	{foo: 1}	with var {qux: n} 		=> console.log(`qux: \(n)`)
 	{foo: 1} 							=> console.log('foo: 1')
 	{foo}								=> console.log('has foo')
 	{qux}								=> console.log('has qux')
@@ -566,13 +566,13 @@ match value {
 
 ```kaoscript
 match view {
-	is UIImageView								=> console.log("It's an image view")
-	is UILabel		with label					=> console.log("It's a label")
-	is UITableView	with tblv					{
+	is UIImageView						=> console.log("It's an image view")
+	is UILabel		with var label		=> console.log("It's a label")
+	is UITableView	with var tblv		{
 		var sectionCount = tblv.numberOfSections()
 		console.log(`It's a table view with \(sectionCount) sections`)
 	}
-	else										=> console.log("It's some other UIView or subclass")
+	else								=> console.log("It's some other UIView or subclass")
 }
 ```
 
@@ -721,7 +721,7 @@ then {
 }]
 
 var-init = (
-	var [mut] *varname* = *expression*
+	var [mut] *varname* [: *type*] = *expression*
 	|
 	*variable* (=|+=|-=|\*=|/=|/.=|%=|&&=|"||="|^^=|<<=|>>=) *expression*
 )
