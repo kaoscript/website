@@ -435,7 +435,7 @@ func-type = '(' [[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]] ')' [:
 object-type = '{'
 	(
 		(
-			*varname*: *type*
+			*varname*[: *type*] [?]
 			|
 			[async] [func] *varname* *func-type*
 			|

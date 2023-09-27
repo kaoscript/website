@@ -120,3 +120,30 @@ point = Point3D.new(0.3, 0.4)
 point = Point3D.new(0.3, 0.4, 1)
 point = Point3D.new(x: 0.3, y: 0.4, z: 1)
 ```
+
+## casting
+
+Unlike classes, structs and tuples can't be casted as their extending structs or tuples.
+It's due that structs and tuples have a fixed memory size, and casting would force a larger memory into a smaller one.
+
+### example
+
+```kaoscript
+struct Point {
+    x: Number
+    y: Number
+}
+
+struct Point3D extends Point {
+	z: Number	= 0
+}
+
+func print({ x, y }: Point) {
+	echo(`x: \(x), y: \(y)`)
+}
+
+var point = Point3D.new(0.3, 0.4)
+
+print(point)
+// throw an error, can not be casted
+```

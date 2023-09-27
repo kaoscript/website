@@ -179,18 +179,18 @@ The operator `??` is a polyadic operator.
 
 ## typing
 
-|        Operator         |        Meaning        |
-|:-----------------------:|:---------------------:|
-|   *expr* `is` *class*   |     Type matching     |
-| *expr* `is not` *class* |   Type not matching   |
-|   *expr* `as` *class*   |     Type casting      |
-|  *expr* `as!` *class*   |  Forced type casting  |
-|  *expr* `as?` *class*   | Nullable type casting |
-|  *expr*`:`*className*   |     Type casting      |
-|  *expr*`:!`*className*  |  Forced type casting  |
-|  *expr*`:?`*className*  | Nullable type casting |
-|       *expr*`!?`        | Null removal matching |
-|       *expr*`!!`        | Forced type matching  |
+|            Operator            |        Meaning        |
+| :----------------------------: | :-------------------: |
+|   *expr* `is` *limited-type*   |     Type matching     |
+| *expr* `is not` *limited-type* |   Type not matching   |
+|   *expr* `as` *limited-type*   |     Type casting      |
+|  *expr* `as!` *limited-type*   |  Forced type casting  |
+|  *expr* `as?` *limited-type*   | Nullable type casting |
+|     *expr*`:`*entity-type*     |     Type casting      |
+|    *expr*`:!`*entity-type*     |  Forced type casting  |
+|    *expr*`:?`*entity-type*     | Nullable type casting |
+|           *expr*`!?`           | Null removal matching |
+|           *expr*`!!`           | Forced type matching  |
 
 ```kaoscript
 class Foobar {
