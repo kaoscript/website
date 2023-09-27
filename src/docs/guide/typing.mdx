@@ -411,7 +411,7 @@ descriptive-type = (
 	[sealed] [var] *varname*[: *type*]
 )
 
-limited-type = (*varname* ('.' *varname*)\* | *func-type*) ['<' *limited-type* ([,] *limited-type*)\* '>']
+limited-type = (*func-type* | *object-type* | *array-type* | *varname* ('.' *varname*)\* ['<' *limited-type* ([,] *limited-type*)\* '>'])
 
 generic-type = *entity-type* (',' *entity-type*)\*
 entity-type = *varname* ('.' *varname*)\*
