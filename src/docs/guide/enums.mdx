@@ -11,7 +11,7 @@ route: /guide/enums
 ```syntax
 enum *varname*["<" *entity-type* ">"] {
 	(
-		*varname* [= *expression*]
+		*varname* [\*\*] [= *expression*]
 		|
 		*method*
 	)*
@@ -19,7 +19,7 @@ enum *varname*["<" *entity-type* ">"] {
 
 bitmask *varname*["<" [(u8 | u16 | u32 | u48 | u64 | u128 | u256)]  ">"] {
 	(
-		*varname* [= *expression*]
+		*varname* [\*\*] [= *expression*]
 		|
 		*method*
 	)*

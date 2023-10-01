@@ -668,11 +668,25 @@ block *label* {
 
 ## with
 
-### Examples
+### modified variable
+
+```kaoscript
+var mut mode = 2
+
+with mode += 12 {
+	// mode = 14
+}
+
+// mode = 2
+```
+
+### temporaries variables
 
 ```kaoscript
 with var file = open() {
 	var text = async file.readText()
+
+	echo(text)
 }
 finally {
 	file.close()
@@ -684,20 +698,20 @@ with {
 }
 then {
 	var text = async file.readText()
+
+	echo(text)
 }
 finally {
 	file.close()
 }
 ```
 
+### implicit expression
+
 ```kaoscript
-var mut mode = 2
-
-with mode += 12 {
-	// mode = 14
+with person {
+	echo(`Hello \(.firstname) \(.lastname)`)
 }
-
-// mode = 2
 ```
 
 ### Syntax
@@ -719,6 +733,10 @@ then {
 [finally {
 	...statements
 }]
+
+with *expression* {
+	...statements
+}
 
 var-init = (
 	var [mut] *varname* [: *type*] = *expression*

@@ -283,6 +283,7 @@ objectItem = (
 A destructuring expression in an expression can be:
 
 - computed
+- this aliased (only if `this` variable is defined)
 
 ### Examples
 
@@ -312,19 +313,19 @@ arrayItem = (
 
 object = '{' [*objectItem1*] [, *objectItem2*] ... [, *objectItemN*] '}'
 objectItem = (
-	*varname* [% (*varname* | *array* | *object*)] (
+	[@] *varname* [% ([@] *varname* | *array* | *object*)] (
 		! [?] (= | ??= | ##=) *expression*
 		|
 		[?] [(= | ??= | ##=) *expression*]
 	)
 	|
-	'[' *varname* ']' % (*varname* | *array* | *object*) (
+	'[' [@] *varname* ']' % ([@] *varname* | *array* | *object*) (
 		! [?] (= | ??= | ##=) *expression*
 		|
 		[?] [(= | ??= | ##=) *expression*]
 	)
 	|
-	'...' *varname* [(? | (= | ??= | ##=) *expression*)]
+	'...' [@] *varname* [(? | (= | ??= | ##=) *expression*)]
 	|
 	'...' [?]
 )
