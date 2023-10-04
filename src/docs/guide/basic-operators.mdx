@@ -121,29 +121,30 @@ true -> false	// false
 |  `x`  |  `y`  | `x || y` | `x && y` | `x ^^ y` | `x -> y` |
 |:-----:|:-----:|:--------:|:--------:|:--------:|:--------:|
 | false | false |  false   |  false   |  false   |   true   |
-| true  | false |   true   |  false   |   true   |  false   |
 | false | true  |   true   |  false   |   true   |   true   |
+| true  | false |   true   |  false   |   true   |  false   |
 | true  | true  |   true   |   true   |  false   |   true   |
 
 ## bitwise & shift
 
 The following operations are only valid for numeric operands.
 
-|      Operator      |   Meaning   |
-| :----------------: | :---------: |
-|     `!`*expr*      |     Not     |
-| *expr* `&&` *expr* |     And     |
-| *expr* `||` *expr* |     Or      |
-| *expr* `^^` *expr* |     Xor     |
-| *expr* `<<` *expr* | Shift left  |
-| *expr* `>>` *expr* | Shift right |
+|      Operator       |   Meaning   |
+| :-----------------: | :---------: |
+|      `+^`expr*      |     Not     |
+| *expr* `+&` *expr*  |     And     |
+| *expr* `+|` *expr*  |     Or      |
+| *expr* `+^` *expr*  |     Xor     |
+| *expr* `+<` *expr*  | Shift left  |
+| *expr* `+>` *expr*  | Shift right |
+
 
 ```kaoscript
-0x22 && 0x0f    // 0x02
-0x22 || 0x0f    // 0x2f
-0x22 ^^ 0x0f    // 0x2d
-0x22 << 4       // 0x220
-0x22 >> 4       // 0x02
+0x22 +& 0x0f    // 0x02
+0x22 +| 0x0f    // 0x2f
+0x22 +^ 0x0f    // 0x2d
+0x22 +< 4       // 0x220
+0x22 +> 4       // 0x02
 ```
 
 ## conditional
@@ -214,27 +215,30 @@ t = x as Array<String>
 
 ## assignment
 
-|      Operator       |         Meaning          |
-| :-----------------: | :----------------------: |
-|  *expr* `=` *expr*  |       Assignment        |
-| *expr* `<-` *expr*  | Assignment with return  |
-| *expr* `-=` *expr*  |       Subtraction        |
-| *expr* `+=` *expr*  |         Addition         |
-| *expr* `*=` *expr*  |      Multiplication      |
-| *expr* `/=` *expr*  |         Division         |
-| *expr* `/.=` *expr* |    Quotient division     |
-| *expr* `%=` *expr*  |          Modulo          |
-| *expr* `&&=` *expr* | And (bitwise or logical) |
-| *expr* `||=` *expr* | Or (bitwise or logical)  |
-| *expr* `^^=` *expr* | Xor (bitwise or logical) |
-| *expr* `<<=` *expr* |        Shift left        |
-| *expr* `>>=` *expr* |       Shift right        |
-| *expr* `?=` *expr*  |       Existential        |
-| *expr* `!?=` *expr* |     Non existential      |
-| *expr* `??=` *expr* |     Null coalescing      |
-| *expr* `#=` *expr*  |        Non empty         |
-| *expr* `!#=` *expr* |          Empty           |
-| *expr* `##=` *expr* |     Empty coalescing     |
+|      Operator       |        Meaning         |
+| :-----------------: | :--------------------: |
+|  *expr* `=` *expr*  |       Assignment       |
+| *expr* `<-` *expr*  | Assignment with return |
+| *expr* `-=` *expr*  |      Subtraction       |
+| *expr* `+=` *expr*  |        Addition        |
+| *expr* `*=` *expr*  |     Multiplication     |
+| *expr* `/=` *expr*  |        Division        |
+| *expr* `/.=` *expr* |   Quotient division    |
+| *expr* `%=` *expr*  |         Modulo         |
+| *expr* `&&=` *expr* |      And logical       |
+| *expr* `||=` *expr* |       Or logical       |
+| *expr* `^^=` *expr* |      Xor logical       |
+| *expr* `+&=` *expr* |      And bitwise       |
+| *expr* `+|=` *expr* |       Or bitwise       |
+| *expr* `+^=` *expr* |      Xor bitwise       |
+| *expr* `+<=` *expr* |       Shift left       |
+| *expr* `+>=` *expr* |      Shift right       |
+| *expr* `?=` *expr*  |      Existential       |
+| *expr* `!?=` *expr* |    Non existential     |
+| *expr* `??=` *expr* |    Null coalescing     |
+| *expr* `#=` *expr*  |       Non empty        |
+| *expr* `!#=` *expr* |         Empty          |
+| *expr* `##=` *expr* |    Empty coalescing    |
 
 Unlike the assignment operator in JavaScript, the assignment operators don't return a value, except:
 - `?=` and `#=` will return `true` when the assignment is **successful**. If not, `false`.
