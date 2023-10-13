@@ -379,7 +379,7 @@ type-statement = "type" *varname* = *type*
 
 type = (
 	(
-		*varname* ('.' *varname*)\* ['<' *type* ([,] *type*)\* '>']
+		*named-type*
 		|
 		[async] [func] *func-type*
 		|
@@ -411,10 +411,12 @@ descriptive-type = (
 	[sealed] [var] *varname*[: *type*]
 )
 
-limited-type = (*func-type* | *object-type* | *array-type* | *varname* ('.' *varname*)\* ['<' *limited-type* ([,] *limited-type*)\* '>'])
+limited-type = (*func-type* | *object-type* | *array-type* | *named-type*)
 
 generic-type = *entity-type* (',' *entity-type*)\*
 entity-type = *varname* ('.' *varname*)\*
+
+named-type = *varname* ('.' *varname*)\* ['<' *limited-type* ([,] *limited-type*)\* '>'] ['(' *varname* ([,] *varname*)\* ')']
 
 array-type = '['
 	(

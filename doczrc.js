@@ -52,6 +52,7 @@ export default {
 				'Enums',
 				'Namespaces',
 				'Structs & Tuples',
+				'Variants',
 				'Augmentations',
 				'Error Handling',
 				'Attributes',

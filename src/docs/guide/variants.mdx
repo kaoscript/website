@@ -1,0 +1,128 @@
+---
+name: Variants
+menu: Guide
+route: /guide/variants
+---
+
+# Variants
+
+## type
+
+```kaoscript
+enum PersonKind {
+    Director = 1
+    Student
+    Teacher
+}
+
+type SchoolPerson = {
+    variant kind: PersonKind {
+        Student {
+            name: string
+        }
+    }
+}
+
+func greeting(person: SchoolPerson): String {
+    return match person {
+        .Teacher => "Hey Professor!"
+        .Director => "Hello Director."
+        .Student when .name == "Richard" => "Still here Ricky?"
+        .Student => `Hey, \(.name).`
+    }
+}
+
+func onlyStudent(student: SchoolPerson.Student) {
+}
+
+func onlyStudent(student: SchoolPerson(Student)) {
+}
+
+func onlyStudentOrTeacher(person: SchoolPerson(Student, Teacher)) {
+}
+
+echo(greeting({ kind: .Student, name: 'Richard' }))
+echo(greeting({ kind: .Teacher }))
+
+func testing(person: SchoolPerson) {
+	if person is SchoolPerson.Student {
+	}
+
+	if person is .Student {
+	}
+
+	if person is SchoolPerson(Student) {
+	}
+
+	if person is SchoolPerson(Student, Teacher) {
+	}
+}
+```
+
+```kaoscript
+type SchoolPerson<T> = {
+	name: T
+    variant kind: PersonKind {
+        Student {
+            level: number
+        }
+    }
+}
+
+if person is SchoolPerson<String> {
+}
+if person is SchoolPerson<String>(Student) {
+}
+```
+
+<!-- ## struct
+
+```kaoscript
+enum PersonKind {
+    Director = 1
+    Student
+    Teacher
+}
+
+struct SchoolPerson {
+    variant kind: PersonKind
+}
+struct Student extends SchoolPerson(Student) {
+    name: string
+}
+
+echo(greeting(Student.new('Richard')))
+echo(greeting(.Teacher))
+```
+
+```kaoscript
+enum PersonKind {
+    Director = 1
+    Student
+    Teacher
+}
+
+struct SchoolPerson {
+    variant kind: PersonKind {
+        Student {
+            name: string
+        }
+    }
+}
+
+echo(greeting(.Student.new('Richard')))
+echo(greeting(.Teacher))
+```
+
+## variant
+
+```kaoscript
+variant SchoolPerson {
+	Director
+    Student { name: String }
+	Teacher
+}
+
+echo(greeting(.Student.new('Richard')))
+echo(greeting(.Teacher))
+``` -->
