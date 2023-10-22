@@ -160,6 +160,7 @@ class Shape {
 |      `Class`      |           ❌           |       ✅       |       ❓        |      ❓      |
 |    `new Class`    |           ❌           |       ✅       |       ❌        |      ✅      |
 
+
 ## static
 
 The modifier `static` declares members that are not bound to class instances.
@@ -268,7 +269,7 @@ console.log(r.draw())
 
 ### Methods
 
-The `override` keyword indicates that the method must inherit a method from the superclass. If not, it will generate an error.
+The override `modifier` is required to extend or modify an inherited method.
 
 ```kaoscript
 class Shape {
@@ -284,7 +285,7 @@ class Rectangle extends Shape {
 }
 ```
 
-The method `methodB` overrides/implements the method `methodA` only and only if *methodB ⊂ methodA*. ([subset](./typing#subsetsuperset))
+The method `methodB` overrides the method `methodA` only and only if *methodB ⊂ methodA*. ([subset](./typing#subsetsuperset))
 
 ```kaoscript
 class Greetings {
@@ -319,6 +320,29 @@ class Node extends AbstractNode {
 ```
 
 The overridden field needs to be subset of the original field.
+
+## assisting method
+
+The override `assist` is required to assist a method with a specialized method on a subset of the main method.
+
+```kaoscript
+class Person {
+}
+class Student extends Person {
+}
+
+class Greetings {
+	greet(person: Person, message: String): String {
+		return message
+	}
+}
+
+class MyGreetings extends Greetings {
+	assist greet(person % { name }: Student, message) {
+		return `Hello \(name)! \(message)`
+	}
+}
+```
 
 <!-- ## final
 
@@ -590,6 +614,14 @@ impl Shape {
 				}
 				|
 				*property*
+				|
+				*method*
+			)
+			|
+			[final] assist (
+				{
+					(*method*)+
+				}
 				|
 				*method*
 			)
