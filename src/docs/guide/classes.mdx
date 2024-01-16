@@ -673,25 +673,25 @@ method = [async] *varname*([*parameter1* [, *parameter2* ... [, *parameterN*]])[
 
 parameter = [mut] (
 	[(# | \* | ([\*] *varname* | \_) %)] [@]*varname* (
-		! [: *param-type*] [?] (= | ??= | ##=) *expression*
+		! [: *param-type*] [?] (= | ??= | ?##= | ?||= | ?++=) *expression*
 		|
-		[: *param-type*] [?] [(= | ??= | ##=) *expression*]
+		[: *param-type*] [?] [(= | ??= | ?##= | ?||= | ?++=) *expression*]
 		|
 		!?
 	)
 	|
 	[[\*] *varname* | \_) %] _ (
-		! [: *param-type*] [?] (= | ??= | ##=) *expression*
+		! [: *param-type*] [?] (= | ??= | ?##= | ?||= | ?++=) *expression*
 		|
-		[: *param-type*] [?] [(= | ??= | ##=) *expression*]
+		[: *param-type*] [?] [(= | ??= | ?##= | ?||= | ?++=) *expression*]
 	)
 	|
 	[[\*] *varname* | \_) %] *destructuring* (
-		! [: *param-type*] [?] (= | ??= | ##=) *expression*
+		! [: *param-type*] [?] (= | ??= | ?##= | ?||= | ?++=) *expression*
 		|
-		[: *param-type*] [?] [(= | ??= | ##=) *expression*]
+		[: *param-type*] [?] [(= | ??= | ?##= | ?||= | ?++=) *expression*]
 	)
 	|
-	[(*varname* | \_) %] ...[{( [*min*], [*max*] | *quantity* )}][[@]*varname*] [: *param-type*] [?] [(= | ##=) *expression*]
+	[(*varname* | \_) %] ...[{( [*min*], [*max*] | *quantity* )}][[@]*varname*] [: *param-type*] [?] [(= | ?##=) *expression*]
 )
 ```

@@ -87,24 +87,24 @@ foobar((a:Number, b:Number): Number => a - b)
 ```syntax
 parameter = [mut] (
 	[(# | \* | ([\*] *varname*) %)] *varname* (
-		! [: *param-type*] [?] (= | ??= | ##=) *expression*
+		! [: *param-type*] [?] (= | ??= | ?##= | ?||= | ?++=) *expression*
 		|
-		[: *param-type*] [?] [(= | ??= | ##=) *expression*]
+		[: *param-type*] [?] [(= | ??= | ?##= | ?||= | ?++=) *expression*]
 	)
 	|
 	[[\*] *varname* %] _ (
-		! [: *param-type*] [?] (= | ??= | ##=) *expression*
+		! [: *param-type*] [?] (= | ??= | ?##= | ?||= | ?++=) *expression*
 		|
-		[: *param-type*] [?] [(= | ??= | ##=) *expression*]
+		[: *param-type*] [?] [(= | ??= | ?##= | ?||= | ?++=) *expression*]
 	)
 	|
 	[[\*] *varname* %] *destructuring* (
-		! [: *param-type*] [?] (= | ??= | ##=) *expression*
+		! [: *param-type*] [?] (= | ??= | ?##= | ?||= | ?++=) *expression*
 		|
-		[: *param-type*] [?] [(= | ??= | ##=) *expression*]
+		[: *param-type*] [?] [(= | ??= | ?##= | ?||= | ?++=) *expression*]
 	)
 	|
-	[*varname* %] ...[{( [*min*], [*max*] | *quantity* )}][*varname*] [: *param-type*] [?] [(= | ##=) *expression*]
+	[*varname* %] ...[{( [*min*], [*max*] | *quantity* )}][*varname*] [: *param-type*] [?] [(= | ?##=) *expression*]
 )
 ```
 
@@ -167,34 +167,34 @@ expect(foo(1, 2, 3, 4, 5)).to.eql([1, 2, 3, 4, 5])
 | `foo(x ??= null)`                |     ☠️     |     ☠️     |     ☠️     |     ☠️     |   ☠️    |
 | `foo(x ??= 'abc')`               |   `'abc'`    |   `'abc'`    |     `''`     |   `'xyz'`    |   `Any`   |
 | `foo(x ??= 'abc'|null)`          |     ☠️     |     ☠️     |     ☠️     |     ☠️     |   ☠️    |
-| `foo(x ##= null)`                |     ☠️     |     ☠️     |     ☠️     |     ☠️     |   ☠️    |
-| `foo(x ##= 'abc')`               |   `'abc'`    |   `'abc'`    |   `'abc'`    |   `'xyz'`    |   `Any`   |
-| `foo(x ##= 'abc'|null)`          |     ☠️     |     ☠️     |     ☠️     |     ☠️     |   ☠️    |
+| `foo(x ?##= null)`                |     ☠️     |     ☠️     |     ☠️     |     ☠️     |   ☠️    |
+| `foo(x ?##= 'abc')`               |   `'abc'`    |   `'abc'`    |   `'abc'`    |   `'xyz'`    |   `Any`   |
+| `foo(x ?##= 'abc'|null)`          |     ☠️     |     ☠️     |     ☠️     |     ☠️     |   ☠️    |
 | `foo(x? = null)`                 |    `null`    |    `null`    |     `''`     |   `'xyz'`    |  `Any?`   |
 | `foo(x? = 'abc')`                |   `'abc'`    |    `null`    |     `''`     |   `'xyz'`    |  `Any?`   |
 | `foo(x? = 'abc'|null)`           | `'abc'|null` |    `null`    |     `''`     |   `'xyz'`    |  `Any?`   |
 | `foo(x? ??= null)`               |    `null`    |    `null`    |     `''`     |   `'xyz'`    |  `Any?`   |
 | `foo(x? ??= 'abc')`              |   `'abc'`    |   `'abc'`    |     `''`     |   `'xyz'`    |  `Any?`   |
 | `foo(x? ??= 'abc'|null)`         | `'abc'|null` | `'abc'|null` |     `''`     |   `'xyz'`    |  `Any?`   |
-| `foo(x? ##= null)`               |    `null`    |    `null`    |    `null`    |   `'xyz'`    |  `Any?`   |
-| `foo(x? ##= 'abc')`              |   `'abc'`    |   `'abc'`    |   `'abc'`    |   `'xyz'`    |  `Any?`   |
-| `foo(x? ##= 'abc'|null)`         | `'abc'|null` | `'abc'|null` | `'abc'|null` |   `'xyz'`    |  `Any?`   |
+| `foo(x? ?##= null)`               |    `null`    |    `null`    |    `null`    |   `'xyz'`    |  `Any?`   |
+| `foo(x? ?##= 'abc')`              |   `'abc'`    |   `'abc'`    |   `'abc'`    |   `'xyz'`    |  `Any?`   |
+| `foo(x? ?##= 'abc'|null)`         | `'abc'|null` | `'abc'|null` | `'abc'|null` |   `'xyz'`    |  `Any?`   |
 | `foo(x: String)`                 |     ☠️     |     ☠️     |     `''`     |   `'xyz'`    | `String`  |
 | `foo(x: String?)`                |     ☠️     |    `null`    |     `''`     |   `'xyz'`    | `String?` |
 | `foo(x: String = null)`          |     ☠️     |     ☠️     |     ☠️     |     ☠️     |   ☠️    |
 | `foo(x: String = 'abc')`         |   `'abc'`    |   `'abc'`    |     `''`     |   `'xyz'`    | `String`  |
 | `foo(x: String = 'abc'|null)`    |     ☠️     |     ☠️     |     ☠️     |     ☠️     |   ☠️    |
 | `foo(x: String ??= 'abc')`       |   `'abc'`    |   `'abc'`    |     `''`     |   `'xyz'`    | `String`  |
-| `foo(x: String ##= 'abc')`       |   `'abc'`    |   `'abc'`    |   `'abc'`    |   `'xyz'`    | `String`  |
+| `foo(x: String ?##= 'abc')`       |   `'abc'`    |   `'abc'`    |   `'abc'`    |   `'xyz'`    | `String`  |
 | `foo(x: String? = null)`         |    `null`    |    `null`    |     `''`     |   `'xyz'`    | `String?` |
 | `foo(x: String? = 'abc')`        |   `'abc'`    |    `null`    |     `''`     |   `'xyz'`    | `String?` |
 | `foo(x: String? = 'abc'|null)`   | `'abc'|null` |    `null`    |     `''`     |   `'xyz'`    | `String?` |
 | `foo(x: String? ??= null)`       |    `null`    |    `null`    |     `''`     |   `'xyz'`    | `String?` |
 | `foo(x: String? ??= 'abc')`      |   `'abc'`    |   `'abc'`    |     `''`     |   `'xyz'`    | `String?` |
 | `foo(x: String? ??= 'abc'|null)` | `'abc'|null` | `'abc'|null` |     `''`     |   `'xyz'`    | `String?` |
-| `foo(x: String? ##= null)`       |    `null`    |    `null`    |    `null`    |   `'xyz'`    | `String?` |
-| `foo(x: String? ##= 'abc')`      |   `'abc'`    |   `'abc'`    |   `'abc'`    |   `'xyz'`    | `String?` |
-| `foo(x: String? ##= 'abc'|null)` | `'abc'|null` | `'abc'|null` | `'abc'|null` |   `'xyz'`    | `String?` |
+| `foo(x: String? ?##= null)`       |    `null`    |    `null`    |    `null`    |   `'xyz'`    | `String?` |
+| `foo(x: String? ?##= 'abc')`      |   `'abc'`    |   `'abc'`    |   `'abc'`    |   `'xyz'`    | `String?` |
+| `foo(x: String? ?##= 'abc'|null)` | `'abc'|null` | `'abc'|null` | `'abc'|null` |   `'xyz'`    | `String?` |
 
 ### Runtime vs Compile time
 
@@ -450,19 +450,6 @@ var d = await disks()
 ```kaoscript
 func foobar(): Number => 42
 ```
-
-### auto
-
-With `auto`, kaoscript will automatically determine the return type
-
-```kaoscript
-func foobar(): auto => 42
-// return type: Number
-
-// can be reduced as
-func foobar() :> 42
-```
-
 ### void
 
 ```kaoscript

@@ -232,6 +232,11 @@ type RegExpExecArray = Array<String?> & {
 
 An exclusion type represents an union type without one or more types.
 
+```kaoscript
+type Instance = Any ^ Primitive ^ Array
+// anything but not primitives or arrays
+```
+
 ## generic type
 
 kaoscript has a very basic support for generics.
@@ -254,60 +259,55 @@ var x = values[0]
 | `Array<Array<String?>>?`  | `[ ...[ ...String? ] ]?` | `String?[][]?` |
 | `Array<Object<String?>>?` | `[ ...{ ...String? } ]?` | `String?{}[]?` |
 
-## type checking
+## type equality
 
 kaoscript used the keywords `is` and `is not` to be able to test the type of a variable.
 
 ```kaoscript
-if x is String {
-
-}
-
-if x is not String {
-
-}
-```
-
-## type casting
-
-The keyword `as` allows complex types but it would need to be surrounded by parentheses
-
-```kaoscript
-(x as String).toLowerCase()
-
-(x as String | Number).toFloat()
-```
-
-If the type is an identifier, you can use `:`. But for complex types, you will need to create aliases.
-
-```kaoscript
-x:String.toLowerCase()
-
-type T = String | Number
-x:T.toFloat()
-```
-
-At runtime, `as` and `:` throw an error when the value doesn't match the type.
-
-You can use `as?` or `:?` to return `null` when the value doesn't match the type.
-
-```kaoscript
 func foobar(p: Point) {
-	if var d3 = p as? Point3D {
+	if p is Point3D {
 		console.log(d3.x + 1, d3.y + 2, d3.z + 3)
 	}
 }
 ```
 
-You can avoid the type casting with `as!` or `:!`.
+## type signalment
 
-```syntax
-*expression*:[(!|?)]*limited-type*(?|'[]'|'{}')\*
+```kaoscript
+x:!(String).toLowerCase()
 
-*expression* as[(!|?)] *type*
+x:!(String | Number).toFloat()
 ```
 
-## type matching
+## type assertion
+
+At runtime, `:&()` throws an error when the value doesn't match the type.
+
+You can use `:&?()` to return `null` when the value doesn't match the type.
+
+```kaoscript
+func foobar(p: Point) {
+	if var d3 ?= p:&?(Point3D) {
+		console.log(d3.x + 1, d3.y + 2, d3.z + 3)
+	}
+}
+```
+
+## type casting
+
+At runtime, `:>()` throws an error when the value can't be casted.
+
+You can use `:>?()` to return `null` when the value can't be casted.
+
+```kaoscript
+func foobar(p: Point) {
+	if var d3 ?= p:>?(Point3D) {
+		console.log(d3.x + 1, d3.y + 2, d3.z + 3)
+	}
+}
+```
+
+## type fitting
 
 To match a type, you can use the unary operators `!?` or `!!`.
 
@@ -386,7 +386,7 @@ type = (
 		*object-type*
 		|
 		*array-type*
-	) (? | '[]' | '{}')\* (('|' | & | ^) *type* | '|?')\*
+	) (? | '[' [*integer* (; *integer*)\*] ']' | '{}' )\* (('|' | & | ^) *type* | '|?')\*
 	|
 	typeof *expression*
 )
@@ -416,17 +416,21 @@ limited-type = (*func-type* | *object-type* | *array-type* | *named-type*)
 generic-type = *entity-type* (',' *entity-type*)\*
 entity-type = *varname* ('.' *varname*)\*
 
-named-type = *varname* ('.' *varname*)\* ['<' *limited-type* ([,] *limited-type*)\* '>'] ['(' *varname* ([,] *varname*)\* ')']
+named-type = *varname* ('.' *varname*)\* ['<' *limited-type* ([,] *limited-type*)\* '>'] [ *subtype* ]
 
-array-type = '['
-	(
+subtype = '(' ( *varname* ([,] *varname*)\* | *expression* ) ')'
+
+array-type = (
+	'['
 		(
-			*type*
-			|
-			...[*type*]
-		) [,]
-	)+
-']'
+			(
+				*type*
+				|
+				...[*type*]
+			) [,]
+		)+
+	']'
+)+
 
 class-type = *varname*['<' *generic-type* '>'] [extends *varname*] [{
 	...

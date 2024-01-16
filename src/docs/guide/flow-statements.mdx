@@ -19,14 +19,18 @@ If the type is unknow, the test's value must be equal to `true`.
 if
 	*expression:Boolean*
 	|
-	var [mut] (*varname* | *destructuring*) [: *type*] (?= | #=) *expression* [;; *expression:Boolean*]
+	var [mut] (*varname* | *destructuring*) [: *type*] (?= | ?#= | ?|= | ?+=) *expression* [;; *expression:Boolean*]
+	|
+	[*expression:Boolean*] ;; var [mut] (*varname* | *destructuring*) [: *type*] (?= | ?#= | ?|= | ?+=) *expression*
 {
 	*...statements*
 }
 (else if
 	*expression:Boolean*
 	|
-	var [mut] (*varname* | *destructuring*) [: *type*] (?= | #=) *expression* [;; *expression:Boolean*]
+	var [mut] (*varname* | *destructuring*) [: *type*] (?= | ?#= | ?|= | ?+=) *expression* [;; *expression:Boolean*]
+	|
+	[*expression:Boolean*] ;; var [mut] (*varname* | *destructuring*) [: *type*] (?= | ?#= | ?|= | ?+=) *expression*
 {
 	*...statements*
 })\*
@@ -290,13 +294,13 @@ then {
 
 ```syntax
 if {
-	(var [mut] (*varname* | *destructuring*) [: *type*] (?= | #=) *expression* [;; *expression:Boolean*])+
+	(var [mut] (*varname* | *destructuring*) [: *type*] (?= | ?#= | ?|= | ?+=) *expression* [;; *expression:Boolean*])+
 }
 then {
 	*...statements*
 }
 (else if {
-	(var [mut] (*varname* | *destructuring*) [: *type*] (?= | #=) *expression* [;; *expression:Boolean*])+
+	(var [mut] (*varname* | *destructuring*) [: *type*] (?= | ?#= | ?|= | ?+=) *expression* [;; *expression:Boolean*])+
 }
 then {
 	*...statements*
@@ -374,7 +378,7 @@ then
 while
 	*expression:Boolean*
 	|
-	var [mut] (*varname* | *destructuring*) [: *type*] (?= | #=) *expression*
+	var [mut] (*varname* | *destructuring*) [: *type*] (?= | ?#= | ?|= | ?+=) *expression*
 {
 
 }
@@ -741,7 +745,7 @@ with *expression* {
 var-init = (
 	var [mut] *varname* [: *type*] = *expression*
 	|
-	*variable* (=|+=|-=|\*=|/=|/.=|%=|&&=|"||="|^^=|<<=|>>=) *expression*
+	*variable* (=|+=|-=|\*=|\*\*=|/=|/#=|/&=|%=|&&=|"||="|^^=|<<=|>>=) *expression*
 )
 
 variable = [@]*varname*(\.*varname* | "[" *expression* "]")\*

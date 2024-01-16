@@ -1,0 +1,39 @@
+---
+name: Generics
+menu: Guide
+route: /guide/generics
+---
+
+# Generics
+
+## Functions
+
+```kaoscript
+func identity<Type>(arg: Type): Type {
+  return arg
+}
+```
+
+```kaoscript
+func getProperty<Type, Key is keyof Type>(obj: Type, key: Key) {
+  return obj[key]
+}
+```
+
+## Variants
+
+```kaoscript
+type SchoolPerson<T> = {
+	name: T
+    variant kind: PersonKind {
+        Student {
+            level: number
+        }
+    }
+}
+
+if person is SchoolPerson<String> {
+}
+if person is SchoolPerson<String>(Student) {
+}
+```

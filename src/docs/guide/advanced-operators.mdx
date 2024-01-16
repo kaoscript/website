@@ -42,6 +42,17 @@ foo(...args)
 // foo(1, 2, 3)
 ```
 
+### null-awareness
+
+By default, the operator `...` only supports array or object and will throw an error if any other value, including `null`, is passed.
+
+The derived operator `...?` will allow a `null` value to be passed as argument but it won't be added to the array or object.
+
+```kaoscript
+var allValues = [42, ...additionalValues, ...?optionalValues]
+echo(allValues)
+```
+
 ### filtering
 
 ```kaoscript
@@ -63,7 +74,7 @@ spread-expression = '...' *expression* [(
 )]
 ``` -->
 ```syntax
-spread-expression = '...' *expression* [(
+spread-expression = '...' [?] *expression* [(
 	'{' *varname* ['%' *varname*] (',' *varname* ['%' *varname*])\* '}'
 )]
 ```
@@ -163,3 +174,55 @@ if h {
 
 writer2.code(' ')
 ```
+
+## pipeline operators
+
+With the pipeline operators, you can write code like
+
+```kaoscript
+func getNewScore(person: { score: Number }): Number {
+	var newScore = person.score
+		|> double
+		|> add(7, _)
+		|> boundScore(0, 100, _)
+
+	return newScore
+}
+```
+instead of
+```kaoscript
+func getNewScore(person: { score: Number }): Number {
+	var newScore = boundScore(0, 100, add(7, double(person.score)))
+
+	return newScore
+}
+```
+
+### Behaviors
+
+|                    Original expression                    |                          Forward pipeline                           |              Backward pipeline              |
+| :-------------------------------------------------------: | :-----------------------------------------------------------------: | :-----------------------------------------: |
+|                         `o.m(x)`                          |            `x |> o.m` `x |> o.m(_)` `x |> (p) => o.m(p)`            |                 `o.m <| x`                  |
+|                        `o.m(0, x)`                        |                          `x |> o.m(0, _)`                           |                     ``                      |
+|                      `await o.m(x)`                       |                         `x |> o.m |> await`                         |                     ``                      |
+|                           `x.i`                           |                              `x |> .i`                              |                                             |
+|                          `o[x]`                           |                             `x |> o[_]`                             |                     ``                      |
+|                          `x[i]`                           |                             `x |> [i]`                              |                     ``                      |
+|                          `x + 1`                          |                            `x |> _ + i`                             |                     ``                      |
+|                         `[0, x]`                          |                            `x |> [0, _]`                            |                     ``                      |
+|                       `{ key: x }`                        |                          `x |> { key: _ }`                          |                     ``                      |
+|             `fib((r <- fib(1, 1))[0], r[1])`              |                      `[1, 1] *|> fib *|> fib`                       |          `fib <|* fib <|* [1, 1]`           |
+|  `?idStr ? repository.findById(parseInt(idNum)) : null`   |             `idStr |>? parseInt |> repository.findById`             | `repository.findById <| parseInt ?<| idStr` |
+| `filter(map(elements, add^^(^, 1)), greaterThan^^(^, 5))` | `elements |> map(_, add^^(^, 1)) |> filter(_, greaterThan^^(^, 5))` |                                             |
+
+`*|>` applies all the arguments from the left side to the expression on the right side
+`|>?` checks for the existence of the argument on the left side. If not, it stops the pipeline and return null.
+
+### Test operators
+
+| Operator |    Meaning    |
+| :------: | :-----------: |
+|  `|>?`   |     Exist     |
+|  `|>?#`  |   Non empty   |
+|  `|>?|`  | Variant(true) |
+|  `|>?+`  |    Finite     |

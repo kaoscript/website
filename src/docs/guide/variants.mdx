@@ -60,18 +60,20 @@ func testing(person: SchoolPerson) {
 ```
 
 ```kaoscript
-type SchoolPerson<T> = {
-	name: T
-    variant kind: PersonKind {
-        Student {
-            level: number
-        }
-    }
+type Position = {
+	line: Number
+	column: Number
 }
 
-if person is SchoolPerson<String> {
-}
-if person is SchoolPerson<String>(Student) {
+type Event = {
+	variant ok: Boolean {
+		false, N {
+			expecteds: String[]?
+		}
+		true, Y => Position & {
+			value
+		}
+	}
 }
 ```
 

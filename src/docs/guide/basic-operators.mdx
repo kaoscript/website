@@ -6,46 +6,72 @@ route: /guide/basic-operators
 
 # Basic Operators
 
-<!-- Unlike most languages, kaoscript supports four types of operators:
-
-- Unary operators operate on a single operand (such as `-x`)
-- Binary operators operate on two operands (such as `a += 42`)
-- Ternary operators operate on three operands (such as `x ? 42 : 24`)
-- Polyadic operators operator on infinite operands (such as `x + y + z` or `24 < x < 42`) -->
-
 > :construction: kaoscript will allow to override operators.
+
+## string
+
+|     Operator      |    Meaning    |
+| :---------------: | :-----------: |
+| *expr* `+` *expr* | Concatenation |
+
+```kaoscript
+'foo' + 'bar'	// foobar
+```
 
 ## arithmetic
 
-|      Operator      |      Meaning      |
-|:------------------:|:-----------------:|
-|     `-`*expr*      |     Negative      |
-| *expr* `-` *expr*  |    Subtraction    |
-| *expr* `+` *expr*  |     Addition      |
-| *expr* `*` *expr*  |  Multiplication   |
-| *expr* `/` *expr*  |     Division      |
-| *expr* `/.` *expr* | Quotient division |
-| *expr* `%` *expr*  |      Modulo       |
+|      Operator      |      Meaning       |
+| :----------------: | :----------------: |
+|     `-`*expr*      |      Negative      |
+| *expr* `-` *expr*  |    Subtraction     |
+| *expr* `+` *expr*  |      Addition      |
+| *expr* `*` *expr*  |   Multiplication   |
+| *expr* `**` *expr* |       Power        |
+| *expr* `/` *expr*  |      Division      |
+| *expr* `%` *expr*  |     Remainder      |
+| *expr* `%%` *expr* |      Modulus       |
+| *expr* `/#` *expr* |  Integer division  |
+| *expr* `/&` *expr* | Euclidean division |
+<!--
+| *expr* `\` *expr*  |   Left division    |
+| *expr* `\#` *expr* |  Integer left division   |
+| *expr* `\&` *expr* | Euclidean left division  |
+-->
 
 ```kaoscript
-// Numbers
 1 + 2			// 3
 1 + 2 + 3		// 6
 1 - 2			// -1
 2 * 3			// 6
 18 / 3			// 6
 28 / 5			// 5.6
-28 /. 5			// 5
+28 /# 5			// 5
+28 /& 5			// [5, 3]
 18 % 3			// 0
 28 % 5			// 3
 28 % 10 % 5		// 3
 -2				// -2
-
-// Strings
-'foo' + 'bar'	// foobar
 ```
 
 Unlike JavaScript, if an operand is `null`, the result will be `null`. And if an operand is not a number, an error will be thrown.
+
+### remainder
+
+```kaoscript
+[x % 3 for x in -5..5]		// [-2, -1, 0, -2, -1, 0, 1, 2, 0, 1, 2]
+[x % -3 for x in -5..5]		// [-2, -1, 0, -2, -1, 0, 1, 2, 0, 1, 2]
+```
+
+### modulus
+
+```kaoscript
+[x %% 3 for x in -5..5]		// [1, 2, 0, 1, 2, 0, 1, 2, 0, 1, 2]
+[x %% -3 for x in -5..5]	// [-2, -1, 0, -2, -1, 0, -2, -1, 0, -2, -1]
+```
+
+### division
+
+The euclidean division operators return result as `[quotient, remainder]`
 
 ## comparison
 
@@ -149,13 +175,17 @@ The following operations are only valid for numeric operands.
 
 ## conditional
 
-|           Operator           |      Meaning      |
-| :--------------------------: | :---------------: |
-|          `?`*expr*           |    Existential    |
-|          `#`*expr*           |     Non empty     |
-|      *expr* `??` *expr*      |  Null coalescing  |
-|      *expr* `##` *expr*      | Empty coalescing  |
-| *expr* `?` *expr* `:` *expr* | Ternary condition |
+|           Operator           |          Meaning          |
+| :--------------------------: | :-----------------------: |
+|          `?`*expr*           |        Existential        |
+|          `?#`*expr*          |         Non empty         |
+|          `?|`*expr*          |       Variant(true)       |
+|          `?+`*expr*          |          Finite           |
+|      *expr* `??` *expr*      |      Null coalescing      |
+|     *expr* `?##` *expr*      |     Empty coalescing      |
+|     *expr* `?||` *expr*      | Variant(false) coalescing |
+|     *expr* `?++` *expr*      |   Not finite coalescing   |
+| *expr* `?` *expr* `:` *expr* |     Ternary condition     |
 
 ### Examples
 
@@ -180,22 +210,41 @@ The operator `??` is a polyadic operator.
 
 ## typing
 
-|            Operator            |        Meaning        |
-| :----------------------------: | :-------------------: |
-|   *expr* `is` *limited-type*   |     Type matching     |
-| *expr* `is not` *limited-type* |   Type not matching   |
-|   *expr* `as` *limited-type*   |     Type casting      |
-|  *expr* `as!` *limited-type*   |  Forced type casting  |
-|  *expr* `as?` *limited-type*   | Nullable type casting |
-|     *expr*`:`*entity-type*     |     Type casting      |
-|    *expr*`:!`*entity-type*     |  Forced type casting  |
-|    *expr*`:?`*entity-type*     | Nullable type casting |
-|           *expr*`!?`           | Null removal matching |
-|           *expr*`!!`           | Forced type matching  |
+|            Operator            |         Meaning         |
+| :----------------------------: | :---------------------: |
+|   *expr* `is` *limited-type*   |      Type equality      |
+| *expr* `is not` *limited-type* |     Type inequality     |
+|      *expr*`:!(`*type*`)`      |     Type signalment     |
+|     *expr*`:!!(`*type*`)`      | Forced type signalment  |
+|      *expr*`:&(`*type*`)`      |     Type assertion      |
+|     *expr*`:&?(`*type*`)`      | Nullable type assertion |
+|      *expr*`:>(`*type*`)`      |      Type casting       |
+|     *expr*`:>?(`*type*`)`      |  Nullable type casting  |
+|           *expr*`!?`           |  Null removal fitting   |
+|           *expr*`!!`           |   Forced type fitting   |
+
+### type signalment
+
+Type signalment indicates to the compiler the type of the variable.
+- `x:!(target-type)` only checks if `x` can be of the target type.
+- `x:!!(target-type)` no checks are done.
+
+### type assertion
+
+Type assestion check if the variable if of the target type. No memory changes
+- `x:&(target-type)` asserts that `x` is of the target type. Returns `x` if true, else fails.
+- `x:&?(target-type)` asserts that `x` is of the target type. Returns `x` if true, else `null`.
+
+### type casting
+
+Type casting converts the variable to the target type. Memory changes can happens. Immutable variables can't be casted.
+- `x:>(target-type)` casts that `x` is of the target type. Returns `x` if true, else fails.
+- `x:>?(target-type)` casts that `x` is of the target type. Returns `x` if true, else `null`.
+
+### example
 
 ```kaoscript
 class Foobar {
-
 }
 
 if x is Foobar {
@@ -206,99 +255,108 @@ if x is not Foobar {
 	// `x`'s type isn't `Foobar`
 }
 
-t = (x as String).toUpperCase()
+t = x:!(String).toUpperCase()
 
-t = x:String.toUpperCase()
-
-t = x as Array<String>
+t = x:!(Array<String>)
 ```
 
 ## assignment
 
-|      Operator       |        Meaning         |
-| :-----------------: | :--------------------: |
-|  *expr* `=` *expr*  |       Assignment       |
-| *expr* `<-` *expr*  | Assignment with return |
-| *expr* `-=` *expr*  |      Subtraction       |
-| *expr* `+=` *expr*  |        Addition        |
-| *expr* `*=` *expr*  |     Multiplication     |
-| *expr* `/=` *expr*  |        Division        |
-| *expr* `/.=` *expr* |   Quotient division    |
-| *expr* `%=` *expr*  |         Modulo         |
-| *expr* `&&=` *expr* |      And logical       |
-| *expr* `||=` *expr* |       Or logical       |
-| *expr* `^^=` *expr* |      Xor logical       |
-| *expr* `+&=` *expr* |      And bitwise       |
-| *expr* `+|=` *expr* |       Or bitwise       |
-| *expr* `+^=` *expr* |      Xor bitwise       |
-| *expr* `+<=` *expr* |       Shift left       |
-| *expr* `+>=` *expr* |      Shift right       |
-| *expr* `?=` *expr*  |      Existential       |
-| *expr* `!?=` *expr* |    Non existential     |
-| *expr* `??=` *expr* |    Null coalescing     |
-| *expr* `#=` *expr*  |       Non empty        |
-| *expr* `!#=` *expr* |         Empty          |
-| *expr* `##=` *expr* |    Empty coalescing    |
+|           Operator           |          Meaning          |
+| :--------------------------: | :-----------------------: |
+|      *expr* `=` *expr*       |        Assignment         |
+|      *expr* `<-` *expr*      |  Assignment with return   |
+|      *expr* `-=` *expr*      |        Subtraction        |
+|      *expr* `+=` *expr*      |         Addition          |
+|      *expr* `*=` *expr*      |      Multiplication       |
+|     *expr* `**=` *expr*      |           Power           |
+|      *expr* `/=` *expr*      |         Division          |
+|     *expr* `/#=` *expr*      |     Integer division      |
+|      *expr* `%=` *expr*      |         Remainder         |
+|     *expr* `%%=` *expr*      |          Modulus          |
+|     *expr* `&&=` *expr*      |        And logical        |
+|     *expr* `||=` *expr*      |        Or logical         |
+|     *expr* `^^=` *expr*      |        Xor logical        |
+|     *expr* `+&=` *expr*      |        And bitwise        |
+|     *expr* `+|=` *expr*      |        Or bitwise         |
+|     *expr* `+^=` *expr*      |        Xor bitwise        |
+|     *expr* `+<=` *expr*      |        Shift left         |
+|     *expr* `+>=` *expr*      |        Shift right        |
+|      *expr* `?=` *expr*      |        Existential        |
+|     *expr* `!?=` *expr*      |      Non existential      |
+|     *expr* `??=` *expr*      |      Null coalescing      |
+|     *expr* `?#=` *expr*      |         Non empty         |
+|     *expr* `!?#=` *expr*     |           Empty           |
+|     *expr* `?##=` *expr*     |     Empty coalescing      |
+|     *expr* `?|=` *expr*      |       Variant(true)       |
+|     *expr* `!?|=` *expr*     |      Variant(false)       |
+|     *expr* `?||=` *expr*     | Variant(false) coalescing |
+|     *expr* `?+=` *expr*      |          Finite           |
+|     *expr* `!?+=` *expr*     |        Not finite         |
+|     *expr* `?++=` *expr*     |   Not finite coalescing   |
+<!--
+| *expr* `:!=` *limited-type*  |      Type signalment      |
+| *expr* `:!!=` *limited-type* |  Forced type signalment   |
+| *expr* `:&=` *limited-type*  |      Type assertion       |
+| *expr* `:&?=` *limited-type* |  Nullable type assertion  |
+| *expr* `:>=` *limited-type*  |       Type casting        |
+| *expr* `:>?=` *limited-type* |   Nullable type casting   |
+-->
 
 Unlike the assignment operator in JavaScript, the assignment operators don't return a value, except:
-- `?=` and `#=` will return `true` when the assignment is **successful**. If not, `false`.
-- `!?=` and `!#=` will return `true` when the assignment is **unsuccessful**. If not, `false`.
+- `?=`, `?#=`, `?|=` and `?+=` will return `true` when the assignment is **successful**. If not, `false`.
+- `!?=`, `!?#=`, `!?|=` and `!?+=` will return `true` when the assignment is **unsuccessful**. If not, `false`.
 - `<-` is the same as `=` but returns the assigned value.
 
 ### Distribution
 
-|    `x`    |    `y`    | `x ?= y` | `x ??= y` | `x #= y` | `x ##= y` |
-| :-------: | :-------: | :------: | :-------: | :------: | :-------: |
-|  `null`   |  `null`   |    ❌    |    ✅     |    ❌    |    ✅     |
-|  `null`   |    `0`    |    ✅    |    ✅     |    ❌    |    ✅     |
-|  `null`   | `[1,2,3]` |    ✅    |    ✅     |    ✅    |    ✅     |
-|   `''`    |  `null`   |    ❌    |    ❌     |    ❌    |    ✅     |
-|   `''`    |    `0`    |    ✅    |    ❌     |    ❌    |    ✅     |
-|   `''`    |  `'abc'`  |    ✅    |    ❌     |    ✅    |    ✅     |
-|   `''`    | `[1,2,3]` |    ✅    |    ❌     |    ✅    |    ✅     |
-|  `'xyz'`  |  `null`   |    ❌    |    ❌     |    ❌    |    ❌     |
-|  `'xyz'`  |    `0`    |    ✅    |    ❌     |    ❌    |    ❌     |
-|  `'xyz'`  |  `'abc'`  |    ✅    |    ❌     |    ✅    |    ❌     |
-|  `'xyz'`  | `[1,2,3]` |    ✅    |    ❌     |    ✅    |    ❌     |
-|   `[]`    |  `null`   |    ❌    |    ❌     |    ❌    |    ✅     |
-|   `[]`    |    `0`    |    ✅    |    ❌     |    ❌    |    ✅     |
-|   `[]`    |  `'abc'`  |    ✅    |    ❌     |    ✅    |    ✅     |
-|   `[]`    | `[1,2,3]` |    ✅    |    ❌     |    ✅    |    ✅     |
-| `[4,5,6]` |  `null`   |    ❌    |    ❌     |    ❌    |    ❌     |
-| `[4,5,6]` |    `0`    |    ✅    |    ❌     |    ❌    |    ❌     |
-| `[4,5,6]` |  `'abc'`  |    ✅    |    ❌     |    ✅    |    ❌     |
-| `[4,5,6]` | `[1,2,3]` |    ✅    |    ❌     |    ✅    |    ❌     |
+|    `x`    |    `y`    | `x ?= y` | `x ??= y` | `x ?#= y` | `x ?##= y` |
+| :-------: | :-------: | :------: | :-------: | :-------: | :--------: |
+|  `null`   |  `null`   |    ❌    |    ✅     |    ❌     |     ✅     |
+|  `null`   |    `0`    |    ✅    |    ✅     |    ❌     |     ✅     |
+|  `null`   | `[1,2,3]` |    ✅    |    ✅     |    ✅     |     ✅     |
+|   `''`    |  `null`   |    ❌    |    ❌     |    ❌     |     ✅     |
+|   `''`    |    `0`    |    ✅    |    ❌     |    ❌     |     ✅     |
+|   `''`    |  `'abc'`  |    ✅    |    ❌     |    ✅     |     ✅     |
+|   `''`    | `[1,2,3]` |    ✅    |    ❌     |    ✅     |     ✅     |
+|  `'xyz'`  |  `null`   |    ❌    |    ❌     |    ❌     |     ❌     |
+|  `'xyz'`  |    `0`    |    ✅    |    ❌     |    ❌     |     ❌     |
+|  `'xyz'`  |  `'abc'`  |    ✅    |    ❌     |    ✅     |     ❌     |
+|  `'xyz'`  | `[1,2,3]` |    ✅    |    ❌     |    ✅     |     ❌     |
+|   `[]`    |  `null`   |    ❌    |    ❌     |    ❌     |     ✅     |
+|   `[]`    |    `0`    |    ✅    |    ❌     |    ❌     |     ✅     |
+|   `[]`    |  `'abc'`  |    ✅    |    ❌     |    ✅     |     ✅     |
+|   `[]`    | `[1,2,3]` |    ✅    |    ❌     |    ✅     |     ✅     |
+| `[4,5,6]` |  `null`   |    ❌    |    ❌     |    ❌     |     ❌     |
+| `[4,5,6]` |    `0`    |    ✅    |    ❌     |    ❌     |     ❌     |
+| `[4,5,6]` |  `'abc'`  |    ✅    |    ❌     |    ✅     |     ❌     |
+| `[4,5,6]` | `[1,2,3]` |    ✅    |    ❌     |    ✅     |     ❌     |
 
 - ✅ indicates that the assignment is **successful**
 - ❌ indicates that the assignment is **unsuccessful**
 
 ## function
 
-|         Operator          |               Meaning                |
-| :-----------------------: | :----------------------------------: |
-|  *expr*`(`*arguments*`)`  |         function application         |
-| *expr*`?(`*arguments*`)`  |   conditional function application   |
-| *expr*`^$(`*arguments*`)` |            curry function            |
-| *expr*`^^(`*arguments*`)` |            curry function            |
-| *expr*`*$(`*arguments*`)` |         function application         |
-|    *expr* `|>` *expr*     |           forward pipeline           |
-|    *expr* `<|` *expr*     |          backward pipeline           |
-|    *expr* `|>?` *expr*    |  forward pipeline with null testing  |
-|    *expr* `<|?` *expr*    | backward pipeline with null testing  |
-|    *expr* `|>#` *expr*    | forward pipeline with empty testing  |
-|    *expr* `<|#` *expr*    | backward pipeline with empty testing |
-|    *expr* `*|>` *expr*    | forward pipeline with destructuring  |
-|    *expr* `<|*` *expr*    | backward pipeline with destructuring |
+|         Operator          |             Meaning              |
+| :-----------------------: | :------------------------------: |
+|  *expr*`(`*arguments*`)`  |       Function application       |
+| *expr*`?(`*arguments*`)`  | Conditional function application |
+| *expr*`^$(`*arguments*`)` |          Curry function          |
+| *expr*`^^(`*arguments*`)` |          Curry function          |
+| *expr*`*$(`*arguments*`)` |       Function application       |
+|    *expr* `|>` *expr*     |         Forward pipeline         |
+|    *expr* `<|` *expr*     |        Backward pipeline         |
 
 ## others
 
-|      Operator       |          Meaning          |
-| :-----------------: | :-----------------------: |
-|   *expr*`.`*name*   |       member access       |
-|  *expr*`?.`*name*   | conditional member access |
-| *expr*`[`*expr*`]`  |       array access        |
-| *expr*`?[`*expr*`]` | conditional array access  |
-|      `.`*name*      |      implicit member      |
-|     `..`*expr*      |     rolling operator      |
-|     `...`*expr*     |      spread operator      |
-|     `**`*name*      |   default value if null   |
+|      Operator       |          Meaning           |
+| :-----------------: | :------------------------: |
+|      `#`*expr*      |      Length operator       |
+|   *expr*`.`*name*   |       Member access        |
+|  *expr*`?.`*name*   | Conditional member access  |
+| *expr*`[`*expr*`]`  |        Array access        |
+| *expr*`?[`*expr*`]` |  Conditional array access  |
+|      `.`*name*      |      Implicit member       |
+|     `..`*expr*      |      Rolling operator      |
+|     `...`*expr*     |      Spread operator       |
+|    `...?`*expr*     | Null-aware spread operator |

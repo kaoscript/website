@@ -1,0 +1,390 @@
+---
+name: Enums & Bitmasks
+menu: Guide
+route: /guide/enums-bitmasks
+---
+
+# Enums & Bitmasks
+
+## enum
+
+### number
+
+```kaoscript
+enum Color {
+	Red
+	Green
+	Blue
+}
+
+var color = Color.Red
+
+console.log(color)
+// 0
+```
+
+#### custom start
+
+```kaoscript
+enum Color {
+	Red = 100
+	Green		// 101
+	Blue		// 102
+}
+
+enum Color<Number;100> {
+	Red			// 100
+	Green		// 101
+	Blue		// 102
+}
+
+enum Color<Number;100;10> {
+	Red			// 100
+	Green		// 110
+	Blue		// 120
+}
+
+enum Color {
+	Red			// 100
+	Green		// 101
+	Blue		// 102
+
+	const value: Number = 100
+}
+```
+
+#### custom number
+
+```kaoscript
+enum Color {
+	Red		= 100
+	Green	= 200
+	Blue	= 300
+}
+```
+
+### string
+
+```kaoscript
+enum CardSuit<String> {
+	Clubs
+	Diamonds
+	Hearts
+	Spades
+}
+
+var card = CardSuit.Clubs
+
+console.log(card)
+// clubs
+```
+
+#### custom string
+
+```kaoscript
+enum CardSuit<String> {
+	Clubs		= 'clb'
+	Diamonds	= 'dmd'
+	Hearts		= 'hrt'
+	Spades		= 'spd'
+}
+```
+
+### fields
+
+Unlike C++, enum's fields are constant.
+[Variants](./variants) provide an C++ enum-like structure.
+
+#### inbuilt fields
+
+- `.index`: position of current enum value (starting from 0)
+- `.name`: name of current enum value
+- `.value`: value of current enum value
+- `Enum.values: Enum[]`: list the enum values
+- `Enum.fields: String[]`: list the fields of an enum value
+
+#### custom fields
+
+```kaoscript
+enum Weekday {
+	MONDAY		= (1, 'Monday') & 1
+	TUESDAY		= (2, 'Tuesday')
+	WEDNESDAY	= (3, 'Wednesday')
+	THURSDAY	= (4, 'Thursday')
+	FRIDAY		= (5, 'Friday')
+	SATURDAY	= (6, 'Saturday')
+	SUNDAY		= (7, 'Sunday')
+
+	const dayOfWeek: Number
+    const printableName: String
+}
+```
+
+### methods
+
+Both instance and static methods are supported.
+
+#### inbuilt methods
+
+- `Enum.fromIndex(index: Number?): Enum?`
+- `Enum.fromName(name: String?): Enum?`
+- `Enum.fromValue(value: T?): Enum?`
+
+#### example
+
+```kaoscript
+enum Weekday {
+	MONDAY
+	TUESDAY
+	WEDNESDAY
+	THURSDAY
+	FRIDAY
+	SATURDAY
+	SUNDAY
+
+	isWeekend(): Boolean => this == SATURDAY | SUNDAY
+
+	static fromString(value: String): Weekday? {
+		return match value {
+			'monday'	=> MONDAY
+			else		=> null
+		}
+	}
+}
+
+func foobar(day: Weekday) {
+	if day.isWeekend() {
+	}
+}
+
+foobar(Weekday.fromString('monday'))
+```
+
+### aliases
+
+```kaoscript
+enum Weekday {
+	MONDAY
+	TUESDAY
+	WEDNESDAY
+	THURSDAY
+	FRIDAY
+	SATURDAY
+	SUNDAY
+
+	ANY = MONDAY | TUESDAY | WEDNESDAY | THURSDAY | FRIDAY | SATURDAY | SUNDAY
+	WEEKEND = SATURDAY | SUNDAY
+	WORKDAY = ANY ^ WEEKEND
+}
+
+func isWeekend(day: Weekday) {
+	return day == .WEEKEND
+}
+```
+
+### typing
+
+#### subtype union
+
+```kaoscript
+enum Weekday {
+	MONDAY
+	TUESDAY
+	WEDNESDAY
+	THURSDAY
+	FRIDAY
+	SATURDAY
+	SUNDAY
+}
+
+type Weekend = Weekday(SATURDAY, SUNDAY)
+
+func isWeekend(day: Weekday) {
+	return day is Weekend
+}
+```
+
+#### smart union
+
+Smart unions are built at compile time and can only use `const` fields.
+
+```kaoscript
+enum Weekday {
+	MONDAY
+	TUESDAY
+	WEDNESDAY
+	THURSDAY
+	FRIDAY
+	SATURDAY
+	SUNDAY
+}
+
+type Weekend = Weekday(name == 'SATURDAY' | 'SUNDAY')
+
+func isWeekend(day: Weekday) {
+	return day is Weekend
+}
+```
+
+### casting
+
+Raw values are required to be casted before being able ot compare them to an enum.
+
+```kaoscript
+enum Weekday {
+	MONDAY
+	TUESDAY
+	WEDNESDAY
+	THURSDAY
+	FRIDAY
+	SATURDAY
+	SUNDAY
+}
+
+func toWeekday(day: Number): Weekday? {
+	return Weekday(day)
+	// return null when not matched
+}
+
+func toWeekday(day: Number): Weekday? {
+	return day:>?(Weekday)
+	// return null when not casted
+}
+
+func toWeekday(day: Number): Weekday {
+	return day:>(Weekday)
+	// throw an error when not casted
+}
+```
+
+#### JSON
+
+##### stringify
+
+When stringifing, an enum is serialized to its raw value.
+
+#### parse
+
+When parsing, an enum's raw value will need to be casted.
+
+### syntax
+
+```syntax
+enum *varname*["<" (String | *numeric-type* [;*expression*[;*expression*]]) ">"] {
+	(
+		*varname* [= (*expression* | "(" *expression* [, *expression*]\* ")" [& *expression*])]
+		|
+		[(public|internal|private)] [static] *method*
+		|
+		[(public|internal|private)] [static] {
+			(*method*)+
+		}
+		|
+		[(public|internal|private)] const *varname*[(: *type* | ?)] [= *value*]
+		|
+		[(public|internal|private)] const {
+			(*varname*[(: *type* | ?)] [= *value*])+
+		}
+	)*
+}
+
+method = [async] *varname*([[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]])[: *type* | auto] [~ *class1* [, *class2* ... [, *classN*]]] [ => *expression* | {
+	*...statements*
+}]
+```
+
+## bitmask
+
+The default, the bitmask's properties are:
+- length: `u16`
+- initial value: `0`
+
+The lengths `u16`, `u32` and `u48` are available.
+The lengths `u64`, `u128` and `u256` haven't been implemented yet.
+
+```kaoscript
+bitmask AnimalFlags {
+	None
+	HasClaws
+	CanFly
+	EatsFish
+	Endangered
+
+	EndangeredFlyingClawedFishEating = HasClaws + CanFly + EatsFish + Endangered
+	Predator = CanFly + HasClaws
+}
+
+func printAnimalAbilities(animal) {
+	var animalFlags = animal.flags
+
+	if animalFlags ~~ AnimalFlags.HasClaws {
+		console.log('animal has claws')
+	}
+
+	if animalFlags ~~ AnimalFlags.CanFly {
+		console.log('animal can fly')
+	}
+
+	if animalFlags == AnimalFlags.None {
+		console.log('nothing')
+	}
+}
+
+var animal = {
+	flags: AnimalFlags.None
+}
+
+printAnimalAbilities(animal)
+// nothing
+
+animal.flags += AnimalFlags.HasClaws
+printAnimalAbilities(animal)
+// animal has claws
+
+animal.flags -= AnimalFlags.HasClaws
+printAnimalAbilities(animal)
+// nothing
+
+animal.flags += AnimalFlags.HasClaws + AnimalFlags.CanFly
+printAnimalAbilities(animal)
+// animal has claws, animal can fly
+```
+
+### fields
+
+#### inbuilt fields
+
+- `.index`: position of current bitmask value (starting from 0) or null if composed
+- `.name`: name of current bitmask value or null if composed
+- `.value`: value of current bitmask value
+- `Bitmask.values: Enum[]`: list the bitmask values
+
+### methods
+
+Both instance and static methods are supported.
+
+#### inbuilt methods
+
+- `Bitmask.fromIndex(index: Number?): Bitmask?`
+- `Bitmask.fromName(name: String?): Bitmask?`
+- `Bitmask.fromValue(value: Number?): Bitmask?`
+
+### syntax
+
+```syntax
+bitmask *varname*["<" (u8 | u16 | u32 | u48 | u64 | u128 | u256)  ">"] {
+	(
+		*varname* [= *expression*]
+		|
+		[(public|internal|private)] [static] *method*
+		|
+		[(public|internal|private)] static {
+			(*method*)+
+		}
+	)*
+}
+
+method = [async] *varname*([[*parameter1*] [, [*parameter2*] ... [, [*parameterN*]]])[: *type* | auto] [~ *class1* [, *class2* ... [, *classN*]]] [ => *expression* | {
+	*...statements*
+}]
+```
